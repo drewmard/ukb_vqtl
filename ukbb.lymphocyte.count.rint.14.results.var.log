@@ -1,0 +1,36 @@
+PLINK v1.90b4 64-bit (20 Mar 2017)
+Options in effect:
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.14
+  --clump /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/ukbb.lymphocyte.count.rint.results.txt
+  --clump-field P.y
+  --clump-kb 5000
+  --clump-p1 1e-5
+  --clump-p2 1e-5
+  --clump-r2 0.01
+  --maf 0.05
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/ukbb.lymphocyte.count.rint.14.results.var
+
+Hostname: cannes.pbtech
+Working directory: /athena/elementolab/scratch/anm2868/GTEx/GTEx_infil/scripts/GeneticAnalysis
+Start time: Sat Aug 17 16:01:57 2019
+
+Random number seed: 1566072117
+515703 MB RAM detected; reserving 257851 MB for main workspace.
+Allocated 193388 MB successfully, after larger attempt(s) failed.
+25509 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/ukbb.lymphocyte.count.rint.14.results.var.nosex
+.
+Using 1 thread (no multithreaded calculations invoked).
+Before main variant filters, 488377 founders and 0 nonfounders present.
+Calculating allele frequencies... done.
+Total genotyping rate is 0.973755.
+13219 variants removed due to minor allele threshold(s)
+(--maf/--max-maf/--mac/--max-mac).
+12290 variants and 488377 people pass filters and QC.
+Note: No phenotypes present.
+Error: Failed to open
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/ukbb.lymphocyte.count.rint.results.txt.
+
+End time: Sat Aug 17 16:01:59 2019
