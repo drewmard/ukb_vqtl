@@ -1,16 +1,30 @@
-# clump
-
-indir=/athena/elementolab/scratch/anm2868/vQTL/UKB/results
-phenoName=lymphocyte.count
-results=$indir/ukbb.${phenoName}.results.txt
+# initialize
+thres="5e-8"
+thres="1e-5"
+indir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl # path to ukb_vqtl
+phenoName=lymphocyte.count.rint
 genodir=/home/kulmsc/athena/ukbiobank/calls
-mkdir -p /athena/elementolab/scratch/anm2868/vQTL/UKB/subset/phenoName
+
+# make important directories
+mkdir -p ${indir}/output/GWAS/subset
+mkdir -p ${indir}/output/GWAS/subset/phenoName
+# mkdir -p $indir/output/GWAS/results/${phenoName}
+mkdir -p $indir/output/GWAS/results2/
+mkdir -p $indir/output/GWAS/results2/$phenoName
+
+# clump
+echo 'Clumping!'
+source activate HLMM
+indir=$indir/output/GWAS/results
+outdir=$indir/output/GWAS/results2
+# indir=/athena/elementolab/scratch/anm2868/vQTL/UKB/results
+results=$indir/ukbb.${phenoName}.results.txt
 for CHR in {1..22}
 do
 echo ${CHR}
-geno=ukbb.${CHR}
+geno=$genodir/ukbb.${CHR}
 outFile=ukbb.${phenoName}.${CHR}.results.var
-plink --bfile $genodir/$geno --maf 0.05 --clump $results --clump-p1 5e-8 --clump-p2 5e-8 --clump-r2 0.01 --clump-kb 5000 --clump-field P.y --out $indir/$outFile
+plink --bfile $geno --maf 0.05 --clump $results --clump-p1 $thres --clump-p2 $thres --clump-r2 0.01 --clump-kb 5000 --clump-field P.y --out $outdir/$outFile
 # outFile=ukbb.${phenoName}.${CHR}.results.mean
 # plink --bfile $genodir/$geno --maf 0.05 --clump $results --clump-p1 5e-8 --clump-p2 5e-8 --clump-r2 0.01 --clump-kb 5000 --clump-field P.x --out $indir/$outFile
 done
@@ -18,22 +32,28 @@ done
 
 # Merge clump 
 
-merged_outFile=ukbb.${phenoName}.results.mean.clumped.txt
-head -1 ukbb.${phenoName}.1.results.mean.clumped > $merged_outFile
-for CHR in {1..22}
-do
-geno=ukbb.${CHR}
-outFile=ukbb.${phenoName}.${CHR}.results.mean.clumped
-tail -n +2 $indir/$outFile | head -n -2 >> $indir/$merged_outFile
-done
+echo 'Merging!'
+# echo "Doing the means..."
+# merged_outFile=ukbb.${phenoName}.results.mean.clumped.txt
+# head -1 ukbb.${phenoName}.1.results.mean.clumped > $merged_outFile
+# for CHR in {1..22}
+# do
+# echo $CHR
+# geno=ukbb.${CHR}
+# outFile=ukbb.${phenoName}.${CHR}.results.mean.clumped
+# tail -n +2 $indir/$outFile | head -n -2 >> $indir/$merged_outFile
+# done
 
-merged_outFile=ukbb.${phenoName}.results.var.clumped.txt
-head -1 ukbb.${phenoName}.1.results.var.clumped > $merged_outFile
+echo "Doing the variances..."
+dir=$indir/output/GWAS/results2/${phenoName}
+merged_outFile=$dir/ukbb.${phenoName}.results.var.clumped.txt
+head -1 $dir/ukbb.${phenoName}.1.results.var.clumped > $merged_outFile
 for CHR in {1..22}
 do
+echo $CHR
 geno=ukbb.${CHR}
-outFile=ukbb.${phenoName}.${CHR}.results.var.clumped
-tail -n +2 $indir/$outFile | head -n -2 >> $indir/$merged_outFile
+outFile=$dir/ukbb.${phenoName}.${CHR}.results.var.clumped
+tail -n +2 $outFile | head -n -2 >> $merged_outFile
 done
 
 # ok if error: may be no significant hits
@@ -41,27 +61,31 @@ done
 
 # pull out SNPs into list
 
-line=1
-merged_outFile=ukbb.${phenoName}.results.mean.clumped.txt
-merged_outFile2=ukbb.${phenoName}.results.mean.clumped.cut.txt
-awk '{print $1,$3}' $indir/$merged_outFile | tail -n +2 > $indir/$merged_outFile2
+# echo "List of mean SNPs..."
+# line=1
+# merged_outFile=ukbb.${phenoName}.results.mean.clumped.txt
+# merged_outFile2=ukbb.${phenoName}.results.mean.clumped.cut.txt
+# awk '{print $1,$3}' $indir/$merged_outFile | tail -n +2 > $indir/$merged_outFile2
 
-line=1
+echo "List of var SNPs..."
+# line=1
+dir=$indir/output/GWAS/results2/${phenoName}
 merged_outFile=ukbb.${phenoName}.results.var.clumped.txt
 merged_outFile2=ukbb.${phenoName}.results.var.clumped.cut.txt
-awk '{print $1,$3}' $indir/$merged_outFile | tail -n +2 > $indir/$merged_outFile2
+awk '{print $1,$3}' $dir/$merged_outFile | tail -n +2 > $dir/$merged_outFile2
 
 
 # create raw genotype files
 
-dir=/home/kulmsc/athena/ukbiobank/calls
-outdir=/athena/elementolab/scratch/anm2868/vQTL/UKB/subset/$phenoName
-merged_outFile2=ukbb.${phenoName}.results.mean.clumped.cut.txt
+echo "Extract SNP time!"
+dir=$indir/output/GWAS/results2/${phenoName}
+outdir=$indir/output/GWAS/subset/$phenoName
+merged_outFile2=ukbb.${phenoName}.results.var.clumped.cut.txt
 mkdir -p $outdir
 while IFS=$' ' read -r -a myArray
 do
  CHR=${myArray[0]}
  snp=${myArray[1]}
  prefix=ukbb.$CHR
- plink --bfile $dir/$prefix --snp $snp --recodeA --out $outdir/$prefix.$snp
-done < $indir/$merged_outFile2 # if running pipeline
+ plink --bfile $genodir/$prefix --snp $snp --recodeA --out $outdir/$prefix.$snp
+done < $dir/$merged_outFile2 # if running pipeline
