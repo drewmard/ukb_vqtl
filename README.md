@@ -13,7 +13,7 @@ Directory: ./scripts/L-MOD/
 
 
 
-## UKB pre-processing of blood cell phenotypes
+## UKB GWAS of blood cell phenotypes
 Directory: ./scripts/GWAS/
 
 
@@ -29,3 +29,17 @@ mergeResults.R
 
 #### clump to significant hits, identify top snps, extract from genotype file
 clump_identify_extract.sh
+
+
+
+## UKB GxE testing (post-vQTL screening)
+Directory: _______
+
+
+#### generate environmental factors
+< insert script 1 >
+
+#### Run GxE
+GxE.R
+
+
