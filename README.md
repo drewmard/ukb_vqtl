@@ -22,7 +22,7 @@ Directory: ./scripts/GWAS/
 
 #### run GWAS
 run_GWAS.sh \
-(this script runs __________)
+(this script runs run_GWAS.slurm.sh)
 
 #### merge diff assoc files together:
 mergeResults.R
