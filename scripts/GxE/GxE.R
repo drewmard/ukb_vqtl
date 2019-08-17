@@ -2,10 +2,12 @@ library(data.table)
 library(sandwich)
 library(lmtest)
 
-phenoName <- 'lymphocyte.count'
+# initialize
+user_direc <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl'
+phenoName <- 'lymphocyte.count.rint'
 
 # var hits
-f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/UKB/results/ukbb.',phenoName,'.results.clumped.cut.txt')
+f <- paste0(user_direc,'/output/GWAS/results2/',phenoName,'/ukbb.',phenoName,'.results.var.clumped.cut.txt')
 index <- fread(f,data.table = F,stringsAsFactors = F)
 
 # mean hits
@@ -20,7 +22,7 @@ for (i in 1:nrow(index)) {
   CHR_vQTL=index[i,1]
   tryCatch(
     {
-      f.vQTL <- paste0('/athena/elementolab/scratch/anm2868/vQTL/UKB/subset/',phenoName,'/ukbb.',CHR_vQTL,'.',vQTL,'.raw')
+      f.vQTL <- paste0(user_direc,'/output/GWAS/subset/',phenoName,'/ukbb.',CHR_vQTL,'.',vQTL,'.raw')
       df.vQTL <- fread(f.vQTL,data.table = F,stringsAsFactors = F)
       
       df.vQTL <- df.vQTL[,c(2,grep(vQTL,colnames(df.vQTL)))]
@@ -32,7 +34,7 @@ for (i in 1:nrow(index)) {
         df.geno <- df.vQTL
       }
     },error=function(e) {
-      print(i)
+      print(paste0('ERROR: ',i))
       break
     }
   )
@@ -43,6 +45,7 @@ print("reading in phenotypes & environmental data, then merging...")
 # df.pheno <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/files/pheno.txt',data.table = F,stringsAsFactors = F)
 # PHENOTYPE_NAMES <- c('bmi','diabetes','high.blood.pressure','hypertension')
 
+# need to switch phenotype file directory:
 df.pheno <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/files/pheno.blood.txt',data.table = F,stringsAsFactors = F)
 
 df <- merge(df.geno,df.pheno,by='IID')
