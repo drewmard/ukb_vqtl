@@ -28,4 +28,4 @@ run_GWAS.sh \
 mergeResults.R
 
 #### clump to significant hits, identify top snps, extract from genotype file
-clump_identify_extract.R
+clump_identify_extract.sh
