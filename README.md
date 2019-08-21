@@ -28,8 +28,8 @@ gen_full_data.R \
 preprocess.R \
 
 #### run GWAS & vGWAS
-run_GWAS.sh \
-(this script runs run_GWAS.slurm.sh)
+run_GWAS.sh (run on cannes; local) \
+run_vGWAS.sh (run on curie.pbtech SLURM cluster) 
 
 #### merge diff assoc files together:
 mergeResults.R

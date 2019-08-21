@@ -100,4 +100,8 @@ for (s in c('80','20')) {
   fwrite(phenotypeDataFile,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.',s,'.txt'),sep='\t',quote = F,col.names = T,row.names = F)
 }
 
+# library(data.table)
+# s <- '80'
+# phenotypeDataFile <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.',s,'.txt'),data.table = F,stringsAsFactors = F)
+fwrite(as.data.frame(colnames(phenotypeDataFile)[-c(1:2)]),'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotype_names.txt',col.names = F,row.names = F,sep = '\t',quote = F)
 
