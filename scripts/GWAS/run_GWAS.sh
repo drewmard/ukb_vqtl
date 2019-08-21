@@ -1,5 +1,3 @@
-echo "Chromosome $CHR analysis..."
-
 echo "Activating environment..."
 source activate vQTL
 
@@ -14,6 +12,7 @@ outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results
 for CHR in {1..22};
 do
 
+echo "Chromosome $CHR analysis..."
 prefix=ukbb.$CHR
 # phenoName=$2
 

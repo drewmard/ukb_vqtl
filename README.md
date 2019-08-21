@@ -27,7 +27,7 @@ gen_pheno.R \
 gen_full_data.R \
 preprocess.R \
 
-#### run GWAS
+#### run GWAS & vGWAS
 run_GWAS.sh \
 (this script runs run_GWAS.slurm.sh)
 
