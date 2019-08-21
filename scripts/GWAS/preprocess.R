@@ -94,7 +94,7 @@ for (s in c('80','20')) {
       phenotypeDataFile[,paste0(phenoName,suffix)][j] <- resid2
 
       # switch NA to -9 for plink
-      phenotypeDataFile[,phenoName][which(is.na(phenotypeDataFile[,phenoName]))] <- -9
+      phenotypeDataFile[,paste0(phenoName,suffix)][which(is.na(phenotypeDataFile[,paste0(phenoName,suffix)]))] <- -9
     }
   }
   fwrite(phenotypeDataFile,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.',s,'.txt'),sep='\t',quote = F,col.names = T,row.names = F)

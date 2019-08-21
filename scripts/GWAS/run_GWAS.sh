@@ -9,15 +9,14 @@ pheno=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/p
 dir=/home/kulmsc/athena/ukbiobank/calls
 outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results
 
-while read -r phenoName;
-do
+# while read -r phenoName;
+# do
 
 for CHR in {1..22};
 do
 
 echo "Chromosome $CHR analysis..."
 prefix=ukbb.$CHR
-# phenoName=$2
 
 # 1 : freq
 echo "MAF measurements..."
@@ -31,18 +30,16 @@ outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results
 # 2 : mean
 echo "muQTL testing..."
 mkdir -p $outdir
-plink --bfile $dir/$prefix --pheno $pheno --pheno-name $phenoName --assoc --out $outdir/$prefix.$phenoName.muGWAS
+# plink --bfile $dir/$prefix --pheno $pheno --pheno-name $phenoName --assoc --out $outdir/$prefix.$phenoName.muGWAS
 
 # for some reason, isn't running all phenotypes!
-#plink --bfile $dir/$prefix --pheno $pheno --all-pheno --assoc --allow-no-sex --out $outdir/$prefix.muGWAS
-
-# plink2 --bfile $dir/$prefix --pheno $pheno --assoc --out $outdir/$prefix.muGWAS
+plink --bfile $dir/$prefix --pheno $pheno --all-pheno --assoc --allow-no-sex --out $outdir/$prefix.muGWAS
 
 done
 
 
 echo "Complete."
 
-done < /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotype_names.txt
+# done < /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotype_names.txt
 
 

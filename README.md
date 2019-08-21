@@ -1,13 +1,12 @@
 # vQTL analysis in UK Biobank
 
-## Linear Modeling of Deviations
+## Linear Modeling of Deviations (L-MOD)
 Directory: ./scripts/L-MOD/
 
 
 #### Script 1
 < insert script 1 >
 
-#### Script 1
 < insert script 1 > \
 < insert >
 
@@ -26,6 +25,9 @@ gen_cov2.R \
 gen_pheno.R \
 gen_full_data.R \
 preprocess.R \
+
+#### Script to perform L-MOD variance testing in Plink
+vGWAS.R
 
 #### run GWAS & vGWAS
 run_GWAS.sh (run on cannes; local) \
