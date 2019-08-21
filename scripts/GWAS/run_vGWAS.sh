@@ -15,7 +15,7 @@ Rscript /home/anm2868/scripts/UKB/061719_Rserve.R
 pheno=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
 dir=/home/kulmsc/athena/ukbiobank/calls
 outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results
-workdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl
+workdir=/athena/elementolab/scratch/anm2868/vQTL
 
 for CHR in {1..22};
 do
