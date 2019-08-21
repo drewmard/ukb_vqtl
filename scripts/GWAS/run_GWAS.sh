@@ -12,7 +12,7 @@ outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results
 # while read -r phenoName;
 # do
 
-for CHR in {1..21};
+for CHR in {1..22};
 do
 
 echo "Chromosome $CHR analysis..."
