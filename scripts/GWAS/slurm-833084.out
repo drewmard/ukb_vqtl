@@ -1,0 +1,466 @@
+Activating environment...
+Starting...
+Starting Rserve:
+ /pbtech_mounts/softlib001/apps/EL7/spack/opt/spack/linux-centos7-x86_64/gcc-6.3.0/r-3.5.0-fxcj5ttxrb6jqw6t5zouoflbiginkdxg/rlib/R/bin/R CMD /pbtech_mounts/homes043/anm2868/R/x86_64-pc-linux-gnu-library/3.5/Rserve/libs//Rserve --no-save 
+
+
+R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+Rserv started in daemon mode.
+Chromosome 1 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.1.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.1
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.1.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+63487 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.1.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 2 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.2.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.2
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.2.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+61966 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.2.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 3 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.3.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.3
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.3.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+52300 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.3.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 4 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.4.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.4
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.4.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+47443 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.4.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 5 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.5.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.5
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.5.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+46314 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.5.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 6 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.6.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.6
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.6.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+53695 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.6.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 7 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.7.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.7
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.7.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+42722 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.7.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 8 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.8.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.8
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.8.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+38591 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.8.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 9 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.9.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.9
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.9.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+34310 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.9.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 10 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.10.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.10
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.10.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+38308 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.10.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 11 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.11.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.11
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.11.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+40824 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.11.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 12 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.12.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.12
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.12.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+37302 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.12.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 13 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.13.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.13
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.13.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+26806 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.13.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 14 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.14.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.14
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.14.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+25509 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.14.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 15 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.15.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.15
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.15.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+24467 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.15.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 16 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.16.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.16
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.16.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+28960 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.16.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 17 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.17.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.17
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.17.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+28835 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.17.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 18 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.18.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.18
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.18.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+21962 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.18.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 19 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.19.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.19
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.19.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+26186 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.19.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 20 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.20.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.20
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.20.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+19959 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.20.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 21 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.21.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.21
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.21.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+11342 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.21.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Chromosome 22 analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.22.monocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.22
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.22.monocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name monocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+12968 variants loaded from .bim file.
+488377 people (223478 males, 264811 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.22.monocyte.count.rint.vGWAS.nosex
+.
+Error: Line 3 of --pheno file has fewer tokens than expected.
+Complete.

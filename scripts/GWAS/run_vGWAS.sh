@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH -J vQTL
-#SBATCH -n 16
-#SBATCH --mem=258G
+#SBATCH -n 8
+#SBATCH --mem=64G
 
 phenoName=$1
 
