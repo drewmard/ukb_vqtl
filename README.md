@@ -17,8 +17,9 @@ Directory: ./scripts/L-MOD/
 Directory: ./scripts/GWAS/
 
 
-#### pre-processing
-< insert script 1 >
+#### pre-processing:
+(1) identify_indiv_blood_disorders.R \
+(2) ukb_sample_qc.txt \
 
 #### run GWAS
 run_GWAS.sh \

@@ -1,21 +1,4 @@
-library(data.table)
-df <- fread('/home/kulmsc/athena/ukbiobank/qc/ukb_sample_qc.txt',data.table = F,stringsAsFactors = F)
-df2 <- df[,c(4,5,6,19,20,23,24,3,26:45)] # 19=exc heterozyg, 20 = aneuploidy, 23 = exc rel,24 = brits,3= genotyping array
-colnames(df2)[1:8] <- c(
-                   'batch',
-                   'plate',
-                   'well',
-                   'het.missing.outliers',
-                   'putative.sex.chromosome.aneuploidy',
-                   'excess.relatives',
-                   'in.white.British.ancestry.subset',
-                   'genotyping.array')
-colnames(df2)[9:ncol(df2)] <- paste0('PC',1:20)
-i.remove <- which(df2$excess.relatives==1 |
-                    df2$putative.sex.chromosome.aneuploidy==1 |
-                    df2$het.missing.outliers==1)
-df2$QC_In <- 1; df2$QC_In[i.remove] <- 0
-
+df2 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/ukb_sample_qc.txt',data.table = F,stringsAsFactors = F)
 df.disease <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/blood_disease.indiv_id.txt',data.table = F,stringsAsFactors = F,header = T)
 
 pheno <- fread('/home/kulmsc/athena/ukbiobank/phenotypes/ukb26867.csv.gz',data.table=F,stringsAsFactors = F)
@@ -23,7 +6,7 @@ pheno2 <- pheno[,c('eid','22001-0.0','21022-0.0','22000-0.0','22007-0.0','22008-
                    '21001-0.0')]
 colnames(pheno2)[2:ncol(pheno2)] <- c('sex','age','batch','plate','well','p.c.1',
                                       'bmi')
-pheno2 <- subset(pheno2, !(eid %in% df.disease$eid))
+pheno2 <- subset(pheno2, !(eid %in% df.disease$eid)) # remove individuals w/ disease
 pheno2$sex[which(is.na(pheno2$sex))] <- median(pheno2$sex,na.rm=T)
 pheno2$age[which(is.na(pheno2$age))] <- median(pheno2$age,na.rm=T)
 pheno2$age2 <- pheno2$age^2
@@ -39,10 +22,10 @@ pheno2$bmi2[i] <- val
 pheno2$bmi2.with_outliers <- pheno2$bmi2
 pheno2$bmi2[j] <- NA
 
-pheno.new <- fread('/home/kulmsc/athena/ukbiobank/setup_morePhenos/ukb33822.sort.csv.gz',data.table=F,stringsAsFactors = F)
+pheno.new <- fread('/home/kulmsc/athena/ukbiobank/setup_morePhenos/ukb33822.csv.gz',data.table=F,stringsAsFactors = F)
 pheno.new2 <- pheno.new[,c('eid',paste0('X',c('3700.0.0','2724.0.0','1558.0.0','1239.0.0','1249.0.0')))]
 colnames(pheno.new2)[2:ncol(pheno.new2)] <- c('time.since.period','menopause','alcohol.freq','current.smoking','past.smoking')
-pheno.new2 <- subset(pheno.new2, !(eid %in% df.disease$eid))
+pheno.new2 <- subset(pheno.new2, !(eid %in% df.disease$eid)) # remove indiv w/ disease
 
 pheno.new2$Smoking <- NA
 pheno.new2$Smoking[which( (pheno.new2$current.smoking==1 | pheno.new2$current.smoking==2) | (pheno.new2$past.smoking==1 | pheno.new2$past.smoking==2) )] <- 1
@@ -75,7 +58,7 @@ pheno.new2$menopause2 <- as.factor(pheno.new2$menopause2)
 
 # phenotypes
 pheno3 <- pheno[,c('eid','30120-0.0','30130-0.0','30140-0.0','30200-0.0','30000-0.0')]
-pheno3 <- subset(pheno3, !(eid %in% df.disease$eid))
+pheno3 <- subset(pheno3, !(eid %in% df.disease$eid))  # remove indiv w/ disease
 PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
 colnames(pheno3)[2:ncol(pheno3)] <- PHENOTYPE_NAMES
 pheno2 <- merge(pheno2,pheno3,by='eid')
@@ -100,6 +83,7 @@ fam3$In[which(is.na(fam3$In))] <- 0
 for (i in 1:length(PHENOTYPE_NAMES)) {
   phenoName <- PHENOTYPE_NAMES[i]
   
+  # creates British-only phenotype that has NA for non-European individuals
   fam3[,paste0(phenoName,'.na')][which(fam3$In==0)] <- NA
   fam3[,paste0(phenoName,'.na')][which(fam3$QC_In==0)] <- NA
 # which(fam3$In==1 & fam3$QC_In==0) # only 1 individual
@@ -123,8 +107,6 @@ colnames(phenotypeDataFile) <- c('FID','IID')
 fam3 <- fam2
 fam3$bmi2 <- fam3$bmi2.with_outliers
 fam3$time.since.period2 <- fam3$time.since.period2.with_outliers
-
-# remove indiv w/ disease:
 
 ############
 

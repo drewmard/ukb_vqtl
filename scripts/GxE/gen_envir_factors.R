@@ -156,6 +156,8 @@ envir_data$age.started.smoking <- apply(cov[,c('age.started.smoking.current','ag
 envir_data$hormone.replacement.therapy <- cov$hormone.replacement.therapy
 envir_data$hormone.replacement.therapy[which(envir_data$hormone.replacement.therapy %in% c(-1,-3))] <- NA
 
+# envir_data$never.eat <- cov$envir_data
+# (envir_data$never.eat==)
 
 
 ############################################################################################
@@ -273,4 +275,6 @@ colnames(cov2)[2:ncol(cov2)] <- COL_NAMES[i]
 
 envir_data <- data.frame(eid=cov$eid,PA,SB,Smoking)
 envir_data <- merge(cov2,envir_data,by='eid')
-fwrite(envir_data,'/athena/elementolab/scratch/anm2868/vQTL/UKB/envir_data.txt',quote=F,col.names = T,row.names = F,sep = '\t',na='NA')
+fwrite(envir_data,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/envir_data.txt',quote=F,col.names = T,row.names = F,sep = '\t',na='NA')
+
+

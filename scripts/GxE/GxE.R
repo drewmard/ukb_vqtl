@@ -40,26 +40,34 @@ for (i in 1:nrow(index)) {
   )
   
 }
+# df.geno$id <- 1:nrow(df.geno)
 
 print("reading in phenotypes & environmental data, then merging...")
 # df.pheno <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/files/pheno.txt',data.table = F,stringsAsFactors = F)
 # PHENOTYPE_NAMES <- c('bmi','diabetes','high.blood.pressure','hypertension')
 
+# P data:
 # need to switch phenotype file directory:
 df.pheno <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/files/pheno.blood.txt',data.table = F,stringsAsFactors = F)
-
 df <- merge(df.geno,df.pheno,by='IID')
 
-df.envir <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/envir_data.txt',data.table = F,stringsAsFactors = F)
+# E data:
+df.envir <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/envir_data.txt',data.table = F,stringsAsFactors = F)
 ENVIR_NAMES <- colnames(df.envir)[-1]
-df.envir <- df.envir[,-which(colnames(df.envir) %in% c('sex','age'))]
+# df.envir <- df.envir[,-which(colnames(df.envir) %in% c('sex','age'))]
 df2 <- merge(df,df.envir,by.x='IID',by.y='eid')
+
+# need to switch directory for df.disease. removes 
+df.disease <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/blood_disease.indiv_id.txt',data.table = F,stringsAsFactors = F,header = T)
+df3 <- subset(df2, !(IID %in% df.disease$eid))
 
 # subset 20% test, 80% train
 i.20 <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/phenotypes_blood.indiv_id.txt',data.table = F,stringsAsFactors = F)
-df.full <- df2
-df.80 <- df.full; df.80[i,] <- NA
-df.20 <- df.full; df.20[(1:nrow(df.full))[-i],] <- NA
+df.20 <- subset(df3,IID %in% df.pheno$IID[i.20])
+df.80 <- subset(df3,!(IID %in% df.pheno$IID[i.20]))
+# df.full <- df2[order(df2$id),]
+# df.80 <- df.full; df.80[i,] <- NA
+# df.20 <- df.full; df.20[(1:nrow(df.full))[-i],] <- NA
 
 # if only want to run single phenotype
 PHENOTYPE_NAMES <- c(phenoName)
@@ -71,16 +79,22 @@ GxE_acrossPhenotypes <- function(i) {
     ENVIR_FACTOR <- ENVIR_NAMES[j]
     print(paste0('Environmental factor ',j,'/',length(ENVIR_NAMES),': ',ENVIR_FACTOR)) # for debugging
     
-    mod.formula <- formula(paste(paste0(phenoName,'.na'),' ~ sex+age+age2+age*sex+age2*sex+genotyping.array+
-                                 PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
-                                 PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+',
-                                 vQTL,'*',ENVIR_FACTOR))
+    # Create LM model w/ GxE interaction:
+    # might need to change column names: for example, ENVIR_FACTOR will be smoking in GxE testing and need to impute medians to keep full data
+    mod.formula.2 <- formula(paste(paste0(phenoName,'.na'),' ~ age+age2+genotyping.array+sex+
+                                   PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
+                                   PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+
+                                   Smoking+Smoking.dummy+time.since.period2+time.since.period2.dummy+
+                                   menopause2+alcohol.freq2+alcohol.freq2.dummy+bmi2.dummy+bmi2+bmi2*age+',
+                                   vQTL,'*',ENVIR_FACTOR))
+    
     # need to switch glm
     # if (i != 1) {
     #   mod1 <- glm(mod.formula,
     #               data=df2,na.action=na.exclude,family=binomial(link="logit"))
     #   mod1.coef <- summary(mod1)$coef
     # } else {
+    
     mod1 <- tryCatch({
       lm(mod.formula,
                  data=df2,na.action=na.exclude)
