@@ -3,7 +3,7 @@
 #SBATCH -n 16
 #SBATCH --mem=258G
 
-phenoName=$2
+phenoName=$1
 
 echo "Activating environment..."
 source activate vQTL
