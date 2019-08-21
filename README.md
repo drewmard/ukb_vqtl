@@ -18,8 +18,14 @@ Directory: ./scripts/GWAS/
 
 
 #### pre-processing:
-(1) identify_indiv_blood_disorders.R \
-(2) ukb_sample_qc.txt \
+split_80_20.R \
+identify_indiv_blood_disorders.R \
+sample_qc.R \
+gen_cov1.R \
+gen_cov2.R \
+gen_pheno.R \
+gen_full_data.R \
+(7) 
 
 #### run GWAS
 run_GWAS.sh \

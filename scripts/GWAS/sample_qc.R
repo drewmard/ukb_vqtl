@@ -16,5 +16,5 @@ i.remove <- which(df2$excess.relatives==1 |
                     df2$het.missing.outliers==1)
 df2$QC_In <- 1; df2$QC_In[i.remove] <- 0
 
-fwrite(df2,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/ukb_sample_qc.txt',row.names = T,col.names = F,quote = F,sep = '\t')
+fwrite(df2,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/ukb_sample_qc.txt',na='NA',row.names = F,col.names = T,quote = F,sep = '\t')
 
