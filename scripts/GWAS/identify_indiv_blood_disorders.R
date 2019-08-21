@@ -36,6 +36,6 @@ i4 <- diseases$ICD10 %in% c(
 
 i.all <- which(i1 | i2 | i3 | i4)
 
-fwrite(data.frame(row=i.all,eid=diseases$eid[i.all]),'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/blood_disease.indiv_id.txt',na='NA',col.names = T,row.names = F,quote=F,sep = '\t',na='NA')
+fwrite(data.frame(row=i.all,eid=diseases$eid[i.all]),'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/blood_disease.indiv_id.txt',col.names = T,row.names = F,quote=F,sep = '\t',na='NA')
 
 

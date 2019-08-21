@@ -25,7 +25,7 @@ gen_cov1.R \
 gen_cov2.R \
 gen_pheno.R \
 gen_full_data.R \
-(7) 
+preprocess.R \
 
 #### run GWAS
 run_GWAS.sh \
