@@ -25,7 +25,7 @@ prefix=ukbb.$CHR
 # 3 : variance
 echo "vQTL testing..."
 mkdir -p $outdir
-myscript=/athena/elementolab/scratch/anm2868/vQTL/UKB/Rscript/vGWAS.R
+myscript=${workdir}/ukb_vqtl/scripts/GWAS/vGWAS.R
 plink --bfile $dir/$prefix --pheno $pheno --pheno-name $phenoName --R $myscript --threads 1 --out $outdir/$prefix.$phenoName.vGWAS
 # plink --bfile $dir/$prefix --pheno $pheno --all-pheno --R $myscript --threads 1 --out $outdir/$prefix.vGWAS
 
