@@ -34,7 +34,7 @@ run_GWAS.sh (run on cannes; local) \
 run_vGWAS.sh (run on curie.pbtech SLURM cluster) 
 
 #### merge diff assoc files together:
-mergeResults.R
+mergeResults.R ########## note: might need to change directories for mean gwas analyses
 
 #### clump to significant hits, identify top snps, extract from genotype file
 clump_identify_extract.sh
