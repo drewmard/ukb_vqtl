@@ -29,7 +29,7 @@ for (s in c('80','20')) {
     phenotypeDataFile <- phenotypeDataFile.20
   }
   #########################################
-  
+  fam2$menopause2 <- as.factor(fam2$menopause2)
   #########################################
   # phenotype preprocessing ###############
   source('/home/anm2868/scripts/Useful_scripts/rntransform.R')
@@ -44,8 +44,6 @@ for (s in c('80','20')) {
     suffix<-'.rint'; fam2[,paste0(phenoName,'.na',suffix)] <- rntransform(fam2[,paste0(phenoName,'.na')])
     suffix<-'.log'; fam2[,paste0(phenoName,'.na',suffix)] <- log10(fam2[,paste0(phenoName,'.na')]+1)
     
-    suffix<-'.rint'; fam2[,paste0(phenoName,'.na',suffix)] <- rntransform(fam2[,paste0(phenoName,'.na')])
-    suffix<-'.log'; fam2[,paste0(phenoName,'.na',suffix)] <- log10(fam2[,paste0(phenoName,'.na')]+1)
   }
   #########################################
   
