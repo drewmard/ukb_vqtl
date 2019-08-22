@@ -4,7 +4,7 @@ library(lmtest)
 
 # initialize
 user_direc <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl'
-phenoName <- 'lymphocyte.count'
+phenoName <- 'lymphocyte.count.rint'
 f.geno <- paste0(user_direc,'/output/GWAS/subset/',phenoName,'/ukbb.ALL_vQTL.raw')
 df.geno <- fread(f.geno,data.table = F,stringsAsFactors = F)
 
@@ -13,15 +13,16 @@ fam2.80 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/
 fam2.20 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/full_data.20.txt',data.table = F,stringsAsFactors = F)
 
 # var hits
+f <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results2/lymphocyte.count.rint/ukbb.lymphocyte.count.rint.results.var.clumped.cut.txt'
 # f <- paste0(user_direc,'/output/GWAS/results2/',phenoName,'/ukbb.',phenoName,'.results.var.clumped.cut.txt')
-# index <- fread(f,data.table = F,stringsAsFactors = F)
+index <- fread(f,data.table = F,stringsAsFactors = F)
 
 # mean hits
 # f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/UKB/results/ukbb.',phenoName,'.results.mean.clumped.cut.txt')
 # index <- fread(f,data.table = F,stringsAsFactors = F)
 
-# for (s in c('80','20')) {
-for (s in c('20')) {
+for (s in c('80','20')) {
+# for (s in c('20')) {
     
   print("reading in phenotypes & environmental data, then merging...")
   
@@ -60,6 +61,9 @@ for (s in c('20')) {
   # df.envir <- df.envir[,-which(colnames(df.envir) %in% c('sex','age'))]
   df2 <- merge(df,df.envir,by.x='IID',by.y='eid')
   
+  f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/full_data_gxe.',s,'.txt')
+  fwrite(df2,f.out,sep='\t',na='NA',row.names = F,col.names = T,quote = F)
+  
   # PHENOTYPE_NAMES <- paste0(rep(PHENOTYPE_NAMES,each=3),'.na.',c('','log','rint'))
   # PHENOTYPE_NAMES <- paste0(rep(PHENOTYPE_NAMES,each=1),'.na.',c('rint'))
   # PHENOTYPE_NAMES <- paste0(PHENOTYPE_NAMES[1:2],'.na') # if only want to run specific phenotypes
@@ -77,13 +81,20 @@ for (s in c('20')) {
       # might need to change column names: for example, ENVIR_FACTOR will be smoking in GxE testing and need to impute medians to keep full data
       mod.formula <- paste(paste0(phenoName),' ~ age+age2+genotyping.array+sex+
                                    PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
-                                   PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+
-                                   time.since.period2+time.since.period2.dummy+
-                                   menopause2+bmi2.dummy+bmi2+bmi2*age+',
+                                   PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+',
                            vQTL,'*',ENVIR_FACTOR)
+      
+      # mod.formula <- paste(paste0(phenoName),' ~ age+age2+genotyping.array+sex+
+      #                              PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
+      #                      PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+',
+      #                      vQTL,'+',ENVIR_FACTOR)
+      
+      # time.since.period2+time.since.period2.dummy+menopause2+ # women only
+      # bmi2.dummy+bmi2+bmi2*age+',
       if (ENVIR_FACTOR!='Smoking.E') {
         mod.formula <- paste0(mod.formula,'+Smoking+Smoking.dummy')
-      } else if (ENVIR_FACTOR!='alcohol.freq.E') { 
+      } 
+      if (ENVIR_FACTOR!='alcohol.freq.E') { 
         mod.formula <- paste0(mod.formula,'+alcohol.freq2+alcohol.freq2.dummy')
       }
       mod.formula <- formula(mod.formula)
@@ -100,13 +111,7 @@ for (s in c('20')) {
            data=df2,na.action=na.exclude)
       },error=function(e) {
         print('wtf????')
-        mod.formula <- formula(paste(paste0(phenoName,'.na'),' ~ sex+age+age2+age*sex+age2*sex+
-                                 PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
-                                 PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+',
-                                     vQTL,'*',ENVIR_FACTOR))
-        mod1 <- lm(mod.formula,
-                   data=df2,na.action=na.exclude)
-        return(mod1)
+        return(NA)
       })
       
       # mod1.coef <- summary(mod1)$coef
@@ -149,8 +154,10 @@ for (s in c('20')) {
   # SAVE # # # #
   f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/ukbb.gxe.',s,'.txt')
   fwrite(results,f.out,sep='\t',na='NA',row.names = F,col.names = T,quote = F)
+  
+  print(results[order(results$P_GxE),][1:10,])
+  
 }
-results[order(results$P_GxE),][1:10,]
 
 ########################################################################
 ########################################################################

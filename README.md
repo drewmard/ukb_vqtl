@@ -24,7 +24,7 @@ gen_cov1.R \
 gen_cov2.R \
 gen_pheno.R \
 gen_full_data.R \
-preprocess.R \
+preprocess.R
 
 #### Script to perform L-MOD variance testing in Plink
 vGWAS.R
@@ -42,16 +42,29 @@ clump_identify_extract.sh
 
 
 ## UKB GxE testing (post-vQTL screening)
-Directory: _______
+Directory: ./scripts/GxE
 
 
 #### generate environmental factors
-< insert script 1 >
+gen_envir_factors.R
 
 #### generate genotype files
 gen_geno.R (need to run clump_identify_extract.sh first)
 
 #### Run GxE
-GxE.R
+GxE.R (might need to clean up?) \
+(need to switch var hits file to be automated) \
+(switch to calculating residuals, identical to preprocess; maybe just extract preprocess) \
+(need to make it look cleaner)
+
+
+## UKB downstream testing (post-GxE)
+Directory: ./scripts/downstream
+
+#### new phenotypes
+gen_pheno_other.R
+
+#### do PGS calculations
+PGS.R
 
 
