@@ -5,50 +5,55 @@ library(lmtest)
 # initialize
 user_direc <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl'
 phenoName <- 'lymphocyte.count.rint'
+f.geno <- paste0(user_direc,'/output/GWAS/subset/',phenoName,'/ukbb.ALL_vQTL.raw')
+df.geno <- fread(f.geno,data.table = F,stringsAsFactors = F)
+
+# read in data
+fam2.80 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/full_data.80.txt',data.table = F,stringsAsFactors = F)
+fam2.20 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/full_data.20.txt',data.table = F,stringsAsFactors = F)
 
 # var hits
-f <- paste0(user_direc,'/output/GWAS/results2/',phenoName,'/ukbb.',phenoName,'.results.var.clumped.cut.txt')
-index <- fread(f,data.table = F,stringsAsFactors = F)
+# f <- paste0(user_direc,'/output/GWAS/results2/',phenoName,'/ukbb.',phenoName,'.results.var.clumped.cut.txt')
+# index <- fread(f,data.table = F,stringsAsFactors = F)
 
 # mean hits
 # f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/UKB/results/ukbb.',phenoName,'.results.mean.clumped.cut.txt')
 # index <- fread(f,data.table = F,stringsAsFactors = F)
 
-# index <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/results/ukbb.bmi.results.custom.txt',data.table = F,stringsAsFactors = F)
-print('Creating genotype file...')
-for (i in 1:nrow(index)) {
-  print(paste0(i,'/',nrow(index),' SNPs...'))
-  vQTL=index[i,2]
-  CHR_vQTL=index[i,1]
-  tryCatch(
-    {
-      f.vQTL <- paste0(user_direc,'/output/GWAS/subset/',phenoName,'/ukbb.',CHR_vQTL,'.',vQTL,'.raw')
-      df.vQTL <- fread(f.vQTL,data.table = F,stringsAsFactors = F)
-      
-      df.vQTL <- df.vQTL[,c(2,grep(vQTL,colnames(df.vQTL)))]
-      colnames(df.vQTL)[2] <- vQTL
-      
-      if (i != 1) {
-        df.geno <- merge(df.geno,df.vQTL,by='IID')
-      } else {
-        df.geno <- df.vQTL
-      }
-    },error=function(e) {
-      print(paste0('ERROR: ',i))
-      break
-    }
-  )
-  
-}
-# df.geno$id <- 1:nrow(df.geno)
 
+
+for (s in c('80','20')) {
+ break
+}
 print("reading in phenotypes & environmental data, then merging...")
-# df.pheno <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/files/pheno.txt',data.table = F,stringsAsFactors = F)
-# PHENOTYPE_NAMES <- c('bmi','diabetes','high.blood.pressure','hypertension')
+
+if (s=='80') {
+  fam2 <- fam2.80 
+} else if (s=='20') {
+  fam2 <- fam2.20
+}
+
+source('/home/anm2868/scripts/Useful_scripts/rntransform.R')
+for (k in 1:length(PHENOTYPE_NAMES)) {
+  phenoName <- PHENOTYPE_NAMES[k]
+  
+  # remove outliers
+  i.outlier <- which(abs(scale(fam2[,paste0(phenoName,'.na')])) > 5)
+  fam2[,paste0(phenoName,'.na')][i.outlier] <- NA
+  
+  # apply transformations
+  suffix<-'.rint'; fam2[,paste0(phenoName,'.na',suffix)] <- rntransform(fam2[,paste0(phenoName,'.na')])
+  suffix<-'.log'; fam2[,paste0(phenoName,'.na',suffix)] <- log10(fam2[,paste0(phenoName,'.na')]+1)
+  
+  suffix<-'.rint'; fam2[,paste0(phenoName,'.na',suffix)] <- rntransform(fam2[,paste0(phenoName,'.na')])
+  suffix<-'.log'; fam2[,paste0(phenoName,'.na',suffix)] <- log10(fam2[,paste0(phenoName,'.na')]+1)
+}
+#########################################
+
+df.pheno <- fam2
 
 # P data:
 # need to switch phenotype file directory:
-df.pheno <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/files/pheno.blood.txt',data.table = F,stringsAsFactors = F)
 df <- merge(df.geno,df.pheno,by='IID')
 
 # E data:

@@ -48,6 +48,9 @@ Directory: _______
 #### generate environmental factors
 < insert script 1 >
 
+#### generate genotype files
+gen_geno.R (need to run clump_identify_extract.sh first)
+
 #### Run GxE
 GxE.R
 
