@@ -2,15 +2,17 @@ library(data.table)
 library(sandwich)
 library(lmtest)
 
-source('')
+source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/gen_datafiles.R')
 
 # initialize
 phenoName <- 'monocyte.count.rint'
+gen_datafiles(phenoName)
 # phenoName2 <- 'monocyte.count.na.rint'
 
 for (s in c('80','20')) {
   
-  
+  f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/full_data_gxe.',s,'.txt')
+  df2 <- fread(f,data.table = F,stringsAsFactors = F)
 
   PHENOTYPE_NAMES <- paste0(rep(PHENOTYPE_NAMES,each=3),c('','.log','.rint'),'.na')
 
