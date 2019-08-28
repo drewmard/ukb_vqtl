@@ -3,6 +3,8 @@
 #SBATCH -n 8
 #SBATCH --mem=64G
 
+# for running local in a loop
+
 phenoName=$1
 CHR=$2
 
