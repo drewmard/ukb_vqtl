@@ -29,9 +29,12 @@ preprocess.R
 #### Script to perform L-MOD variance testing in Plink
 vGWAS.R
 
-#### run GWAS & vGWAS
+#### run GWAS
 run_GWAS.sh (run on cannes; local) \
-run_vGWAS.sh (run on curie.pbtech SLURM cluster) 
+
+#### run vGWAS
+(sbatch) run_vGWAS_4.sh <phenotype> <CHR> (run on cannes locally/curie.pbtech cluster for spec chr) 
+run_vGWAS_3.sh <phenotype> (run on cannes locally in a loop) 
 
 #### merge diff assoc files together:
 mergeResults.R ########## note: might need to change directories for mean gwas analyses

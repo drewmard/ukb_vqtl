@@ -1,24 +1,25 @@
 # initialize
+phenoName=monocyte.count
 thres="5e-8"
-thres="1e-5"
+# thres="1e-5"
 indir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl # path to ukb_vqtl
-phenoName=lymphocyte.count.rint
 genodir=/home/kulmsc/athena/ukbiobank/calls
 
 # make important directories
 mkdir -p ${indir}/output/GWAS/subset
-mkdir -p ${indir}/output/GWAS/subset/phenoName
+mkdir -p ${indir}/output/GWAS/subset/$phenoName
 # mkdir -p $indir/output/GWAS/results/${phenoName}
 mkdir -p $indir/output/GWAS/results2/
 mkdir -p $indir/output/GWAS/results2/$phenoName
 
 # clump
 echo 'Clumping!'
-source activate HLMM
-indir=$indir/output/GWAS/results
-outdir=$indir/output/GWAS/results2
+source activate vQTL
+indir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl # path to ukb_vqtl
+# indir1=$indir/output/GWAS/results
+outdir=$indir/output/GWAS/results2/${phenoName}
 # indir=/athena/elementolab/scratch/anm2868/vQTL/UKB/results
-results=$indir/ukbb.${phenoName}.results.txt
+results=$indir/output/GWAS/results/ukbb.${phenoName}.results.txt
 for CHR in {1..22}
 do
 echo ${CHR}
