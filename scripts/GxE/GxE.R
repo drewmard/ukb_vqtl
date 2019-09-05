@@ -31,7 +31,7 @@ for (s in c('80','20')) {
   fam3$bmi2 <- df2$bmi2.with_outliers
   fam3$time.since.period2 <- df2$time.since.period2.with_outliers
   
-  source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/GxE_acrossPhenotypes.R')
+  source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/GxE_acrossPhenotypes_2.R')
   
   print('GxE...')
   for (k in 1:length(index)) {
@@ -39,7 +39,8 @@ for (s in c('80','20')) {
     print(paste0('SNP ',k,'/',length(index),': ',vQTL)) # for debugging
     # y2 <- (lapply(1:length(PHENOTYPE_NAMES),GxE_acrossPhenotypes))
     y2 <- (lapply(which(PHENOTYPE_NAMES%in% 
-                          c('monocyte.count.na','monocyte.count.rint.na')
+                          # c('monocyte.count.na','monocyte.count.rint.na')
+                        c('monocyte.count.na')
                         ),GxE_acrossPhenotypes))
     y2.df <- as.data.frame(do.call(rbind,y2))
     for (l in 4:length(y2.df)) {
