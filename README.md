@@ -38,6 +38,7 @@ run_vGWAS_3.sh <phenotype> (run on cannes locally in a loop)
 
 #### merge diff assoc files together:
 mergeResults.R ########## note: might need to change directories for mean gwas analyses
+mergeTransform.R
 
 #### clump to significant hits, identify top snps, extract from genotype file
 clump_identify_extract.sh

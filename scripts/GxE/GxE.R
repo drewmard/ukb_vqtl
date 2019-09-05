@@ -5,96 +5,42 @@ library(lmtest)
 source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/gen_datafiles.R')
 
 # initialize
-phenoName <- 'monocyte.count.rint'
+phenoName <- 'monocyte.count'
+PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
+ENVIR_NAMES <- c("PA","SB","Smoking.E","sleep.duration","getting.up.morning","nap.during.day",
+                 "time.spent.outdoors.summer","time.spent.outdoors.winter","time.spent.outdoors",
+                 "tobacco.smoke.exposure","alcohol.freq.E","childhood.sunburn.occasions",
+                 "age.started.smoking","hormone.replacement.therapy",       
+                 'age','sex') #,'bmi2','menopause','time.since.period2')
+# ENVIR_NAMES <- c('PA','SB','Smoking.E','alcohol.freq.E','childhood.sunburn.occasions','age','sex') #,'bmi2','menopause','time.since.period2')
+
+# loading:
 gen_datafiles(phenoName)
-# phenoName2 <- 'monocyte.count.na.rint'
+PHENOTYPE_NAMES <- paste0(rep(PHENOTYPE_NAMES,each=3),c('','.log','.rint'),'.na')
+phenoName2 <- paste0(phenoName,'.na')
 
 for (s in c('80','20')) {
   
   f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/full_data_gxe.',s,'.txt')
   df2 <- fread(f,data.table = F,stringsAsFactors = F)
+  df2$menopause2 <- as.factor(df2$menopause2)
+  
+  index <- colnames(df2)[2:(which(colnames(df2)=='FID')-1)]
 
-  PHENOTYPE_NAMES <- paste0(rep(PHENOTYPE_NAMES,each=3),c('','.log','.rint'),'.na')
-
-  GxE_acrossPhenotypes <- function(i) {
-    phenoName <- PHENOTYPE_NAMES[i]
-    print(paste0('Phenotype ',i,'/',length(PHENOTYPE_NAMES),': ',phenoName )) # for debugging
-    
-    GxE <- function(j) {
-      ENVIR_FACTOR <- ENVIR_NAMES[j]
-      print(paste0('Environmental factor ',j,'/',length(ENVIR_NAMES),': ',ENVIR_FACTOR)) # for debugging
-      
-      # Create LM model w/ GxE interaction:
-      mod1 <- tryCatch({
-        mod.formula <- paste(paste0(phenoName),' ~ age+age2+genotyping.array+sex+
-                                   PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
-                             PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+',
-                             vQTL,'*',ENVIR_FACTOR)
-        
-        # time.since.period2+time.since.period2.dummy+menopause2+ # women only
-        # bmi2.dummy+bmi2+bmi2*age+',
-        if (ENVIR_FACTOR!='Smoking.E') {
-          mod.formula <- paste0(mod.formula,'+Smoking+Smoking.dummy')
-        } 
-        if (ENVIR_FACTOR!='alcohol.freq.E') { 
-          mod.formula <- paste0(mod.formula,'+alcohol.freq2+alcohol.freq2.dummy')
-        }
-        mod.formula <- formula(mod.formula)
-        
-        mod1 <- lm(mod.formula,
-                   data=df2,na.action=na.exclude)
-        mod1
-      },error=function(e) {
-        mod.formula <- paste(paste0(phenoName),' ~ age+age2+sex+
-                                   PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
-                             PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+',
-                             vQTL,'*',ENVIR_FACTOR)
-        
-        # time.since.period2+time.since.period2.dummy+menopause2+ # women only
-        # bmi2.dummy+bmi2+bmi2*age+',
-        if (ENVIR_FACTOR!='Smoking.E') {
-          mod.formula <- paste0(mod.formula,'+Smoking+Smoking.dummy')
-        } 
-        if (ENVIR_FACTOR!='alcohol.freq.E') { 
-          mod.formula <- paste0(mod.formula,'+alcohol.freq2+alcohol.freq2.dummy')
-        }
-        mod.formula <- formula(mod.formula)
-        
-        mod1 <- lm(mod.formula,
-                   data=df2,na.action=na.exclude)
-        mod1
-      })
-
-      # mod1.coef <- summary(mod1)$coef
-      mod1.coef <- coeftest(mod1, vcov = vcovHC(mod1))
-      
-      # }
-      res1 <- mod1.coef[paste0(vQTL),]
-      res2 <- mod1.coef[paste0(ENVIR_FACTOR),]
-      res3 <- tryCatch({mod1.coef[paste0(vQTL,':',ENVIR_FACTOR),]},
-                       error=function(e) { mod1.coef[paste0(ENVIR_FACTOR,':',vQTL),]})
-      
-      return(c(phenoName,vQTL,ENVIR_FACTOR,res1,res2,res3))
-    }
-    
-    y <- lapply(1:length(ENVIR_NAMES),GxE)
-    y.df <- as.data.frame(do.call(rbind,y))
-    colnames(y.df) <- c('Phenotype','vQTL','E','BETA_vQTL','SE_vQTL','T_vQTL','P_vQTL',
-                        'BETA_E','SE_E','T_E','P_E',
-                        'BETA_GxE','SE_GxE','T_GxE','P_GxE')
-    return(y.df)
-  }
+  fam3 <- df2
+  fam3$bmi2 <- df2$bmi2.with_outliers
+  fam3$time.since.period2 <- df2$time.since.period2.with_outliers
+  
+  source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/GxE_acrossPhenotypes.R')
   
   print('GxE...')
-  # df2 <- df.80
-  # for (k in 1:nrow(index)) {
-    # vQTL=index[k,2]
   for (k in 1:length(index)) {
     vQTL <- index[k]
     print(paste0('SNP ',k,'/',length(index),': ',vQTL)) # for debugging
     # y2 <- (lapply(1:length(PHENOTYPE_NAMES),GxE_acrossPhenotypes))
-    # y2 <- (lapply(which(PHENOTYPE_NAMES==phenoName2),GxE_acrossPhenotypes))
-    y2 <- (lapply(which(PHENOTYPE_NAMES=='monocyte.count.na'),GxE_acrossPhenotypes))
+    y2 <- (lapply(which(PHENOTYPE_NAMES%in% 
+                          c('monocyte.count.na','monocyte.count.rint.na')
+                        ),GxE_acrossPhenotypes))
     y2.df <- as.data.frame(do.call(rbind,y2))
     for (l in 4:length(y2.df)) {
       y2.df[,l] <- as.numeric(levels(y2.df[,l]))[y2.df[,l]]
@@ -106,11 +52,12 @@ for (s in c('80','20')) {
     }
   }
   
+  print(results[order(results$P_GxE),][1:10,])
+  
   # SAVE # # # #
-  f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/ukbb.gxe.',s,'.txt')
+  f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/ukbb.gxe.',phenoName,'.',s,'.txt')
   fwrite(results,f.out,sep='\t',na='NA',row.names = F,col.names = T,quote = F)
   
-  print(results[order(results$P_GxE),][1:10,])
   
 }
 

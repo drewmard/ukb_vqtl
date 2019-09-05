@@ -4,10 +4,6 @@ library(data.table)
 fam2.80 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/full_data.80.txt',data.table = F,stringsAsFactors = F)
 fam2.20 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/full_data.20.txt',data.table = F,stringsAsFactors = F)
 
-sum(!is.na(fam3[i,paste0(phenoName,'.na',suffix)]))
-sum(!is.na(mod1.pred))
-
-
 # Create phenotype file
 phenotypeDataFile.80 <- fam2.80[,c('FID','IID')]
 phenotypeDataFile.20 <- fam2.20[,c('FID','IID')]
