@@ -7,11 +7,16 @@ source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/gen_datafi
 # initialize
 phenoName <- 'lymphocyte.count'
 PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
-ENVIR_NAMES <- c("PA","SB","Smoking.E","sleep.duration","getting.up.morning","nap.during.day",
-                 "time.spent.outdoors.summer","time.spent.outdoors.winter","time.spent.outdoors",
-                 "tobacco.smoke.exposure","alcohol.freq.E","childhood.sunburn.occasions",
-                 "age.started.smoking","hormone.replacement.therapy",       
-                 'age','sex') #,'bmi2','menopause','time.since.period2')
+# ENVIR_NAMES <- c("PA","SB","Smoking.E","sleep.duration","getting.up.morning","nap.during.day",
+#                  "time.spent.outdoors.summer","time.spent.outdoors.winter","time.spent.outdoors",
+#                  "tobacco.smoke.exposure","alcohol.freq.E","childhood.sunburn.occasions",
+#                  "age.started.smoking","hormone.replacement.therapy",       
+#                  'age','sex') 
+ENVIR_NAMES <- c("PA","SB","Smoking.E","sleep.duration","alcohol.freq.E",
+                 'age','sex') 
+
+
+#,'bmi2','menopause','time.since.period2')
 # ENVIR_NAMES <- c('PA','SB','Smoking.E','alcohol.freq.E','childhood.sunburn.occasions','age','sex') #,'bmi2','menopause','time.since.period2')
 
 # loading:
