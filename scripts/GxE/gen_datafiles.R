@@ -58,17 +58,17 @@ gen_datafiles <- function(phenoName) {
     fam3$bmi2 <- df2$bmi2.with_outliers
     fam3$time.since.period2 <- df2$time.since.period2.with_outliers
     
-    for (iter in 1:3) {
+    for (iter in 1:4) {
       i <- which(df2$sex==1); j <- which(df2$sex==0); 
-      mod.formula.1 <- (paste(paste0(phenoName),' ~ age+age2+genotyping.array+
+      mod.formula.1 <- (paste(paste0(phenoName),' ~ genotyping.array+
                               PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
                               PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+
-                              bmi2.dummy+bmi2+bmi2*age'))
-      mod.formula.2 <- (paste(paste0(phenoName),' ~ age+age2+genotyping.array+
+                              bmi2.dummy+bmi2'))
+      mod.formula.2 <- (paste(paste0(phenoName),' ~ genotyping.array+
                               PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
                               PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+
                               time.since.period2+time.since.period2.dummy+menopause2+
-                              bmi2.dummy+bmi2+bmi2*age'))
+                              bmi2.dummy+bmi2'))
       
       if (iter!=3) { #(ENVIR_FACTOR!='Smoking.E') {
         mod.formula.1 <- paste0(mod.formula.1,'+Smoking+Smoking.dummy')
@@ -77,6 +77,10 @@ gen_datafiles <- function(phenoName) {
       if (iter!=2) { #if (ENVIR_FACTOR!='alcohol.freq.E') { 
         mod.formula.1 <- paste0(mod.formula.1,'+alcohol.freq2+alcohol.freq2.dummy')
         mod.formula.2 <- paste0(mod.formula.2,'+alcohol.freq2+alcohol.freq2.dummy')
+      }
+      if (iter!=4) {
+        mod.formula.1 <- paste0(mod.formula.1,'+age+age2')
+        mod.formula.2 <- paste0(mod.formula.2,'+age+age2')
       }
       mod.formula.1 <- formula(mod.formula.1)
       mod.formula.2 <- formula(mod.formula.2)

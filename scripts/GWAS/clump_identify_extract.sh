@@ -1,7 +1,7 @@
 # initialize
-phenoName=monocyte.count
-thres="5e-8"
-# thres="1e-5"
+phenoName=lymphocyte.count.rint
+# thres="5e-8"
+thres="1e-5"
 indir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl # path to ukb_vqtl
 genodir=/home/kulmsc/athena/ukbiobank/calls
 

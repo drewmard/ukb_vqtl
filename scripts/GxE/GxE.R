@@ -5,7 +5,7 @@ library(lmtest)
 source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/gen_datafiles.R')
 
 # initialize
-phenoName <- 'monocyte.count'
+phenoName <- 'lymphocyte.count'
 PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
 ENVIR_NAMES <- c("PA","SB","Smoking.E","sleep.duration","getting.up.morning","nap.during.day",
                  "time.spent.outdoors.summer","time.spent.outdoors.winter","time.spent.outdoors",
@@ -40,7 +40,7 @@ for (s in c('80','20')) {
     # y2 <- (lapply(1:length(PHENOTYPE_NAMES),GxE_acrossPhenotypes))
     y2 <- (lapply(which(PHENOTYPE_NAMES%in% 
                           # c('monocyte.count.na','monocyte.count.rint.na')
-                        c('monocyte.count.na')
+                        c('monocyte.count.rint.na')
                         ),GxE_acrossPhenotypes))
     y2.df <- as.data.frame(do.call(rbind,y2))
     for (l in 4:length(y2.df)) {

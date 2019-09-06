@@ -12,6 +12,9 @@ GxE_acrossPhenotypes <- function(i) {
     } else if (ENVIR_FACTOR=='alcohol.freq.E') { 
       mod.formula <- paste(paste0('resid3'),' ~ ',
                            vQTL,'*',ENVIR_FACTOR)
+    } else if (ENVIR_FACTOR=='age') {
+      mod.formula <- paste(paste0('resid4'),' ~ ',
+                           vQTL,'*',ENVIR_FACTOR)
     } else {
       mod.formula <- paste(paste0('resid1'),' ~ ',
                            vQTL,'*',ENVIR_FACTOR)

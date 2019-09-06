@@ -1,5 +1,5 @@
 library(data.table)
-phenoName='monocyte.count'
+phenoName='lymphocyte.count'
 f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.',phenoName,'.results.txt')
 df <- fread(f,stringsAsFactors = F,data.table = F)
 
@@ -16,6 +16,11 @@ df2.rint <- df.rint[,c('SNP','CHR','BP','BETA.x','P.x','BETA.y','P.y')]
 colnames(df2.rint)[(ncol(df2.rint)-3):ncol(df2.rint)] <- c('BETA.MEAN.RINT','P.MEAN.RINT','BETA.VAR.RINT','P.VAR.RINT')
 
 df.mg <- merge(df2,df2.rint,by=c('SNP','CHR','BP'))
+
+subset(df.mg,P.VAR.RINT < 1e-3 & SNP %in% results$vQTL)$SNP
+subset(results,vQTL %in% subset(df.mg,P.VAR.RINT < 1e-3 & SNP %in% results$vQTL)$SNP)
+x <- subset(results,vQTL %in% subset(df.mg,P.VAR.RINT < 1e-3 & SNP %in% results$vQTL)$SNP)
+print(x[order(x$P_GxE),][1:10,])
 
 cor.test(df.mg$BETA.MEAN,df.mg$BETA.VAR,use = 'pairwise.complete.obs')
 cor.test(df.mg$BETA.MEAN.RINT,df.mg$BETA.VAR.RINT,use = 'pairwise.complete.obs')

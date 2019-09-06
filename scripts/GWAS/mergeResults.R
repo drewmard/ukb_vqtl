@@ -1,5 +1,5 @@
 library(data.table)
-phenoName='monocyte.count.rint'
+phenoName='lymphocyte.count.rint'
 
 for (CHR in 1:22) {
   print(paste('CHR:',CHR))
