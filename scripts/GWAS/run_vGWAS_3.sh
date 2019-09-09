@@ -6,7 +6,7 @@
 # for running local in a loop
 
 phenoName=$1
-CHR=$2
+CHR_in=$2
 
 echo "sbatch run_vGWAS_2.sh $1 $2"
 
@@ -22,7 +22,7 @@ dir=/home/kulmsc/athena/ukbiobank/calls
 outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results
 workdir=/athena/elementolab/scratch/anm2868/vQTL
 
-for CHR in {1..22};
+for CHR in {2..22};
 do
 
 echo "Chromosome $CHR analysis..."

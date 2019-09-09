@@ -1,0 +1,42 @@
+sbatch run_vGWAS_2.sh lymphocyte.count.rint 2
+Activating environment...
+Starting...
+Starting Rserve:
+ /pbtech_mounts/softlib001/apps/EL7/spack/opt/spack/linux-centos7-x86_64/gcc-6.3.0/r-3.5.0-fxcj5ttxrb6jqw6t5zouoflbiginkdxg/rlib/R/bin/R CMD /pbtech_mounts/homes043/anm2868/R/x86_64-pc-linux-gnu-library/3.5/Rserve/libs//Rserve --no-save 
+
+
+R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+Rserv started in daemon mode.
+Chromosome {2..22} analysis...
+vQTL testing...
+PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.{2..22}.lymphocyte.count.rint.vGWAS.log.
+Options in effect:
+  --R /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/vGWAS.R
+  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.{2..22}
+  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.{2..22}.lymphocyte.count.rint.vGWAS
+  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
+  --pheno-name lymphocyte.count.rint
+  --threads 1
+
+386756 MB RAM detected; reserving 193378 MB for main workspace.
+Error: Failed to open /home/kulmsc/athena/ukbiobank/calls/ukbb.{2..22}.bed.
+Complete.
