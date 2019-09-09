@@ -4,8 +4,9 @@ pheno <- fread('/home/kulmsc/athena/ukbiobank/phenotypes/ukb26867.csv.gz',data.t
 df.disease <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/blood_disease.indiv_id.txt',data.table = F,stringsAsFactors = F,header = T)
 
 # phenotypes
-pheno3 <- pheno[,c('eid','21022-0.0','20002-0.0')]
+pheno3 <- pheno[,c('eid','21022-0.0','20002-0.0','30120-0.0')]
 colnames(pheno3)[2] <- 'age'
+colnames(pheno3)[4] <- 'lymphocyte.count'
 pheno3$psoriasis <- as.numeric(pheno3[,'20002-0.0']==1453)
 pheno3$psoriasis[which(is.na(pheno3$psoriasis))] <- 0
 pheno3$coeliac_disease <- as.numeric(pheno3[,'20002-0.0']==1456)
@@ -33,6 +34,9 @@ summary(lm(psoriasis~rs887468*age,data=df)) # significant
 summary(lm(coeliac_disease~rs887468+age,data=df)) 
 summary(lm(coeliac_disease~rs887468*age,data=df)) # loses lots of significance?
 summary(lm(hyperthyroidism~rs887468*age,data=df))
+summary(lm(lymphocyte.count~rs887468*age,data=df))
+library(car)
+leveneTest(lymphocyte.count~as.factor(rs887468),data=df)
 # case control imbalance, maybe not the best data set to try this out on?
 
 summary(lm(psoriasis~rs887468*age,data=df))

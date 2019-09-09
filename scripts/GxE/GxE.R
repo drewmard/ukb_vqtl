@@ -5,7 +5,7 @@ library(lmtest)
 source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/gen_datafiles.R')
 
 # initialize
-phenoName <- 'lymphocyte.count'
+phenoName <- 'monocyte.count'
 PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
 # ENVIR_NAMES <- c("PA","SB","Smoking.E","sleep.duration","getting.up.morning","nap.during.day",
 #                  "time.spent.outdoors.summer","time.spent.outdoors.winter","time.spent.outdoors",
@@ -13,14 +13,14 @@ PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neu
 #                  "age.started.smoking","hormone.replacement.therapy",       
 #                  'age','sex') 
 ENVIR_NAMES <- c("PA","SB","Smoking.E","sleep.duration","alcohol.freq.E",
-                 'age','sex') 
+                 'age') 
 
 
 #,'bmi2','menopause','time.since.period2')
 # ENVIR_NAMES <- c('PA','SB','Smoking.E','alcohol.freq.E','childhood.sunburn.occasions','age','sex') #,'bmi2','menopause','time.since.period2')
 
 # loading:
-gen_datafiles(phenoName)
+source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/gen_datafiles.R'); gen_datafiles(phenoName)
 PHENOTYPE_NAMES <- paste0(rep(PHENOTYPE_NAMES,each=3),c('','.log','.rint'),'.na')
 phenoName2 <- paste0(phenoName,'.na')
 
@@ -42,10 +42,9 @@ for (s in c('80','20')) {
   for (k in 1:length(index)) {
     vQTL <- index[k]
     print(paste0('SNP ',k,'/',length(index),': ',vQTL)) # for debugging
-    # y2 <- (lapply(1:length(PHENOTYPE_NAMES),GxE_acrossPhenotypes))
-    y2 <- (lapply(which(PHENOTYPE_NAMES%in% 
+    y2 <- (lapply(which(PHENOTYPE_NAMES%in%
                           # c('monocyte.count.na','monocyte.count.rint.na')
-                        c('monocyte.count.rint.na')
+                        c('lymphocyte.count.na')
                         ),GxE_acrossPhenotypes))
     y2.df <- as.data.frame(do.call(rbind,y2))
     for (l in 4:length(y2.df)) {

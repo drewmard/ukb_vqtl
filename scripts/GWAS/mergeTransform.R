@@ -1,5 +1,5 @@
 library(data.table)
-phenoName='lymphocyte.count'
+phenoName='monocyte.count'
 f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.',phenoName,'.results.txt')
 df <- fread(f,stringsAsFactors = F,data.table = F)
 
@@ -30,7 +30,7 @@ head(df.mg[order(df.mg$P.VAR),],30)
 x <- subset(df.mg,P.VAR < 5e-8 & P.VAR.RINT < 1e-3)
 
 
-subset(df.mg,SNP%in%c('rs34890930','rs8026803'))
+subset(df.mg,SNP%in%c('rs2524069'))
 head(df.mg[order(df.mg$P.VAR.RINT),],10)
 
 phenoName <- 'lymphocyte.count.transform_all'
