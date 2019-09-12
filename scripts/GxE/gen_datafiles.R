@@ -24,8 +24,9 @@ gen_datafiles <- function(phenoName) {
       fam2 <- fam2.20
     }
     
+    fam2$menopause2[which(fam2$sex==1)] <- 4
     fam2$menopause2 <- as.factor(fam2$menopause2)
-    
+
     source('/home/anm2868/scripts/Useful_scripts/rntransform.R')
     PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
     for (k in 1:length(PHENOTYPE_NAMES)) {
@@ -63,47 +64,32 @@ gen_datafiles <- function(phenoName) {
       mod.formula.1 <- (paste(paste0(phenoName),' ~ genotyping.array+
                               PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
                               PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+
+                              menopause2+
                               bmi2.dummy+bmi2'))
-      mod.formula.2 <- (paste(paste0(phenoName),' ~ genotyping.array+
-                              PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
-                              PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+
-                              time.since.period2+time.since.period2.dummy+menopause2+
-                              bmi2.dummy+bmi2'))
-      
+
       if (iter!=3) { #(ENVIR_FACTOR!='Smoking.E') {
         mod.formula.1 <- paste0(mod.formula.1,'+Smoking+Smoking.dummy')
-        mod.formula.2 <- paste0(mod.formula.2,'+Smoking+Smoking.dummy')
       } 
       if (iter!=2) { #if (ENVIR_FACTOR!='alcohol.freq.E') { 
         mod.formula.1 <- paste0(mod.formula.1,'+alcohol.freq2+alcohol.freq2.dummy')
-        mod.formula.2 <- paste0(mod.formula.2,'+alcohol.freq2+alcohol.freq2.dummy')
       }
       if (iter!=4) {
         mod.formula.1 <- paste0(mod.formula.1,'+age+age2')
-        mod.formula.2 <- paste0(mod.formula.2,'+age+age2')
       }
       mod.formula.1 <- formula(mod.formula.1)
-      mod.formula.2 <- formula(mod.formula.2)
-      
+
       # fitting models, not including individuals that are outliers
       mod1 <- lm(mod.formula.1,
-                 data=df2[i,],na.action=na.exclude)
-      mod2 <- lm(mod.formula.2,
-                 data=df2[j,],na.action=na.exclude)
-      
+                 data=df2,na.action=na.exclude)
+
       # but calculate residuals in all individuals
       mod1.pred <- predict.lm(mod1,newdata = fam3[i,])
-      mod2.pred <- predict.lm(mod1,newdata = fam3[j,])
-      resid1 <- fam3[i,paste0(phenoName)] - mod1.pred
-      resid2 <- fam3[j,paste0(phenoName)] - mod2.pred
+      resid1 <- fam3[,paste0(phenoName)] - mod1.pred
       resid1 <- scale(resid1)
-      resid2 <- scale(resid2)
-      
+
       # Supplement to phenotype file
-      df2[i,paste0('resid',iter)] <- NA
-      df2[i,paste0('resid',iter)] <- resid1
-      df2[j,paste0('resid',iter)] <- resid2
-      
+      df2[,paste0('resid',iter)] <- resid1
+
     }
 
     f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/full_data_gxe.',s,'.txt')
