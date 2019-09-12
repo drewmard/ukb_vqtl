@@ -33,8 +33,9 @@ vGWAS.R
 run_GWAS.sh (run on cannes; local) \
 
 #### run vGWAS
-(sbatch) run_vGWAS_4.sh <phenotype> <CHR> (run on cannes locally/curie.pbtech cluster for spec chr) 
-run_vGWAS_3.sh <phenotype> (run on cannes locally in a loop) 
+array job: sbatch run_vGWAS_5.sh <phenotype> (run on cannes locally/curie.pbtech cluster for all chr) \
+(sbatch) run_vGWAS_4.sh <phenotype> <CHR> (run on cannes locally/curie.pbtech cluster for spec chr) \
+run_vGWAS_3.sh <phenotype> (run on cannes locally in a loop) \
 
 #### merge diff assoc files together:
 mergeResults.R ########## note: might need to change directories for mean gwas analyses

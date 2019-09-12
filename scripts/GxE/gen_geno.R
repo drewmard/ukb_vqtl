@@ -2,7 +2,7 @@ library(data.table)
 
 # initialize
 user_direc <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl'
-phenoName <- 'lymphocyte.count.rint'
+phenoName <- 'lymphocyte.count.ALL'
 
 # var hits
 f <- paste0(user_direc,'/output/GWAS/results2/',phenoName,'/ukbb.',phenoName,'.results.var.clumped.cut.txt')

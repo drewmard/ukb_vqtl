@@ -1,7 +1,7 @@
 # initialize
-phenoName=lymphocyte.count.rint
-# thres="5e-8"
-thres="1e-4"
+phenoName=lymphocyte.count.ALL
+thres="5e-8"
+# thres="0.000106107"
 indir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl # path to ukb_vqtl
 genodir=/home/kulmsc/athena/ukbiobank/calls
 
@@ -90,3 +90,4 @@ do
  prefix=ukbb.$CHR
  plink --bfile $genodir/$prefix --snp $snp --recodeA --out $outdir/$prefix.$snp
 done < $dir/$merged_outFile2 # if running pipeline
+

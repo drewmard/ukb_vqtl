@@ -1,12 +1,15 @@
 library(data.table)
-phenoName='lymphocyte.count.rint'
+phenoName='lymphocyte.count.rint.M'
+
+f <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/bin/nsnp.txt'
+nsnp <- fread(f,data.table = F,stringsAsFactors = F)
+nsnp <- nsnp[order(nsnp[,1]),2]
 
 for (CHR in 1:22) {
   print(paste('CHR:',CHR))
   RELEVANT_COLUMNS=c('SNP','CHR','BP','NMISS','BETA.x','P.x','BETA.y','P.y','REF','ALT')
   #mean
   #print('Mean...')
-  # df.mean <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/UKB/results/ukbb.',CHR,'.',phenoName,'.muGWAS.qassoc'),data.table = F,stringsAsFactors = F)
   df.mean <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.',CHR,'.muGWAS.',phenoName,'.qassoc'),data.table = F,stringsAsFactors = F)
   
   #var
@@ -15,6 +18,8 @@ for (CHR in 1:22) {
     df.var <- read.table(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.',CHR,'.',phenoName,'.vGWAS.auto.R'),stringsAsFactors = F)
     colnames(df.var) <- c('CHR','SNP','BP','REF',
                           'BETA','SE','T','P')
+    # print(nrow(df.var))
+    if (nrow(df.var) != nsnp[CHR]) {print(paste0('ERROR 1: ',CHR))}
     
     # freq
     #print('Freq...')
@@ -25,7 +30,7 @@ for (CHR in 1:22) {
     df.mg <- merge(df.mean,df.var,by=c('SNP','CHR','BP'))
     df.mg2 <- merge(df.mg,df.freq[,c('SNP','ALT','MAF')])
     
-  },error=function(e) { print(paste0('ERROR: ',CHR)) })
+  },error=function(e) { print(paste0('ERROR 2: ',CHR)) })
   
   # print('Saving...')
   if (CHR==1) {

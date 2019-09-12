@@ -5,7 +5,7 @@ library(lmtest)
 source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/gen_datafiles.R')
 
 # initialize
-phenoName <- 'monocyte.count'
+phenoName <- 'lymphocyte.count.ALL'
 PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
 # ENVIR_NAMES <- c("PA","SB","Smoking.E","sleep.duration","getting.up.morning","nap.during.day",
 #                  "time.spent.outdoors.summer","time.spent.outdoors.winter","time.spent.outdoors",
