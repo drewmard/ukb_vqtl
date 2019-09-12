@@ -83,7 +83,7 @@ gen_datafiles <- function(phenoName) {
                  data=df2,na.action=na.exclude)
 
       # but calculate residuals in all individuals
-      mod1.pred <- predict.lm(mod1,newdata = fam3[i,])
+      mod1.pred <- predict.lm(mod1,newdata = fam3)
       resid1 <- fam3[,paste0(phenoName)] - mod1.pred
       resid1 <- scale(resid1)
 
