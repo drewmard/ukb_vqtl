@@ -1,7 +1,14 @@
+#!/bin/bash -l
+#SBATCH -J clump
+#SBATCH --mem=128G
+#SBATCH --tasks-per-node=1
+#SBATCH -N 1
+#SBATCH -n 1
+
 # initialize
-phenoName=lymphocyte.count.ALL
-thres="5e-8"
-# thres="0.000106107"
+phenoName=lymphocyte.count.rint.ALL
+# thres="5e-8"
+thres="0.00001"
 indir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl # path to ukb_vqtl
 genodir=/home/kulmsc/athena/ukbiobank/calls
 
