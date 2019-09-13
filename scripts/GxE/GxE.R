@@ -7,7 +7,7 @@ source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/gen_datafi
 # initialize
 # phenoName <- 'lymphocyte.count.rint'
 phenoName <- 'lymphocyte.count.rint.ALL'
-phenoName <- 'lymphocyte.count.ALL'
+# phenoName <- 'lymphocyte.count.ALL'
 phenoName2 <- 'lymphocyte.count'
 
 PHENOTYPE_NAMES <- phenoName
@@ -33,6 +33,8 @@ gen_datafiles(phenoName,phenoName2)
 
 # for (s in c('80','20')) {
 for (s in c('80')) {
+  
+  s <- '80'
   
   f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/full_data_gxe.',s,'.txt')
   df2 <- fread(f,data.table = F,stringsAsFactors = F)

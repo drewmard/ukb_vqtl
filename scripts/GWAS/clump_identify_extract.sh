@@ -8,7 +8,7 @@
 # initialize
 phenoName=lymphocyte.count.rint.ALL
 # thres="5e-8"
-thres="0.0001"
+thres="0.001"
 indir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl # path to ukb_vqtl
 genodir=/home/kulmsc/athena/ukbiobank/calls
 
@@ -18,6 +18,9 @@ mkdir -p ${indir}/output/GWAS/subset/$phenoName
 # mkdir -p $indir/output/GWAS/results/${phenoName}
 mkdir -p $indir/output/GWAS/results2/
 mkdir -p $indir/output/GWAS/results2/$phenoName
+
+# remove old stuff
+rm /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results2/lymphocyte.count.rint.ALL/ukbb.lymphocyte.count.rint.ALL.*.results.var*
 
 # clump
 echo 'Clumping!'

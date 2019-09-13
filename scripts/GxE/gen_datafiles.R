@@ -74,10 +74,10 @@ gen_datafiles <- function(phenoName,phenoName2) {
                               menopause2+
                               bmi2.dummy+bmi2'))
 
-      if (iter!=3) { #(ENVIR_FACTOR!='Smoking.E') {
+      if (iter!=2) { #(ENVIR_FACTOR!='Smoking.E') {
         mod.formula.1 <- paste0(mod.formula.1,'+Smoking+Smoking.dummy')
       } 
-      if (iter!=2) { #if (ENVIR_FACTOR!='alcohol.freq.E') { 
+      if (iter!=3) { #if (ENVIR_FACTOR!='alcohol.freq.E') { 
         mod.formula.1 <- paste0(mod.formula.1,'+alcohol.freq2+alcohol.freq2.dummy')
       }
       if (iter!=4) {

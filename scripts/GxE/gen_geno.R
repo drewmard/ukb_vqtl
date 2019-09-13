@@ -41,3 +41,7 @@ for (i in 1:nrow(index)) {
 
 f.out <- paste0(user_direc,'/output/GWAS/subset/',phenoName,'/ukbb.ALL_vQTL.raw')
 fwrite(df.geno,f.out,sep='\t',quote=F,row.names = F,col.names = T,na='NA')
+
+
+SNP <- 'rs887468'
+which(index %in% SNP)
