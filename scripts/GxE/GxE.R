@@ -5,8 +5,14 @@ library(lmtest)
 source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/gen_datafiles.R')
 
 # initialize
-phenoName <- 'lymphocyte.count.rint'
-PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
+# phenoName <- 'lymphocyte.count.rint'
+phenoName <- 'lymphocyte.count.rint.ALL'
+phenoName <- 'lymphocyte.count.ALL'
+phenoName2 <- 'lymphocyte.count'
+
+PHENOTYPE_NAMES <- phenoName
+
+# PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
 # ENVIR_NAMES <- c("PA","SB","Smoking.E","sleep.duration","getting.up.morning","nap.during.day",
 #                  "time.spent.outdoors.summer","time.spent.outdoors.winter","time.spent.outdoors",
 #                  "tobacco.smoke.exposure","alcohol.freq.E","childhood.sunburn.occasions",
@@ -20,9 +26,10 @@ ENVIR_NAMES <- c("PA","SB","Smoking.E","sleep.duration","alcohol.freq.E",
 # ENVIR_NAMES <- c('PA','SB','Smoking.E','alcohol.freq.E','childhood.sunburn.occasions','age','sex') #,'bmi2','menopause','time.since.period2')
 
 # loading:
-source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/gen_datafiles.R'); gen_datafiles(phenoName)
-PHENOTYPE_NAMES <- paste0(rep(PHENOTYPE_NAMES,each=3),c('','.log','.rint'),'.na')
-phenoName2 <- paste0(phenoName,'.na')
+source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/gen_datafiles.R');
+gen_datafiles(phenoName,phenoName2)
+# PHENOTYPE_NAMES <- paste0(rep(PHENOTYPE_NAMES,each=3),c('','.log','.rint'),'.na')
+# phenoName2 <- paste0(phenoName,'.na')
 
 # for (s in c('80','20')) {
 for (s in c('80')) {
@@ -45,7 +52,7 @@ for (s in c('80')) {
     print(paste0('SNP ',k,'/',length(index),': ',vQTL)) # for debugging
     y2 <- (lapply(which(PHENOTYPE_NAMES%in%
                           # c('monocyte.count.na','monocyte.count.rint.na')
-                        c(paste0(phenoName,'.na'))
+                        c(paste0(phenoName))
                         ),GxE_acrossPhenotypes))
     y2.df <- as.data.frame(do.call(rbind,y2))
     for (l in 4:length(y2.df)) {

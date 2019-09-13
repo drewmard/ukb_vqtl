@@ -7,8 +7,8 @@ gen_datafiles <- function(phenoName,phenoName2) {
   # phenoName2 <- paste0(phenoName,'.na')
   # user_direc <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl'
   
-  phenoName='lymphocyte.count.rint.ALL'
-  phenoName2='lymphocyte.count'
+  # phenoName='lymphocyte.count.rint.ALL'
+  # phenoName2='lymphocyte.count'
   
   f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/subset/',phenoName,'/ukbb.ALL_vQTL.raw')
   df.geno <- fread(f.geno,data.table = F,stringsAsFactors = F,check.names = T)
