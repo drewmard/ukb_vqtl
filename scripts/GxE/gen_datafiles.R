@@ -1,12 +1,16 @@
 library(data.table)
 
-gen_datafiles <- function(phenoName) {
+gen_datafiles <- function(phenoName,phenoName2) {
   
   # initialize
   # phenoName <- 'monocyte.count'
-  phenoName2 <- paste0(phenoName,'.na')
-  user_direc <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl'
-  f.geno <- paste0(user_direc,'/output/GWAS/subset/',phenoName,'/ukbb.ALL_vQTL.raw')
+  # phenoName2 <- paste0(phenoName,'.na')
+  # user_direc <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl'
+  
+  phenoName='lymphocyte.count.rint.ALL'
+  phenoName2='lymphocyte.count'
+  
+  f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/subset/',phenoName,'/ukbb.ALL_vQTL.raw')
   df.geno <- fread(f.geno,data.table = F,stringsAsFactors = F,check.names = T)
   index <- colnames(df.geno)[-1]
   
@@ -28,22 +32,25 @@ gen_datafiles <- function(phenoName) {
     fam2$menopause2 <- as.factor(fam2$menopause2)
 
     source('/home/anm2868/scripts/Useful_scripts/rntransform.R')
-    PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
+    PHENOTYPE_NAMES <- c(phenoName2)
+    # PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
     for (k in 1:length(PHENOTYPE_NAMES)) {
-      phenoName <- PHENOTYPE_NAMES[k]
-      
+
       # remove outliers
-      i.outlier <- which(abs(scale(fam2[,paste0(phenoName,'.na')])) > 5)
-      fam2[,paste0(phenoName,'.na')][i.outlier] <- NA
+      i.outlier <- which(abs(scale(fam2[,paste0(PHENOTYPE_NAMES[k],'.na')])) > 5)
+      fam2[,paste0(PHENOTYPE_NAMES[k],'.na')][i.outlier] <- NA
       
       # apply transformations
-      suffix<-'.rint'; fam2[,paste0(phenoName,suffix,'.na')] <- rntransform(fam2[,paste0(phenoName,'.na')])
-      suffix<-'.log'; fam2[,paste0(phenoName,suffix,'.na')] <- log10(fam2[,paste0(phenoName,'.na')]+1)
+      suffix<-'.rint'; fam2[,paste0(PHENOTYPE_NAMES[k],suffix,'.na')] <- rntransform(fam2[,paste0(PHENOTYPE_NAMES[k],'.na')])
+      suffix<-'.log'; fam2[,paste0(PHENOTYPE_NAMES[k],suffix,'.na')] <- log10(fam2[,paste0(PHENOTYPE_NAMES[k],'.na')]+1)
     }
     #########################################
     
     df.pheno <- fam2
     
+    library(stringr)
+    tmp=str_locate_all(phenoName,'\\.')[[1]]; phenoName3 <- paste0(substring(phenoName,1,as.numeric(tmp[nrow(tmp),1])-1),'.na')
+
     # P data:
     df <- merge(df.geno,df.pheno,by='IID')
     
@@ -61,7 +68,7 @@ gen_datafiles <- function(phenoName) {
     
     for (iter in 1:4) {
       i <- which(df2$sex==1); j <- which(df2$sex==0); 
-      mod.formula.1 <- (paste(paste0(phenoName),' ~ genotyping.array+
+      mod.formula.1 <- (paste(phenoName3,' ~ genotyping.array+
                               PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
                               PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+
                               menopause2+
@@ -84,7 +91,7 @@ gen_datafiles <- function(phenoName) {
 
       # but calculate residuals in all individuals
       mod1.pred <- predict.lm(mod1,newdata = fam3)
-      resid1 <- fam3[,paste0(phenoName)] - mod1.pred
+      resid1 <- fam3[,phenoName3] - mod1.pred
       resid1 <- scale(resid1)
 
       # Supplement to phenotype file

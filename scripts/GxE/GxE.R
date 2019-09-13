@@ -25,7 +25,7 @@ PHENOTYPE_NAMES <- paste0(rep(PHENOTYPE_NAMES,each=3),c('','.log','.rint'),'.na'
 phenoName2 <- paste0(phenoName,'.na')
 
 # for (s in c('80','20')) {
-for (s in c('80','20')) {
+for (s in c('80')) {
   
   f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/full_data_gxe.',s,'.txt')
   df2 <- fread(f,data.table = F,stringsAsFactors = F)
