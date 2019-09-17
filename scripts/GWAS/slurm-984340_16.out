@@ -1,4 +1,4 @@
-sbatch run_vGWAS_2.sh lymphocyte.count.rint 2
+sbatch run_vGWAS_5.sh neutrophil.count.rint.ALL 16
 Activating environment...
 Starting...
 Starting Rserve:
@@ -24,19 +24,6 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 Rserv started in daemon mode.
-Chromosome {2..22} analysis...
+##> SOCK_ERROR: bind error #98(address already in use)
+Chromosome 16 analysis...
 vQTL testing...
-PLINK v1.90b4 64-bit (20 Mar 2017)             www.cog-genomics.org/plink/1.9/
-(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
-Logging to /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.{2..22}.lymphocyte.count.rint.vGWAS.log.
-Options in effect:
-  --R /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/vGWAS.R
-  --bfile /home/kulmsc/athena/ukbiobank/calls/ukbb.{2..22}
-  --out /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.{2..22}.lymphocyte.count.rint.vGWAS
-  --pheno /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
-  --pheno-name lymphocyte.count.rint
-  --threads 1
-
-386756 MB RAM detected; reserving 193378 MB for main workspace.
-Error: Failed to open /home/kulmsc/athena/ukbiobank/calls/ukbb.{2..22}.bed.
-Complete.

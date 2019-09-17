@@ -1,14 +1,14 @@
 #!/bin/bash -l
 #SBATCH -J vQTL
 #SBATCH -n 8
-#SBATCH --mem=64G
+#SBATCH --mem=128G
 
 # for running local in a loop
 
 phenoName=$1
 CHR_in=$2
 
-echo "sbatch run_vGWAS_2.sh $1 $2"
+echo "sbatch run_vGWAS_3.sh $1 $2"
 
 echo "Activating environment..."
 source activate vQTL
@@ -22,7 +22,9 @@ dir=/home/kulmsc/athena/ukbiobank/calls
 outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results
 workdir=/athena/elementolab/scratch/anm2868/vQTL
 
-for CHR in {2..22};
+# for CHR in {1..22};
+#for CHR in 1 2;
+for CHR in $CHR_in
 do
 
 echo "Chromosome $CHR analysis..."
@@ -32,7 +34,7 @@ prefix=ukbb.$CHR
 echo "vQTL testing..."
 mkdir -p $outdir
 myscript=${workdir}/ukb_vqtl/scripts/GWAS/vGWAS.R
-plink --bfile $dir/$prefix --pheno $pheno --pheno-name $phenoName --R $myscript --threads 1 --out $outdir/$prefix.$phenoName.vGWAS
+plink --bfile $dir/$prefix --pheno $pheno --pheno-name $phenoName --R $myscript --threads 1 --memory 128000 --out $outdir/$prefix.$phenoName.vGWAS
 # plink --bfile $dir/$prefix --pheno $pheno --all-pheno --R $myscript --threads 1 --out $outdir/$prefix.vGWAS
 
 done

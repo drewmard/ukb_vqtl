@@ -1,12 +1,16 @@
 #!/bin/bash -l
 #SBATCH -J vQTL
-#SBATCH -n 8
-#SBATCH --mem=48G
+#SBATCH --mem=128G
+#SBATCH --array=6-6:1
+
+
+# #SBATCH --array=2,3,4,5,6,7,8,11,14,15,17,18,22
+# #SBATCH --array=1-22:1
 
 phenoName=$1
-CHR=$2
+CHR=$SLURM_ARRAY_TASK_ID
 
-echo "sbatch run_vGWAS_4.sh $1 $2"
+echo "sbatch run_vGWAS_5.sh $phenoName $CHR"
 
 echo "Activating environment..."
 source activate vQTL
@@ -25,8 +29,8 @@ prefix=ukbb.$CHR
 
 # 3 : variance
 echo "vQTL testing..."
-mkdir -p $outdir
+# mkdir -p $outdir
 myscript=${workdir}/ukb_vqtl/scripts/GWAS/vGWAS.R
-plink --bfile $dir/$prefix --pheno $pheno --pheno-name $phenoName --R $myscript --threads 1 --memory 46000 --out $outdir/$prefix.$phenoName.vGWAS
+plink --bfile $dir/$prefix --pheno $pheno --pheno-name $phenoName --R $myscript --threads 1 --memory 96000 --out $outdir/$prefix.$phenoName.vGWAS
 
 echo "Complete."

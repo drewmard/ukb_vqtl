@@ -1,0 +1,23 @@
+10   38308 /home/kulmsc/athena/ukbiobank/calls/ukbb.10.bim
+11   40824 /home/kulmsc/athena/ukbiobank/calls/ukbb.11.bim
+12   37302 /home/kulmsc/athena/ukbiobank/calls/ukbb.12.bim
+13   26806 /home/kulmsc/athena/ukbiobank/calls/ukbb.13.bim
+14   25509 /home/kulmsc/athena/ukbiobank/calls/ukbb.14.bim
+15   24467 /home/kulmsc/athena/ukbiobank/calls/ukbb.15.bim
+16   28960 /home/kulmsc/athena/ukbiobank/calls/ukbb.16.bim
+17   28835 /home/kulmsc/athena/ukbiobank/calls/ukbb.17.bim
+18   21962 /home/kulmsc/athena/ukbiobank/calls/ukbb.18.bim
+19   26186 /home/kulmsc/athena/ukbiobank/calls/ukbb.19.bim
+1    63487 /home/kulmsc/athena/ukbiobank/calls/ukbb.1.bim
+20   19959 /home/kulmsc/athena/ukbiobank/calls/ukbb.20.bim
+21   11342 /home/kulmsc/athena/ukbiobank/calls/ukbb.21.bim
+22   12968 /home/kulmsc/athena/ukbiobank/calls/ukbb.22.bim
+2   61966 /home/kulmsc/athena/ukbiobank/calls/ukbb.2.bim
+3   52300 /home/kulmsc/athena/ukbiobank/calls/ukbb.3.bim
+4   47443 /home/kulmsc/athena/ukbiobank/calls/ukbb.4.bim
+5   46314 /home/kulmsc/athena/ukbiobank/calls/ukbb.5.bim
+6   53695 /home/kulmsc/athena/ukbiobank/calls/ukbb.6.bim
+7   42722 /home/kulmsc/athena/ukbiobank/calls/ukbb.7.bim
+8   38591 /home/kulmsc/athena/ukbiobank/calls/ukbb.8.bim
+9   34310 /home/kulmsc/athena/ukbiobank/calls/ukbb.9.bim
+
