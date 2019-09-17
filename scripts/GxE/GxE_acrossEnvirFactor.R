@@ -39,7 +39,8 @@ GxE_acrossSNPs <- function(k) {
     return(c(phenoName,vQTL,ENVIR_FACTOR,res1,res2,res3))
   }
   
-  y <- lapply(1:length(ENVIR_NAMES),GxE)
+  # y <- lapply(1:length(ENVIR_NAMES),GxE)
+  y <- lapply(1:length(ENVIR_NAMES),GxE_acrossEnvirFactor)
   y.df <- as.data.frame(do.call(rbind,y))
   colnames(y.df) <- c('Phenotype','vQTL','E','BETA_vQTL','SE_vQTL','T_vQTL','P_vQTL',
                       'BETA_E','SE_E','T_E','P_E',

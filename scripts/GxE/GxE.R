@@ -48,9 +48,12 @@ for (s in c('80','20')) {
   fam3$time.since.period2 <- df2$time.since.period2.with_outliers
   
   source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/GxE_acrossPhenotypes_2.R')
+  source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/GxE_acrossEnvirFactor.R')
   
   print('GxE...')
   START=TRUE
+  lapply(1:2,GxE_acrossSNPs)
+  
   
   # for (k in 112:135) {
   for (k in 1:length(index)) {
