@@ -6,7 +6,7 @@
 #SBATCH -n 1
 
 # initialize
-phenoName=lymphocyte.count.rint.ALL
+phenoName=monocyte.count.rint.ALL
 # thres="5e-8"
 thres="0.001"
 indir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl # path to ukb_vqtl

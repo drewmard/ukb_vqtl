@@ -2,7 +2,7 @@ library(data.table)
 
 # initialize
 user_direc <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl'
-phenoName <- 'lymphocyte.count.rint.ALL'
+phenoName <- 'monocyte.count.rint.ALL'
 
 # var hits
 f <- paste0(user_direc,'/output/GWAS/results2/',phenoName,'/ukbb.',phenoName,'.results.var.clumped.cut.txt')
@@ -15,6 +15,7 @@ index.SNP <- fread(f,data.table = F,stringsAsFactors = F)
 # index <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/results/ukbb.bmi.results.custom.txt',data.table = F,stringsAsFactors = F)
 print('Creating genotype file...')
 for (i in 1:nrow(index.SNP)) {
+# for (i in 1:10) {
   print(paste0(i,'/',nrow(index.SNP),' SNPs...'))
   vQTL=index.SNP[i,2]
   CHR_vQTL=index.SNP[i,1]
@@ -41,8 +42,4 @@ for (i in 1:nrow(index.SNP)) {
 
 f.out <- paste0(user_direc,'/output/GWAS/subset/',phenoName,'/ukbb.ALL_vQTL.raw')
 fwrite(df.geno,f.out,sep='\t',quote=F,row.names = F,col.names = T,na='NA')
-
-
-# SNP <- 'rs887468'
-# which(index.SNP %in% SNP)
 

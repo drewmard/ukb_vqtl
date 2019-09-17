@@ -1,6 +1,7 @@
 library(data.table)
 library(sandwich)
 library(lmtest)
+library(parallel)
 
 source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/gen_datafiles.R')
 
@@ -47,33 +48,36 @@ for (s in c('80','20')) {
   fam3$bmi2 <- df2$bmi2.with_outliers
   fam3$time.since.period2 <- df2$time.since.period2.with_outliers
   
-  source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/GxE_acrossPhenotypes_2.R')
+  # source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/GxE_acrossPhenotypes_2.R')
   source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/GxE_acrossEnvirFactor.R')
   
   print('GxE...')
   START=TRUE
-  lapply(1:2,GxE_acrossSNPs)
-  
+  y2 <- mclapply(1:2,GxE_acrossSNPs,mc.cores = 16)
+  y2.df <- as.data.frame(do.call(rbind,y2))
+  for (l in 4:length(y2.df)) {
+    y2.df[,l] <- as.numeric(levels(y2.df[,l]))[y2.df[,l]]
+  }
   
   # for (k in 112:135) {
-  for (k in 1:length(index)) {
-    vQTL <- index[k]
-    print(paste0('SNP ',k,'/',length(index),': ',vQTL)) # for debugging
-    y2 <- (lapply(which(PHENOTYPE_NAMES%in%
-                          # c('monocyte.count.na','monocyte.count.rint.na')
-                        c(paste0(phenoName))
-                        ),GxE_acrossPhenotypes))
-    y2.df <- as.data.frame(do.call(rbind,y2))
-    for (l in 4:length(y2.df)) {
-      y2.df[,l] <- as.numeric(levels(y2.df[,l]))[y2.df[,l]]
-    }
-    if (START) {
-      results <- y2.df
-      START<-FALSE
-    } else {
-      results <- rbind(results,y2.df)
-    }
-  }
+  # for (k in 1:length(index)) {
+  #   vQTL <- index[k]
+  #   print(paste0('SNP ',k,'/',length(index),': ',vQTL)) # for debugging
+  #   y2 <- (lapply(which(PHENOTYPE_NAMES%in%
+  #                         # c('monocyte.count.na','monocyte.count.rint.na')
+  #                       c(paste0(phenoName))
+  #                       ),GxE_acrossPhenotypes))
+  #   y2.df <- as.data.frame(do.call(rbind,y2))
+  #   for (l in 4:length(y2.df)) {
+  #     y2.df[,l] <- as.numeric(levels(y2.df[,l]))[y2.df[,l]]
+  #   }
+  #   if (START) {
+  #     results <- y2.df
+  #     START<-FALSE
+  #   } else {
+  #     results <- rbind(results,y2.df)
+  #   }
+  # }
   
   print(results[order(results$P_GxE),][1:10,])
   # subset(results[order(results$P_GxE),],E!='age')[1:3,]

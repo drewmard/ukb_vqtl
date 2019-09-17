@@ -1,5 +1,5 @@
 library(data.table)
-phenoName='lymphocyte.count.rint.ALL'
+phenoName='monocyte.count.rint.ALL'
 
 f <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/bin/nsnp.txt'
 nsnp <- fread(f,data.table = F,stringsAsFactors = F)
