@@ -10,18 +10,20 @@ gen_datafiles <- function(phenoName,phenoName2) {
   # phenoName='lymphocyte.count.rint.ALL'
   # phenoName2='lymphocyte.count'
   
+  print("reading in genotype data...")
   f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/subset/',phenoName,'/ukbb.ALL_vQTL.raw')
   df.geno <- fread(f.geno,data.table = F,stringsAsFactors = F,check.names = T)
   index <- colnames(df.geno)[-1]
   
   # read in data
+  print("reading in phenotypes & environmental data, then merging...")
+  
   fam2.80 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/full_data.80.txt',data.table = F,stringsAsFactors = F)
   fam2.20 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/full_data.20.txt',data.table = F,stringsAsFactors = F)
   
   for (s in c('80','20')) {
     
-    print("reading in phenotypes & environmental data, then merging...")
-    
+    print(s)
     if (s=='80') {
       fam2 <- fam2.80 
     } else if (s=='20') {

@@ -35,7 +35,9 @@ do
 echo ${CHR}
 geno=$genodir/ukbb.${CHR}
 outFile=ukbb.${phenoName}.${CHR}.results.var
-plink --bfile $geno --maf 0.05 --clump $results --clump-p1 $thres --clump-p2 $thres --clump-r2 0.01 --clump-kb 5000 --clump-field P.y --out $outdir/$outFile
+# plink --bfile $geno --maf 0.05 --clump $results --clump-p1 $thres --clump-p2 $thres --clump-r2 0.01 --clump-kb 5000 --clump-field P.y --out $outdir/$outFile
+plink --bfile $geno --maf 0.05 --clump $results --clump-p1 $thres --clump-p2 $thres --clump-r2 0.8 --clump-field P.y --out $outdir/$outFile
+
 # outFile=ukbb.${phenoName}.${CHR}.results.mean
 # plink --bfile $genodir/$geno --maf 0.05 --clump $results --clump-p1 5e-8 --clump-p2 5e-8 --clump-r2 0.01 --clump-kb 5000 --clump-field P.x --out $indir/$outFile
 done
@@ -88,7 +90,7 @@ awk '{print $1,$3}' $dir/$merged_outFile | tail -n +2 > $dir/$merged_outFile2
 
 # create raw genotype files
 
-echo "Extract SNP time!"
+echo "Extract SNP time."
 dir=$indir/output/GWAS/results2/${phenoName}
 outdir=$indir/output/GWAS/subset/$phenoName
 merged_outFile2=ukbb.${phenoName}.results.var.clumped.cut.txt

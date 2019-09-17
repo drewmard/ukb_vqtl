@@ -16,10 +16,11 @@ PHENOTYPE_NAMES <- phenoName
 # ENVIR_NAMES <- c("PA","SB","Smoking.E","sleep.duration","getting.up.morning","nap.during.day",
 #                  "time.spent.outdoors.summer","time.spent.outdoors.winter","time.spent.outdoors",
 #                  "tobacco.smoke.exposure","alcohol.freq.E","childhood.sunburn.occasions",
-#                  "age.started.smoking","hormone.replacement.therapy",       
-#                  'age','sex') 
+#                  "age.started.smoking","hormone.replacement.therapy",
+#                  'age')#,
+                 # 'sex')
 ENVIR_NAMES <- c("PA","SB","Smoking.E","sleep.duration","alcohol.freq.E",
-                 'age') 
+                 'age')
 
 
 #,'bmi2','menopause','time.since.period2')
@@ -31,8 +32,8 @@ gen_datafiles(phenoName,phenoName2)
 # PHENOTYPE_NAMES <- paste0(rep(PHENOTYPE_NAMES,each=3),c('','.log','.rint'),'.na')
 # phenoName2 <- paste0(phenoName,'.na')
 
-# for (s in c('80','20')) {
-for (s in c('80')) {
+for (s in c('80','20')) {
+# for (s in c('80')) {
   
   s <- '80'
   
@@ -49,6 +50,9 @@ for (s in c('80')) {
   source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/GxE_acrossPhenotypes_2.R')
   
   print('GxE...')
+  START=TRUE
+  
+  # for (k in 112:135) {
   for (k in 1:length(index)) {
     vQTL <- index[k]
     print(paste0('SNP ',k,'/',length(index),': ',vQTL)) # for debugging
@@ -60,14 +64,16 @@ for (s in c('80')) {
     for (l in 4:length(y2.df)) {
       y2.df[,l] <- as.numeric(levels(y2.df[,l]))[y2.df[,l]]
     }
-    if (k==1) {
+    if (START) {
       results <- y2.df
+      START<-FALSE
     } else {
       results <- rbind(results,y2.df)
     }
   }
   
   print(results[order(results$P_GxE),][1:10,])
+  # subset(results[order(results$P_GxE),],E!='age')[1:3,]
   
   # SAVE # # # #
   f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/ukbb.gxe.',phenoName,'.',s,'.txt')
