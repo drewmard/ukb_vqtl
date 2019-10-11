@@ -15,7 +15,7 @@ index.SNP <- fread(f,data.table = F,stringsAsFactors = F)
 # index <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/results/ukbb.bmi.results.custom.txt',data.table = F,stringsAsFactors = F)
 print('Creating genotype file...')
 for (i in 1:nrow(index.SNP)) {
-# for (i in 1:10) {
+# for (i in 235:nrow(index.SNP)) {
   print(paste0(i,'/',nrow(index.SNP),' SNPs...'))
   vQTL=index.SNP[i,2]
   CHR_vQTL=index.SNP[i,1]

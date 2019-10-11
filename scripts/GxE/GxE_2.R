@@ -6,12 +6,12 @@ library(parallel)
 
 # initialize
 user_direc <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl'
-phenoName <- 'lymphocyte.count.rint.ALL'
+phenoName <- 'monocyte.count.rint.ALL'
 
 # var hits
 f <- paste0(user_direc,'/output/GWAS/results2/',phenoName,'/ukbb.',phenoName,'.results.var.clumped.cut.txt')
 index.SNP <- fread(f,data.table = F,stringsAsFactors = F)
-
+index.SNP <- index.SNP
 # mean hits
 # f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/UKB/results/ukbb.',phenoName,'.results.mean.clumped.cut.txt')
 # index <- fread(f,data.table = F,stringsAsFactors = F)
@@ -50,10 +50,10 @@ fwrite(df.geno,f.out,sep='\t',quote=F,row.names = F,col.names = T,na='NA')
 source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxE/gen_datafiles.R')
 
 # initialize
-# phenoName <- 'lymphocyte.count.rint'
 phenoName <- 'lymphocyte.count.rint.ALL'
-# phenoName <- 'lymphocyte.count.ALL'
 phenoName2 <- 'lymphocyte.count'
+# phenoName <- 'monocyte.count.rint.ALL'
+# phenoName2 <- 'monocyte.count'
 
 PHENOTYPE_NAMES <- phenoName
 
@@ -77,8 +77,8 @@ gen_datafiles(phenoName,phenoName2)
 # PHENOTYPE_NAMES <- paste0(rep(PHENOTYPE_NAMES,each=3),c('','.log','.rint'),'.na')
 # phenoName2 <- paste0(phenoName,'.na')
 
-
-s <- '20'
+# s <- '20'
+s <- '80'
 
 f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/full_data_gxe.',s,'.txt')
 df2 <- fread(f,data.table = F,stringsAsFactors = F)

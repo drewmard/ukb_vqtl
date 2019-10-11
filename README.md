@@ -70,6 +70,7 @@ Directory: ./scripts/downstream
 gen_pheno_other.R
 
 #### do PGS calculations
+create_PGS.R # for creating PGS file for scott to run \
 PGS.R
 
 
