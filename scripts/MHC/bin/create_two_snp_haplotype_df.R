@@ -1,4 +1,4 @@
-create_two_snp_haplotype_df <- function(df.mg) {
+create_two_snp_haplotype_df <- function(df.mg,SNP1,SNP2) {
 
 i1 <- grep(SNP1,colnames(df.mg))
 i2 <- grep(SNP2,colnames(df.mg))
