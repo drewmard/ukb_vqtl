@@ -29,6 +29,8 @@ df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('10/01','01/10')] <- '10/01'
 df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('11/01','01/11')] <- '11/01'
 df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('11/10','10/11')] <- '11/10'
 
+df.mg <- subset(df.mg,(!is.na(lymphocyte.count.rint.ALL)))
+
 return(df.mg)
 
 }
