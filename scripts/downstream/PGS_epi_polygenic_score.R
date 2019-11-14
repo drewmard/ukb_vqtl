@@ -6,7 +6,8 @@ phenoName2 <- 'lymphocyte.count.na'
 for (i in 1:22) {
   print(i)
   # f <- paste0('/home/kulmsc/athena/forAndrew/clumping/ukbb.',i,'.profile')
-  f <- paste0('/home/kulmsc/athena/forAndrew/noCorrection/ukbb.',i,'.profile')
+  # f <- paste0('/home/kulmsc/athena/forAndrew/noCorrection/ukbb.',i,'.profile')
+  f <- paste0('/home/kulmsc/athena/forAndrew/clumping_impute/ukbb.',i,'.profile')
   df <- fread(f,data.table = F,stringsAsFactors = F)
   if (i == 1) {
     score.save <- df
@@ -20,7 +21,7 @@ s <- '20'
 f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/full_data_gxe.',s,'.txt')
 df <- fread(f,data.table = F,stringsAsFactors = F)
 
-cor(df[,c('rs2242659','rs146125856')],use='p')
+# cor(df[,c('rs2242659','rs146125856')],use='p')
 
 s <- '80'
 f.res <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG/ukbb.lymphocyte.count.rint.ALL.ALL.sub.GxG.epi.qt')
@@ -79,7 +80,7 @@ mod <- lm(mod.formula,data=df.save)
 summary(mod.epi)$adj.r.squared/summary(mod)$adj.r.squared
 
 
-mod$adj.r.squared
+summary(lm(formula(paste0(phenoName2,'~','PGS.epi+SCORE','+rs146125856')),df.save))
 
 
 
@@ -94,9 +95,6 @@ mod.formula <- formula(mod.formula)
 mod <- lm(mod.formula,data=df.save)
 summary(mod)
 
-
-
-cor(df.save[,c('SCORE','PGS.epi')],use='p')
 
 
 

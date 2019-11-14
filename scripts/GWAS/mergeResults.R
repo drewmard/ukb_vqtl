@@ -43,4 +43,3 @@ for (CHR in 1:22) {
 
 f.save <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/results/ukbb.',phenoName,'.results.txt')
 fwrite(df.save,f.save,col.names = T,row.names = F,na='NA',quote=F,sep='\t')
-
