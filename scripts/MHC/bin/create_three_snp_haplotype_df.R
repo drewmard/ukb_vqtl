@@ -28,17 +28,28 @@ df.mg[,paste0(SNP3,'_2')] <- unlist(lapply(x,function(x) x[3]))
 df.mg[,'Haplotype1'] <- paste0(df.mg[,paste0(SNP1,'_1')],df.mg[,paste0(SNP2,'_1')],df.mg[,paste0(SNP3,'_1')])
 df.mg[,'Haplotype2'] <- paste0(df.mg[,paste0(SNP1,'_2')],df.mg[,paste0(SNP2,'_2')],df.mg[,paste0(SNP3,'_2')])
 df.mg[,'Haplotype'] <- paste0(df.mg[,'Haplotype1'],'/',df.mg[,'Haplotype2'])
-# df.mg[,'HaplotypeCode'] <- NA
-# df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('00/00')] <- '00/00'
-# df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('10/10')] <- '10/10'
-# df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('01/01')] <- '01/01'
-# df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('11/11')] <- '11/11'
-# df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('10/00','00/10')] <- '10/00'
-# df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('01/00','00/01')] <- '01/00'
-# df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('11/00','00/11')] <- '11/00'
-# df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('10/01','01/10')] <- '10/01'
-# df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('11/01','01/11')] <- '11/01'
-# df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('11/10','10/11')] <- '11/10'
+
+df.mg[,'000'] <- apply(df.mg[,c('Haplotype1','Haplotype2')],1,function(x) {sum(x=='000')})
+df.mg[,'100'] <- apply(df.mg[,c('Haplotype1','Haplotype2')],1,function(x) {sum(x=='100')})
+df.mg[,'110'] <- apply(df.mg[,c('Haplotype1','Haplotype2')],1,function(x) {sum(x=='110')})
+df.mg[,'111'] <- apply(df.mg[,c('Haplotype1','Haplotype2')],1,function(x) {sum(x=='111')})
+df.mg[,'101'] <- apply(df.mg[,c('Haplotype1','Haplotype2')],1,function(x) {sum(x=='101')})
+df.mg[,'011'] <- apply(df.mg[,c('Haplotype1','Haplotype2')],1,function(x) {sum(x=='011')})
+df.mg[,'001'] <- apply(df.mg[,c('Haplotype1','Haplotype2')],1,function(x) {sum(x=='001')})
+df.mg[,'010'] <- apply(df.mg[,c('Haplotype1','Haplotype2')],1,function(x) {sum(x=='010')})
+
+create_haplotype <- function(x) {
+  sorting.index <- x[3] > x[4]
+  if (sorting.index) {
+    res <- paste0(x[1],'/',x[2])
+  } else {
+    res <- paste0(x[2],'/',x[1])
+  }
+}
+
+df.mg$Haplotype1.ind <- as.numeric(as.factor(df.mg$Haplotype1))
+df.mg$Haplotype2.ind <- as.numeric(as.factor(df.mg$Haplotype2))
+df.mg$HaplotypeCode <- apply(df.mg[,c('Haplotype1','Haplotype2','Haplotype1.ind','Haplotype2.ind')],1,create_haplotype)
 
 df.mg <- subset(df.mg,(!is.na(lymphocyte.count.rint.ALL)))
 

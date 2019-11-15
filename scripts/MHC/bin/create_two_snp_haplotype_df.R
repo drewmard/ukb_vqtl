@@ -29,6 +29,11 @@ df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('10/01','01/10')] <- '10/01'
 df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('11/01','01/11')] <- '11/01'
 df.mg[,'HaplotypeCode'][df.mg[,'Haplotype']%in%c('11/10','10/11')] <- '11/10'
 
+df.mg[,'00'] <- apply(df.mg[,c('Haplotype1','Haplotype2')],1,function(x) {sum(x==0)})
+df.mg[,'01'] <- apply(df.mg[,c('Haplotype1','Haplotype2')],1,function(x) {sum(x==1)})
+df.mg[,'10'] <- apply(df.mg[,c('Haplotype1','Haplotype2')],1,function(x) {sum(x==10)})
+df.mg[,'11'] <- apply(df.mg[,c('Haplotype1','Haplotype2')],1,function(x) {sum(x==11)})
+
 df.mg <- subset(df.mg,(!is.na(lymphocyte.count.rint.ALL)))
 
 return(df.mg)
