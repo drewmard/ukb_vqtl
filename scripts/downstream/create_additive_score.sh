@@ -14,7 +14,12 @@ genodir=/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies
 geno=$genodir/ukbb.${CHR}.impute
 
 assocdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/imputed/results
-assoc=$assocdir/ukbb.lymphocyte.count.rint.ALL.results.txt
-out=$assocdir/ukbb.impute.lymphocyte.count.rint.ALL.muGWAS.chr${CHR}.p_${Pthres}.r_${r2thres}.kb_${kbthres}
+gwasFile=$assocdir/ukbb.lymphocyte.count.rint.ALL.results.txt
+clumpFile=$assocdir/ukbb.impute.lymphocyte.count.rint.ALL.muGWAS.chr${CHR}.p_${Pthres}.r_${r2thres}.kb_${kbthres}.clumped
 
-plink --bfile $geno --clump $assoc --clump-p1 0.005 --clump-r2 0.8 --clump-kb 250 --out 
+awk 'NR==FNR{A[$3];next} $1 in A' $clumpFile $gwasFile > $clumpFile.txt
+
+out=$clumpFile.PGS
+
+plink --bfile $geno --score $clumpFile.txt 1 11 5 sum --out $out
+
