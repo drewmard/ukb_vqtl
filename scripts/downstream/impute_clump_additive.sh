@@ -17,4 +17,4 @@ assocdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/imputed/result
 assoc=$assocdir/ukbb.lymphocyte.count.rint.ALL.results.txt
 out=$assocdir/ukbb.impute.lymphocyte.count.rint.ALL.muGWAS.chr${CHR}.p_${Pthres}.r_${r2thres}.kb_${kbthres}
 
-plink --bfile $geno --clump $assoc --clump-p1 0.005 --clump-r2 0.8 --clump-kb 250 --out 
+plink --bfile $geno --clump $assoc --clump-p1 0.005 --clump-r2 0.8 --clump-kb 250 --out $out
