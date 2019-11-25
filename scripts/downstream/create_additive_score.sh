@@ -21,5 +21,5 @@ awk 'NR==FNR{A[$3];next} $1 in A' $clumpFile $gwasFile > $clumpFile.txt
 
 out=$clumpFile.PGS
 
-plink --bfile $geno --score $clumpFile.txt 1 11 5 sum --out $out
+plink --bfile $geno --score $clumpFile.txt 1 10 5 sum --out $out
 
