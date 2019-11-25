@@ -1,24 +1,57 @@
+# library(data.table)
+# library(stringr)
+# 
+# phenoName <- 'lymphocyte.count.rint.ALL'
+# 
+# # read in scores for all individuals
+# for (i in 1:22) {
+#   print(i)
+#   # f <- paste0('/home/kulmsc/athena/forAndrew/clumping/ukbb.',i,'.profile')
+#   # f <- paste0('/home/kulmsc/athena/forAndrew/noCorrection/ukbb.',i,'.profile')
+#   f <- paste0('/home/kulmsc/athena/forAndrew/clumping_impute/ukbb.',i,'.profile')
+#   df <- fread(f,data.table = F,stringsAsFactors = F)
+#   if (i == 1) {
+#     score.save <- df
+#   } else {
+#     score.save$SCORE <-score.save$SCORE+df$SCORE
+#   }
+# }
+# colnames(score.save)[1] <- 'IID'
+
 library(data.table)
 library(stringr)
+workdir='/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/imputed/results'
+
+# phenoName <- 'lymphocyte.count.rint.ALL'
+# # read in scores for all individuals
+# for (i in 1:22) {
+#   print(i)
+#   f <- paste0(workdir,'/ukbb.impute.',phenoName,'.muGWAS.chr',i,'.p_0.005.r_0.8.kb_250.clumped.PGS.profile')
+#   df <- fread(f,data.table = F,stringsAsFactors = F)
+#   if (i == 1) {
+#     score.save <- df
+#   } else {
+#     score.save$SCORESUM <-score.save$SCORESUM+df$SCORESUM
+#   }
+# }
 
 phenoName <- 'lymphocyte.count.rint.ALL'
-
 # read in scores for all individuals
 for (i in 1:22) {
   print(i)
-  # f <- paste0('/home/kulmsc/athena/forAndrew/clumping/ukbb.',i,'.profile')
-  # f <- paste0('/home/kulmsc/athena/forAndrew/noCorrection/ukbb.',i,'.profile')
-  f <- paste0('/home/kulmsc/athena/forAndrew/clumping_impute/ukbb.',i,'.profile')
+  f <- paste0(workdir,'/ukbb.impute.',phenoName,'.muGWAS.chr',i,'.p_0.005.r_0.8.kb_250.clumped.PGS.profile')
   df <- fread(f,data.table = F,stringsAsFactors = F)
+  df$SCORESUM <- -1*df$SCORESUM
   if (i == 1) {
-    score.save <- df
+    colnames(df)[6] <- paste0('SCORESUM.',i)
+    score.save <- df[,c('IID',paste0('SCORESUM.',i))]
   } else {
-    score.save$SCORE <-score.save$SCORE+df$SCORE
+    colnames(df)[6] <- paste0('SCORESUM.',i)
+    score.save <- merge(score.save,df[,c('IID',paste0('SCORESUM.',i))],by='IID')
   }
 }
 
-score.save <- fread('/athena/elementolab/scratch/kulmsc/forAndrew/clumping_impute/ukbb.all.profile',data.table = F,stringsAsFactors = F)
-colnames(score.save)[1] <- 'IID'
+score.save$Additive <- apply(score.save[,grepl('SCORESUM',colnames(score.save))],1,sum)
 
 # read in full data results for 20% UKB testing set
 s <- '20'
@@ -118,6 +151,8 @@ if (mode=='one_interaction_only') {
 }
 # res.sub.save is the interaction set
 
+fwrite(res.sub.save,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG/ukbb.lymphocyte.count.rint.ALL.ALL.sub.GxG.epi.correlation_purge2.txt')
+
 # calculate interaction score:
 score.interaction <- 0
 cor.vec <- c()
@@ -134,9 +169,48 @@ for (i in 1:nrow(res.sub.save)) {
 }
 
 dataf <- data.frame(IID=df$IID,Interaction=score.interaction,Phenotype=df[,phenoName2])
-dataf <- merge(dataf,score.save[,c('IID','SCORE')],by='IID')
-colnames(dataf)[ncol(dataf)] <- 'Additive'
+
+dataf <- merge(dataf,score.save,by='IID') # andrew's sep chr scores
+# dataf <- merge(dataf,score.save[,c('IID','SCORE')],by='IID') # scott's scores
+# dataf <- merge(dataf,score.save[,c('IID','SCORESUM')],by='IID') # andrew's scores
+
+# colnames(dataf)[ncol(dataf)] <- 'Additive'
 dataf$Joint <- dataf$Interaction+dataf$Additive
+
+for (i in 1:22) {
+  dataf[,paste0('SCORESUM.',i,'.scaled')] <- scale(dataf[,paste0('SCORESUM.',i)])
+}
+res=cor.test(dataf$SCORESUM.3,dataf$Phenotype,use='p'); res[c('estimate','p.value')]
+
+
+i <- sample(1:nrow(dataf),floor(nrow(dataf)/2),replace = F) # to identify train/test
+
+# 22 diff chromosome scores
+mod.formula <- paste0('Phenotype','~','SCORESUM.1+SCORESUM.2+SCORESUM.3+SCORESUM.4+
+                      SCORESUM.5+SCORESUM.6+SCORESUM.7+SCORESUM.8+
+                      SCORESUM.9+SCORESUM.10+SCORESUM.11+SCORESUM.12+
+                      SCORESUM.13+SCORESUM.14+SCORESUM.15+SCORESUM.16+
+                      SCORESUM.17+SCORESUM.18+SCORESUM.19+SCORESUM.20+
+                      SCORESUM.21+SCORESUM.22')
+mod.formula <- formula(mod.formula)
+mod.test <- lm(mod.formula,data=dataf[i,])
+summary(mod.test)
+pred <- predict(mod.test,dataf[-i,])
+
+# just one score over all chromosomes
+mod.formula <- paste0('Phenotype','~','Additive.scaled')
+mod.formula <- formula(mod.formula)
+mod.test <- lm(mod.formula,data=dataf[i,])
+summary(mod.test)
+pred2 <- predict(mod.test,dataf[-i,])
+
+cor(pred,dataf[-i,'Phenotype'],use='p')
+cor(pred2,dataf[-i,'Phenotype'],use='p')
+
+# mod.test <- lm(mod.formula,data=dataf)
+# summary(mod.test)
+
+
 
 dataf$Interaction.scaled <- scale(dataf$Interaction)
 dataf$Additive.scaled <- scale(dataf$Additive)
@@ -163,6 +237,7 @@ summary(mod.int_add)$adj.r.squared/summary(mod.add)$adj.r.squared
 summary(mod.int_add)
 summary(mod.int)
 summary(mod.add)
+summary(mod.joint)
 
 afss=anova(mod.int_add)$"Sum Sq"; x=afss/sum(afss)*100; x=x[1]+x[2];x
 afss=anova(mod.add)$"Sum Sq"; y=afss/sum(afss)*100; y=y[1];y
