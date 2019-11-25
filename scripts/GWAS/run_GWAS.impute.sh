@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH -J vQTL
-#SBATCH --mem=64G
-#SBATCH --array=1-22:1
+#SBATCH --mem=128G
+#SBATCH --array=20-20:1
 
 echo "Activating environment..."
 source activate vQTL
@@ -18,9 +18,10 @@ mkdir -p $outdir/MAF
 mkdir -p $outdir/results
 
 phenoName=lymphocyte.count.rint.ALL
+CHR=$SLURM_ARRAY_TASK_ID
 
-for CHR in {1..22};
-do
+# for CHR in {1..22};
+# do
 
 echo "Chromosome $CHR analysis..."
 prefix=ukbb.$CHR.impute
@@ -28,7 +29,7 @@ prefix=ukbb.$CHR.impute
 # 1 : freq
 echo "MAF measurements..."
 outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/imputed/MAF
-plink --bfile $dir/$prefix --freq --allow-no-sex --out $outdir/$prefix
+plink --bfile $dir/$prefix --freq --allow-no-sex --memory 120000 --out $outdir/$prefix
 
 # GWAS: ##########
 
@@ -38,9 +39,9 @@ outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/imputed/results
 plink --bfile $dir/$prefix --pheno $pheno --pheno-name $phenoName --assoc --out $outdir/$prefix.$phenoName.muGWAS
 
 # for some reason, isn't running all phenotypes!
-# plink --bfile $dir/$prefix --pheno $pheno --all-pheno --assoc --allow-no-sex --out $outdir/$prefix.muGWAS
+# plink --bfile $dir/$prefix --pheno $pheno --all-pheno --assoc --allow-no-sex --memory 120000 --out $outdir/$prefix.muGWAS
 
-done
+# done
 
 
 echo "Complete."

@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH -J vQTL
 #SBATCH --mem=128G
-#SBATCH --array=6-6:1
+#SBATCH --array=1-22:1
 
 
 # #SBATCH --array=2,3,4,5,6,7,8,11,14,15,17,18,22

@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH -J clump
+#SBATCH -J PGS
 #SBATCH --mem=128G
 #SBATCH --array=1-22:1
 
