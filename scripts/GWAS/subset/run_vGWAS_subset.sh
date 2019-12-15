@@ -14,7 +14,7 @@ echo "Activating environment..."
 source activate vQTL
 
 echo "Starting..."
-spack load -r r@3.6.0
+# spack load -r r@3.6.0
 
 # 3 : variance
 echo "vQTL testing..."

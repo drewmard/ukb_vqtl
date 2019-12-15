@@ -41,6 +41,7 @@ DeviationRegressionModel <- function(i) {
 Fit_Model <- function(start=1,p=5000) {
   # df.save <- mclapply(1:p,function(idx) DeviationRegressionModel(as(geno$genotypes[,idx],"numeric")),mc.cores=8)
   # start=4990; p = 5000
+  p <- min(p,length(geno_names))
   df.save <- mclapply(start:p,DeviationRegressionModel,mc.cores=num_cores)
   df.save <- do.call(rbind,df.save)
   df.save <- as.data.frame(df.save)

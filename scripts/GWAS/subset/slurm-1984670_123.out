@@ -1,0 +1,11 @@
+sbatch run_vGWAS_subset.sh 123 lymphocyte.count.rint.ALL 4
+Activating environment...
+Starting...
+vQTL testing...
+Let it run!
+Warning message:
+package ‘BEDMatrix’ was built under R version 3.6.1 
+Error in BEDMatrix(path) : 
+  ukbb.1.80.impute.fam not found. Provide number of samples (n).
+Execution halted
+Complete.
