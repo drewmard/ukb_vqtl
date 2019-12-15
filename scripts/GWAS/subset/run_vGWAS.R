@@ -13,9 +13,10 @@ num_cores=args[3]
 
 
 # manual input
+# i=1019
 # ID.df <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/subset/ID.impute.txt',data.table = F,stringsAsFactors = F)
-# x1=ID.df[1,1]
-# x2=ID.df[1,2]
+# x1=ID.df[i,1]
+# x2=ID.df[i,2]
 # phenotype='lymphocyte.count.rint.ALL'
 # num_cores=4
 
@@ -30,6 +31,7 @@ pheno <- pheno[match(geno_names[ind],pheno$IID),]
 
 DeviationRegressionModel <- function(i) {
   if (i %% 100 == 0) {print(i)}
+  # print(i)
   SNP <- geno[ind,i]
   PHENO <- pheno[,phenotype]
   X <- as.factor(SNP)
@@ -41,7 +43,8 @@ DeviationRegressionModel <- function(i) {
 Fit_Model <- function(start=1,p=5000) {
   # df.save <- mclapply(1:p,function(idx) DeviationRegressionModel(as(geno$genotypes[,idx],"numeric")),mc.cores=8)
   # start=4990; p = 5000
-  p <- min(p,length(geno_names))
+  # nsnp <- length(colnames(geno))
+  # p <- min(p,nsnp)
   df.save <- mclapply(start:p,DeviationRegressionModel,mc.cores=num_cores)
   df.save <- do.call(rbind,df.save)
   df.save <- as.data.frame(df.save)
@@ -50,7 +53,8 @@ Fit_Model <- function(start=1,p=5000) {
   return(df.save)
 }
 
-df.results <- Fit_Model(start=1,p=5000)
+nsnp <- length(colnames(geno))
+df.results <- Fit_Model(start=1,p=nsnp)
 
 print('Saving...')
 # f.out <- paste0(prefix,'.save.txt')
