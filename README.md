@@ -18,7 +18,9 @@ preprocess.R
 vGWAS.R
 
 #### run GWAS
-run_GWAS.sh (run on cannes; local) \
+This is a standard GWAS analysis, where SNPs are tested one-by-one for association with the marginal means of a quantitative phenotype.
+
+run_GWAS.sh (run on cannes; local)
 
 #### run vGWAS
 In the vGWAS setting, SNPs are tested one-by-one for association with the marginal variance of a quantitative phenotype. In our testing framework, we developed a Deviation Regression Model for variance testing, which is a linear model modification to the  Levene's and Brown-Forsythe's classical tests. The DRM assesses whether additive differences in the variance exist across genotypes. The test is also robust to any genetic effects on the mean of the phenotype.
