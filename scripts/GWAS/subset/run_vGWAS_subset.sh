@@ -2,7 +2,9 @@
 #SBATCH -J vQTL
 #SBATCH -n 4
 #SBATCH --mem=32G
-#SBATCH --array=1-1857:1
+#SBATCH --array=123,411,413
+
+# #SBATCH --array=1-1857:1
 
 arg1=$SLURM_ARRAY_TASK_ID
 phenoName=lymphocyte.count.rint.ALL
