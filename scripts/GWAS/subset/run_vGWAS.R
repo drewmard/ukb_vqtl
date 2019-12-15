@@ -1,6 +1,7 @@
 # load
 library('BEDMatrix')
 library(data.table)
+library(parallel)
 
 # system arguments
 args = commandArgs(trailingOnly=TRUE)
@@ -37,7 +38,6 @@ DeviationRegressionModel <- function(i) {
   res <- summary(lm(Z.ij~SNP))$coef[2,]
 }
 
-library(parallel)
 Fit_Model <- function(start=1,p=5000) {
   # df.save <- mclapply(1:p,function(idx) DeviationRegressionModel(as(geno$genotypes[,idx],"numeric")),mc.cores=8)
   # start=4990; p = 5000
@@ -49,7 +49,7 @@ Fit_Model <- function(start=1,p=5000) {
   return(df.save)
 }
 
-df.results <- Fit_Model(start=1,p=105)
+df.results <- Fit_Model(start=1,p=5000)
 
 print('Saving...')
 # f.out <- paste0(prefix,'.save.txt')
