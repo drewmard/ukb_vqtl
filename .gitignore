@@ -1,1 +1,3 @@
 output/
+scripts/GWAS/subset/slurm*
+
