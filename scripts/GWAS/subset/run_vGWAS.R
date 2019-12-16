@@ -13,12 +13,12 @@ num_cores=args[3]
 
 
 # manual input
-# i=1019
-# ID.df <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/subset/ID.impute.txt',data.table = F,stringsAsFactors = F)
-# x1=ID.df[i,1]
-# x2=ID.df[i,2]
-# phenotype='lymphocyte.count.rint.ALL'
-# num_cores=4
+i=123
+ID.df <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/subset/ID.impute.txt',data.table = F,stringsAsFactors = F)
+x1=ID.df[i,1]
+x2=ID.df[i,2]
+phenotype='lymphocyte.count.rint.ALL'
+num_cores=4
 
 path <- paste0('/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/subset/','ukbb.',x1,'.',x2,'.impute.bed')
 geno <- BEDMatrix(path)
