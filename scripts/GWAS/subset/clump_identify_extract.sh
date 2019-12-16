@@ -9,8 +9,7 @@
 phenoName=lymphocyte.count.rint.ALL
 # thres="5e-8"
 thres="0.001"
-indir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/subset # path to ukb_vqtl
-genodir=/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/
+genodir=/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies
 
 # make important directories
 # mkdir -p ${indir}/output/GWAS/subset
@@ -21,14 +20,14 @@ genodir=/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/
 # clump
 echo 'Clumping!'
 source activate vQTL
-outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_clump/${phenoName}
+outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_clump # /${phenoName}
 results=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.${phenoName}.vGWAS.txt
 for CHR in {1..22}
 do
 echo ${CHR}
-geno=$genodir/ukbb.${CHR}
+geno=$genodir/ukbb.${CHR}.impute
 outFile=ukbb.${phenoName}.${CHR}.results.var
-plink --bfile $geno --maf 0.05 --clump $results --clump-p1 $thres --clump-p2 $thres --clump-r2 0.8 --clump-field P.y --out $outdir/$outFile
+plink --bfile $geno --maf 0.05 --clump $results --clump-p1 $thres --clump-p2 $thres --clump-r2 0.8 --clump-field P --clump-snp-field rs --out $outdir/$outFile
 
 done
 

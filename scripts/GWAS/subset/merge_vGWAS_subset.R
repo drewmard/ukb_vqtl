@@ -22,11 +22,10 @@ for (i in 1:nrow(ID.df)) {
   },error=function(e) { print(paste0('ERROR: ',i,'(',x1,',',x2,')')) })
 }
 
-
-colnames(df.res.save)[4] <- 'P'
-
 g <- regexpr("_[^_]*$", df.res.save$SNP)-1
 df.res.save$rs <- substring(df.res.save$SNP,1,g)
+
+colnames(df.res.save) <- c('BETA','SE','T','P','SNP','rs')
 
 f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/','ukbb.',phenotype,'.vGWAS.txt')
 print(paste0('Writing: ',f.out))
