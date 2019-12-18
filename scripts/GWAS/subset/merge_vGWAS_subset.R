@@ -1,6 +1,8 @@
 library(data.table)
 ID.df <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/subset/ID.impute.txt',data.table = F,stringsAsFactors = F)
-phenotype='lymphocyte.count.rint.ALL'
+args = commandArgs(trailingOnly=TRUE)
+phenotype=args[1]
+# phenotype='lymphocyte.count.rint.ALL'
 
 for (i in 1:nrow(ID.df)) {
 # for (i in 1:5) {
