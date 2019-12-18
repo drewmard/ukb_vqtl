@@ -31,7 +31,8 @@ array job: sbatch run_vGWAS_5.sh <phenotype> (run on cannes locally/curie.pbtech
 run_vGWAS_3.sh <phenotype> (run on cannes locally in a loop) \
 
 #### run vGWAS using R's BEDMatrix library
-
+run_vGWAS_subset.sh
+merge_vGWAS_subset.R
 
 
 #### merge diff assoc files together:

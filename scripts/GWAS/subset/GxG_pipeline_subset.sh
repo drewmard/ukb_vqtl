@@ -53,7 +53,7 @@ rm ${genoSub_next}*
 done
 
 # 4:
-outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_GxG/
+outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_GxG
 prefix=ukbb.${phenoName}.ALL.sub
 merged_outFile3=$outdir/ukbb.${phenoName}.results.var.clumped.cut.2.txt
 pheno=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt

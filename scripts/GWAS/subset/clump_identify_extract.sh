@@ -47,9 +47,9 @@ echo 'Merging!'
 # done
 
 echo "Doing the variances..."
-dir=$indir/output/GWAS/results2/${phenoName}
+dir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_clump/
 merged_outFile=$dir/ukbb.${phenoName}.results.var.clumped.txt
-head -1 $dir/ukbb.${phenoName}.1.results.var.clumped > $merged_outFile
+head -1 $dir/ukbb.${phenoName}.${CHR}.results.var.clumped > $merged_outFile
 for CHR in {1..22}
 do
 echo $CHR
@@ -71,7 +71,7 @@ done
 
 echo "List of var SNPs..."
 # line=1
-dir=$indir/output/GWAS/results2/${phenoName}
+dir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_clump/
 merged_outFile=ukbb.${phenoName}.results.var.clumped.txt
 merged_outFile2=ukbb.${phenoName}.results.var.clumped.cut.txt
 awk '{print $1,$3}' $dir/$merged_outFile | tail -n +2 > $dir/$merged_outFile2
@@ -80,7 +80,7 @@ awk '{print $1,$3}' $dir/$merged_outFile | tail -n +2 > $dir/$merged_outFile2
 # create raw genotype files
 
 echo "Extract SNP time."
-dir=$indir/output/GWAS/results2/${phenoName}
+dir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_clump/
 outdir=$indir/output/GWAS/subset/$phenoName
 merged_outFile2=ukbb.${phenoName}.results.var.clumped.cut.txt
 mkdir -p $outdir
