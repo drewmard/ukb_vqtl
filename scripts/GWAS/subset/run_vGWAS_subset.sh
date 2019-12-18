@@ -8,6 +8,7 @@
 
 arg1=$SLURM_ARRAY_TASK_ID
 phenoName=neutrophil.count.rint.ALL
+phenoName=$1
 numCores=4
 
 echo "sbatch run_vGWAS_subset.sh $arg1 $phenoName $numCores"

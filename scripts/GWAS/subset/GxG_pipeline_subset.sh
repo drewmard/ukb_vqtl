@@ -1,6 +1,11 @@
-# 1: form list of SNPs
 phenoName=lymphocyte.count.rint.ALL
 # phenoName=monocyte.count.rint.ALL
+
+sbatch run_vGWAS_subset.sh
+Rscript merge_vGWAS_subset.R
+
+
+# 1: form list of SNPs
 dir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_clump
 outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_GxG
 mkdir -p $outdir
