@@ -10,7 +10,7 @@ df.sub <- df
 # df.sub <- subset(df,CHR1!=CHR2 & CHR1!=6 & CHR2!=6)
 df.sub[order(df.sub$P)[1:5],] 
 
-df.sub <- subset(df,CHR1==15 | CHR2==15)
+df.sub <- subset(df,CHR1!=CHR2)
 df.sub[order(df.sub$P)[1:5],] 
 
 df.sub <- subset(df,CHR1==15 | CHR2==15)
