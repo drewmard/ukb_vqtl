@@ -6,8 +6,8 @@ phenotype=$1
 # phenotype=monocyte.count.rint.ALL # hard input
 
 #initialize
-rm $outFile
 outFile=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenotype.vGWAS.txt
+rm $outFile
 head -1 /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.1.1.$phenotype.txt > $outFile
 
 # loop
