@@ -2,7 +2,7 @@
 ID=/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/subset/ID.impute.txt
 # ID=/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/subset/ID.impute.txt.tmp # testing!
 
-phenoName=$1
+phenotype=$1
 # phenotype=monocyte.count.rint.ALL # hard input
 
 #initialize
@@ -24,7 +24,7 @@ do
  # print to script
  if [ ! -f $f ]; then
    echo "ERROR: $i ($x1, $x2)"
-   sbatch /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset/run_vGWAS_subset_specific.sh $phenoName $i
+   sbatch /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset/run_vGWAS_subset_specific.sh $phenotype $i
  else
    tail -n +2 $f >> $outFile
  fi
