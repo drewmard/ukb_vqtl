@@ -14,7 +14,7 @@ gen_pheno.R \
 gen_full_data.R \
 preprocess.R
 
-#### Script to perform L-MOD variance testing in Plink
+#### Script to perform DRM variance testing in Plink
 vGWAS.R
 
 #### run GWAS

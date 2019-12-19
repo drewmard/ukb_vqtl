@@ -11,7 +11,7 @@ rm $outFile
 head -1 /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.1.1.$phenotype.txt > $outFile
 
 # loop
-i=1
+i=0
 while IFS=$'\t' read -r -a myArray
 do
  # loop initialize

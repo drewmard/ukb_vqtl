@@ -8,7 +8,7 @@ phenoName=neutrophil.count.rint.ALL
 phenoName=$1
 numCores=4
 
-echo "sbatch run_vGWAS_subset_specific.sh $arg1 $phenoName $numCores"
+echo "sbatch run_vGWAS_subset_specific.sh $phenoName $arg1"
 
 echo "Activating environment..."
 source activate vQTL
