@@ -1,6 +1,6 @@
 phenoName=lymphocyte.count.rint.ALL
 phenoName=monocyte.count.rint.ALL
-phenoName=neutrophil.count.rint.ALL
+# phenoName=neutrophil.count.rint.ALL
 
 # Run vQTL screen
 sbatch run_vGWAS_subset.sh $phenoName
@@ -8,6 +8,8 @@ sbatch run_vGWAS_subset.sh $phenoName
 ##########################################################
 
 # Merge together results
+./merge_vGWAS_subset.R $phenoName
+
 Rscript merge_vGWAS_subset.R $phenoName
 
 ##########################################################
@@ -81,7 +83,6 @@ if [ ! -f $genoSub_next ]; then
 	cp $outdir/ukbb.${phenoName}.1.bim ${genoSub_next}.bim
 	# cp $genoSub_prev $genoSub_next
 fi
-
 
 for CHR in {3..22}
 do
