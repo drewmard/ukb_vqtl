@@ -2,7 +2,7 @@
 ID=/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/subset/ID.impute.txt
 # ID=/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/subset/ID.impute.txt.tmp # testing!
 
-phenotype=$1
+phenoName=$1
 # phenotype=monocyte.count.rint.ALL # hard input
 
 #initialize

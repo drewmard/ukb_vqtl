@@ -8,7 +8,7 @@ sbatch run_vGWAS_subset.sh $phenoName
 ##########################################################
 
 # Merge together results
-./merge_vGWAS_subset.R $phenoName
+./merge_vGWAS_subset.sh $phenoName
 
 Rscript merge_vGWAS_subset.R $phenoName
 
