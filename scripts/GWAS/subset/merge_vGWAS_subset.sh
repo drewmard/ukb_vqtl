@@ -3,9 +3,7 @@ ID=/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/subset/
 # ID=/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/subset/ID.impute.txt.tmp # testing!
 
 phenotype=$1
-phenotype=monocyte.count.rint.ALL
-outFile=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenotype.vGWAS.txt
-# outFile=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenotype.vGWAS.txt.tmp # testing!
+# phenotype=monocyte.count.rint.ALL # hard input
 
 #initialize
 rm $outFile
