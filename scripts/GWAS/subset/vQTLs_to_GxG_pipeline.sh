@@ -9,8 +9,10 @@ sbatch run_vGWAS_subset.sh $phenoName
 
 # Merge together results
 ./merge_vGWAS_subset.sh $phenoName
+mv /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.txt /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.old.txt
+Rscript merge_vGWAS_subset_2.R $phenoName
 
-Rscript merge_vGWAS_subset.R $phenoName
+# Rscript merge_vGWAS_subset.R $phenoName
 
 ##########################################################
 
