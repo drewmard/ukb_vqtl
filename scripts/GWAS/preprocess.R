@@ -9,7 +9,9 @@ phenotypeDataFile.80 <- fam2.80[,c('FID','IID')]
 phenotypeDataFile.20 <- fam2.20[,c('FID','IID')]
 
 #initialize
-PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
+# PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
+PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count',
+                     'rbc.erythrocyte.count','platelet.count','eosinophil.count','basophil.count')
 
 ############
 

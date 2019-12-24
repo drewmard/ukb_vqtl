@@ -1,6 +1,8 @@
-phenoName=lymphocyte.count.rint.ALL
-phenoName=monocyte.count.rint.ALL
+# phenoName=lymphocyte.count.rint.ALL
+# phenoName=monocyte.count.rint.ALL
 # phenoName=neutrophil.count.rint.ALL
+phenoName=wbc.leukocyte.count.rint.ALL
+phenoName=rbc.erythrocyte.count.rint.ALL
 
 # Run vQTL screen
 sbatch run_vGWAS_subset.sh $phenoName
@@ -110,4 +112,7 @@ outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_GxG
 prefix=ukbb.${phenoName}.ALL.sub
 merged_outFile3=$outdir/ukbb.${phenoName}.results.var.clumped.cut.2.txt
 pheno=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
-plink --bfile $outdir/$prefix --pheno $pheno --pheno-name $phenoName --epistasis set-by-set --set ${merged_outFile3} --epi1 1 --allow-no-sex --out $outdir/$prefix.GxG
+plink --bfile $outdir/$prefix --pheno $pheno --pheno-name $phenoName --epistasis set-by-set --set ${merged_outFile3} --epi1 1 --allow-no-sex --out $outdir/$prefix.GxG.80
+
+pheno=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.20.txt
+plink --bfile $outdir/$prefix --pheno $pheno --pheno-name $phenoName --epistasis set-by-set --set ${merged_outFile3} --epi1 1 --allow-no-sex --out $outdir/$prefix.GxG.20
