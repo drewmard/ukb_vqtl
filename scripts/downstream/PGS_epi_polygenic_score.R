@@ -54,13 +54,13 @@ for (i in 1:22) {
 score.save$Additive <- apply(score.save[,grepl('SCORESUM',colnames(score.save))],1,sum)
 
 # read in full data results for 20% UKB testing set
-s <- '80'
-f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/full_data_gxe.',s,'.txt')
-df <- fread(f,data.table = F,stringsAsFactors = F)
+# s <- '80'
+# f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/full_data_gxe.',s,'.txt')
+# df <- fread(f,data.table = F,stringsAsFactors = F)
 s <- '20'
 f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/results/full_data_gxe.',s,'.txt')
 df2 <- fread(f,data.table = F,stringsAsFactors = F)
-df <- as.data.frame(rbind(df,df2))
+# df <- as.data.frame(rbind(df,df2))
 x <- strsplit(phenoName,'\\.')[[1]]; phenoName2 <- paste0(c(x[-length(x)],'na'),collapse='.')
 
 # read in vQTL results from 80% UKB discovery set
@@ -155,7 +155,7 @@ if (mode=='one_interaction_only') {
 }
 # res.sub.save is the interaction set
 
-# fwrite(res.sub.save,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG/ukbb.lymphocyte.count.rint.ALL.ALL.sub.GxG.epi.correlation_purge2.txt')
+fwrite(res.sub.save,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG/ukbb.lymphocyte.count.rint.ALL.ALL.sub.GxG.epi.correlation_purge2.txt')
 
 # calculate interaction score:
 score.interaction <- 0
@@ -190,6 +190,10 @@ fwrite(dataf,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/downstrea
 # if reading in data
 f <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/downstream/ukbb.lymphocyte.count.rint.ALL.results.PGS.data.txt'
 dataf<- fread(f,data.table = F,stringsAsFactors = F)
+read2=TRUE
+if (read2) {
+  pheno <- fread('/home/kulmsc/athena/ukbiobank/phenotypes/ukb26867.csv.gz',data.table=F,stringsAsFactors = F)
+}
 pheno2 <- pheno[,c('eid','21000-0.0','30120-0.0','21003-0.0','22001-0.0',
                    '22009-0.1','22009-0.2','22009-0.3','22009-0.4','21001-0.0')]
 colnames(pheno2) <- c('IID','Ethnicity','Lymphocyte.Count','Age','Sex',

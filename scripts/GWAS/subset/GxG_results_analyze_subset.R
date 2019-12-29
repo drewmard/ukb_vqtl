@@ -2,8 +2,8 @@ library(data.table)
 # phenoName <- 'lymphocyte.count.rint.ALL'
 phenoName <- 'monocyte.count.rint.ALL'
 # phenoName <- 'neutrophil.count.rint.ALL'
-phenoName <- 'wbc.leukocyte.count.rint.ALL'
-phenoName <- 'rbc.erythrocyte.count.rint.ALL'
+# phenoName <- 'wbc.leukocyte.count.rint.ALL'
+# phenoName <- 'rbc.erythrocyte.count.rint.ALL'
 
 s <- '80'
 df.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_GxG/ukbb.',phenoName,'.ALL.sub.GxG.',s,'.epi.qt'),data.table=F,stringsAsFactors = F)
