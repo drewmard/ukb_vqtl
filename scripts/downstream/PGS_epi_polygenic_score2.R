@@ -71,6 +71,11 @@ if (mode=='correlation_purge2') {
 
 f <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG/ukbb.lymphocyte.count.rint.ALL.ALL.sub.GxG.epi.correlation_purge2.txt'
 fwrite(res.sub.save,f,col.names = T,row.names = F,quote = F,na='NA',sep = '\t')
+
+
+# library(data.table)
+# library(stringr)
+# f <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG/ukbb.lymphocyte.count.rint.ALL.ALL.sub.GxG.epi.correlation_purge2.txt'
 res.sub.save <- fread(f,data.table = F,stringsAsFactors = F)
 # calculate interaction score:
 score.interaction <- 0
@@ -91,6 +96,7 @@ dataf <- merge(dataf,df[,c('IID','age','sex','PC1','PC2','PC3','PC4','genotyping
 dataf$Joint <- dataf$Interaction+dataf$Additive
 fwrite(dataf,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/downstream/ukbb.lymphocyte.count.rint.ALL.results.PGS.data.txt',quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 
+library(data.table)
 f <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/downstream/ukbb.lymphocyte.count.rint.ALL.results.PGS.data.txt'
 dataf<- fread(f,data.table = F,stringsAsFactors = F)
 # read2=TRUE
@@ -214,19 +220,131 @@ summary(mod.add)
 summary(mod.joint)
 
 # score prediction correlation
+f <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/downstream/ukbb.lymphocyte.count.rint.ALL.results.PGS.data.txt'
+dataf<- fread(f,data.table = F,stringsAsFactors = F)
 i <- sample(1:nrow(dataf),floor(nrow(dataf)/2),replace = F) # to identify train/test
+i.test <- (1:nrow(dataf))[-i]
+
 mod.formula <- paste0('Phenotype','~','Additive')
 mod.formula <- formula(mod.formula)
-mod.test <- lm(mod.formula,data=dataf[i,])
-summary(mod.test)
-pred <- predict(mod.test,dataf[-i,])
-cor(pred,dataf[-i,'Phenotype'],use='p')
+mod.add <- lm(mod.formula,data=dataf[i,])
+
 mod.formula <- paste0('Phenotype','~','Additive+Interaction')
 mod.formula <- formula(mod.formula)
-mod.test <- lm(mod.formula,data=dataf[i,])
-summary(mod.test)
-pred <- predict(mod.test,dataf[-i,])
-cor(pred,dataf[-i,'Phenotype'],use='p')
+mod.add_int <- lm(mod.formula,data=dataf[i,])
+
+nsim <- 100
+diff <- rep(NA,nsim)
+r.add.vec <- rep(NA,nsim)
+r.int.vec <- rep(NA,nsim)
+for (j in 1:nsim) {
+  i.test.bs <- sample(i.test,length(i.test),replace = T)
+  pred <- predict(mod.add,dataf[i.test.bs,])
+  r.add <- cor(pred,dataf[i.test.bs,'Phenotype'],use='p'); r.add
+  
+  pred <- predict(mod.add_int,dataf[i.test.bs,])
+  r.int <- cor(pred,dataf[i.test.bs,'Phenotype'],use='p'); r.int
+  
+  r.add.vec[j] <- r.add.vec
+  r.int.vec[j] <- r.int.vec
+  diff[j] <- r.int - r.add
+  
+}
 
 
 
+
+
+##########
+
+set.seed(03191995)
+nsim <- 1000
+diff <- rep(NA,nsim)
+r.add.vec <- rep(NA,nsim)
+r.int.vec <- rep(NA,nsim)
+r.add_int.vec <- rep(NA,nsim)
+r.baseline.vec <- rep(NA,nsim)
+for (j in 1:nsim) {
+  if (j %% 10 == 0) {print(j)}
+  i <- sample(1:nrow(dataf),floor(nrow(dataf)/2),replace = F) # to identify train/test
+  i.test.bs <- (1:nrow(dataf))[-i]
+  
+  mod.formula <- paste0('Phenotype','~','Additive+age+sex+PC1+PC2+PC3+PC4+genotyping.array')
+  mod.formula <- formula(mod.formula)
+  mod.add <- lm(mod.formula,data=dataf[i,])
+  
+  mod.formula <- paste0('Phenotype','~','Additive+Interaction+age+sex+PC1+PC2+PC3+PC4+genotyping.array')
+  mod.formula <- formula(mod.formula)
+  mod.add_int <- lm(mod.formula,data=dataf[i,])
+
+  mod.formula <- paste0('Phenotype','~','Interaction+age+sex+PC1+PC2+PC3+PC4+genotyping.array')
+  mod.formula <- formula(mod.formula)
+  mod.int <- lm(mod.formula,data=dataf[i,])
+  
+  mod.formula <- paste0('Phenotype','~','age+sex+PC1+PC2+PC3+PC4+genotyping.array')
+  mod.formula <- formula(mod.formula)
+  mod.base <- lm(mod.formula,data=dataf[i,])
+  
+  pred <- predict(mod.add,dataf[i.test.bs,])
+  r.add <- cor(pred,dataf[i.test.bs,'Phenotype'],use='p'); r.add
+  
+  pred <- predict(mod.add_int,dataf[i.test.bs,])
+  r.add_int <- cor(pred,dataf[i.test.bs,'Phenotype'],use='p'); r.int
+  
+  pred <- predict(mod.int,dataf[i.test.bs,])
+  r.int <- cor(pred,dataf[i.test.bs,'Phenotype'],use='p'); r.int
+  
+  pred <- predict(mod.base,dataf[i.test.bs,])
+  r.baseline <- cor(pred,dataf[i.test.bs,'Phenotype'],use='p'); r.int
+  
+  r.add_int.vec[j] <- r.add_int
+  r.int.vec[j] <- r.int
+  r.add.vec[j] <- r.add
+  r.baseline.vec[j] <- r.baseline
+  
+  diff[j] <- r.int - r.add
+  
+}
+quantile(r.add_int.vec,c(0.025,0.975))
+quantile(r.add.vec,c(0.025,0.975))
+quantile(r.int.vec,c(0.025,0.975))
+quantile(r.baseline.vec,c(0.025,0.975))
+mean(r.add_int.vec)
+mean(r.add.vec)
+mean(r.int.vec)
+mean(r.baseline.vec)
+
+mean(r.int.vec)/mean(r.add.vec)
+
+
+table(dataf$genotyping.array)
+
+
+i <- which(dataf$genotyping.array=='UKBB')
+mod.formula <- paste0('Phenotype','~','Additive+age+sex+PC1+PC2+PC3+PC4')
+mod.formula <- formula(mod.formula)
+mod.add <- lm(mod.formula,data=dataf[i,])
+
+mod.formula <- paste0('Phenotype','~','Additive+Interaction+age+sex+PC1+PC2+PC3+PC4')
+mod.formula <- formula(mod.formula)
+mod.add_int <- lm(mod.formula,data=dataf[i,])
+
+mod.formula <- paste0('Phenotype','~','Interaction+age+sex+PC1+PC2+PC3+PC4')
+mod.formula <- formula(mod.formula)
+mod.int <- lm(mod.formula,data=dataf[i,])
+
+mod.formula <- paste0('Phenotype','~','age+sex+PC1+PC2+PC3+PC4')
+mod.formula <- formula(mod.formula)
+mod.base <- lm(mod.formula,data=dataf[i,])
+
+pred <- predict(mod.add,dataf[i.test.bs,])
+r.add <- cor(pred,dataf[i.test.bs,'Phenotype'],use='p'); r.add
+
+pred <- predict(mod.add_int,dataf[i.test.bs,])
+r.add_int <- cor(pred,dataf[i.test.bs,'Phenotype'],use='p'); r.add_int
+
+pred <- predict(mod.int,dataf[i.test.bs,])
+r.int <- cor(pred,dataf[i.test.bs,'Phenotype'],use='p'); r.int
+
+pred <- predict(mod.base,dataf[i.test.bs,])
+r.baseline <- cor(pred,dataf[i.test.bs,'Phenotype'],use='p'); r.baseline

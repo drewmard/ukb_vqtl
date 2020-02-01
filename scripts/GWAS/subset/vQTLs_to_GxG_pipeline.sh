@@ -1,8 +1,11 @@
 # phenoName=lymphocyte.count.rint.ALL
 # phenoName=monocyte.count.rint.ALL
 # phenoName=neutrophil.count.rint.ALL
-phenoName=wbc.leukocyte.count.rint.ALL
-phenoName=rbc.erythrocyte.count.rint.ALL
+# phenoName=wbc.leukocyte.count.rint.ALL
+# phenoName=rbc.erythrocyte.count.rint.ALL
+# phenoName=monocyte.count.ALL
+phenoName=lymphocyte.count.ALL
+phenoName=eosinophil.count.rint.ALL
 
 # Run vQTL screen
 sbatch run_vGWAS_subset.sh $phenoName
@@ -35,7 +38,7 @@ plink --bfile $geno --maf 0.05 --clump $results --clump-p1 $thres --clump-p2 $th
 done
 
 echo "Doing the variances..."
-dir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_clump/
+dir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_clump
 merged_outFile=$dir/ukbb.${phenoName}.results.var.clumped.txt
 head -1 $dir/ukbb.${phenoName}.${CHR}.results.var.clumped > $merged_outFile
 for CHR in {1..22}
@@ -94,7 +97,13 @@ echo ${CHR}
 geno=$outdir/ukbb.${phenoName}.${CHR}
 genoSub_prev=$outdir/ukbb.${phenoName}.$(($CHR-1)).sub
 genoSub_next=$outdir/ukbb.${phenoName}.${CHR}.sub
+if [ -f $geno.fam ]; then
 plink --bfile $genoSub_prev --bmerge $geno --make-bed --out $genoSub_next
+else 
+cp $genoSub_prev.bed ${genoSub_next}.bed
+cp $genoSub_prev.fam ${genoSub_next}.fam
+cp $genoSub_prev.bim ${genoSub_next}.bim
+fi
 done
 
 mv $genoSub_next.bim $outdir/ukbb.${phenoName}.ALL.sub.bim
@@ -116,3 +125,7 @@ plink --bfile $outdir/$prefix --pheno $pheno --pheno-name $phenoName --epistasis
 
 pheno=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.20.txt
 plink --bfile $outdir/$prefix --pheno $pheno --pheno-name $phenoName --epistasis set-by-set --set ${merged_outFile3} --epi1 1 --allow-no-sex --out $outdir/$prefix.GxG.20
+
+
+
+

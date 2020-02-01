@@ -236,6 +236,8 @@ x2 <- aggregate(p.mat2.save[[2]],by=list(genetic.var.exp=p.mat.save[[2]]$genetic
 fwrite(x1,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/simulation/p.mat2.save.1.aggre.txt',sep='\t',quote = F,row.names = F,col.names = T)
 fwrite(x2,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/simulation/p.mat2.save.2.aggre.txt',sep='\t',quote = F,row.names = F,col.names = T)
 
+x1 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/simulation/p.mat2.save.1.aggre.txt',data.table = F,stringsAsFactors = F)
+x2 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/simulation/p.mat2.save.2.aggre.txt',data.table = F,stringsAsFactors = F)
 
 aggregate(p.mat2.save[[2]][,1:8],by=list(p.mat2.save[[2]]$genetic.var.exp,p.mat2.save[[2]]$phenotype,p.mat2.save[[2]]$simMethod),function(x) {mean(x < 0.05,na.rm=T)})
 

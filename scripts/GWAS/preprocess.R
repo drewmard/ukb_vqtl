@@ -13,6 +13,7 @@ phenotypeDataFile.20 <- fam2.20[,c('FID','IID')]
 PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count',
                      'rbc.erythrocyte.count','platelet.count','eosinophil.count','basophil.count')
 
+
 ############
 
 for (s in c('80','20')) {
@@ -31,6 +32,8 @@ for (s in c('80','20')) {
   fam2$menopause2 <- as.factor(fam2$menopause2)
   # table(fam2[,c('sex','menopause2')])
   #########################################
+  
+  
   # phenotype preprocessing ###############
   source('/home/anm2868/scripts/Useful_scripts/rntransform.R')
   for (k in 1:length(PHENOTYPE_NAMES)) {
@@ -62,6 +65,7 @@ for (s in c('80','20')) {
       
       phenoName <- PHENOTYPE_NAMES[k]
       
+      # menopause sex related variable
       i <- which(fam2$sex==1); j <- which(fam2$sex==0); 
       mod.formula.1 <- formula(paste(paste0(phenoName,'.na',suffix),' ~ age+age2+genotyping.array+
                PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
@@ -70,7 +74,6 @@ for (s in c('80','20')) {
       mod.formula.2 <- formula(paste(paste0(phenoName,'.na',suffix),' ~ age+age2+genotyping.array+
                 PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
                 PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+
-                 # time.since.period2+time.since.period2.dummy+
                  menopause2+
                  Smoking+Smoking.dummy+alcohol.freq2+alcohol.freq2.dummy+bmi2.dummy+bmi2'))
 

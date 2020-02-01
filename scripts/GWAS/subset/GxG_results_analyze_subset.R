@@ -1,13 +1,22 @@
 library(data.table)
-# phenoName <- 'lymphocyte.count.rint.ALL'
-phenoName <- 'monocyte.count.rint.ALL'
+phenoName <- 'lymphocyte.count.ALL'
+# phenoName <- 'monocyte.count.rint.ALL'
 # phenoName <- 'neutrophil.count.rint.ALL'
 # phenoName <- 'wbc.leukocyte.count.rint.ALL'
 # phenoName <- 'rbc.erythrocyte.count.rint.ALL'
 
 s <- '80'
-df.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_GxG/ukbb.',phenoName,'.ALL.sub.GxG.',s,'.epi.qt'),data.table=F,stringsAsFactors = F)
+f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_GxG/ukbb.',phenoName,'.ALL.sub.GxG.',s,'.epi.qt')
+# f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_GxG/ukbb.',phenoName,'.ALL.sub.GxG.epi.qt')
+df.80 <- fread(f,data.table=F,stringsAsFactors = F)
 colnames(df.80)[5:7] <- paste0(colnames(df.80)[5:7],'.',s)
+df.80[order(df.80$P.80)[1:5],] 
+# unique(subset(df.80,P.80 < 0.05/nrow(df.80)/5)[,'CHR1'])
+# monocyte: 4
+# lymphocyte: 28
+# neutrophil: 1
+
+subset(df.80,P.80 < 5e-8)
 
 s <- '20'
 df.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_GxG/ukbb.',phenoName,'.ALL.sub.GxG.',s,'.epi.qt'),data.table=F,stringsAsFactors = F)

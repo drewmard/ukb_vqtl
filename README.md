@@ -30,9 +30,8 @@ array job: sbatch run_vGWAS_5.sh <phenotype> (run on cannes locally/curie.pbtech
 (sbatch) run_vGWAS_4.sh <phenotype> <CHR> (run on cannes locally/curie.pbtech cluster for spec chr) \
 run_vGWAS_3.sh <phenotype> (run on cannes locally in a loop) \
 
-#### run vGWAS using R's BEDMatrix library
-run_vGWAS_subset.sh
-merge_vGWAS_subset.R
+#### run vGWAS -> GxG pipeline using R's BEDMatrix library
+Use ./scripts/GWAS/subset/vQTLs_to_GxG_pipeline.sh
 
 
 #### merge diff assoc files together:
