@@ -43,6 +43,18 @@ clump_identify_extract.sh
 
 
 
+## GxG testing
+Directory: ./scripts/GxG
+
+#### pipeline
+see GxG_pipeline.sh
+
+#### analyze results
+GxG_results_analyze.R
+
+
+
+
 ## UKB GxE testing (post-vQTL screening)
 Directory: ./scripts/GxE
 
