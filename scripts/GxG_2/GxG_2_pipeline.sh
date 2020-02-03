@@ -28,7 +28,7 @@ suffix2="var"
 thres="0.001"
 phenoName=${pheno}.${suffix1}
 
-./GWAS_to_clumped_SNP_list.sh $pheno $suffix1 $suffix2 $thres
+/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxG_2/GWAS_to_clumped_SNP_list.sh $pheno $suffix1 $suffix2 $thres
 
 # b: trim vGWAS on raw
 thres="1e-5"

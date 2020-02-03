@@ -5,8 +5,6 @@ suffix1=$2
 suffix2=$3
 thres=$4
 
-./GWAS_to_clumped_SNP_list.sh $pheno $suffix1 $suffix2 $thres
-
 r2thres=0.5
 
 # initialize directories
