@@ -1,0 +1,24 @@
+PLINK v1.90b4 64-bit (20 Mar 2017)
+Options in effect:
+  --bfile /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.lymphocyte.count.ALL.sub
+  --recode A
+  --snps 19:16533781_AG_A,rs73511187,rs12461448,rs61420814
+
+Hostname: cannes.pbtech
+Working directory: /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxG_2
+Start time: Wed Feb  5 08:57:42 2020
+
+Random number seed: 1580911062
+515703 MB RAM detected; reserving 257851 MB for main workspace.
+4 out of 4259 variants loaded from .bim file.
+487409 people (223005 males, 264316 females, 88 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to plink.nosex .
+Using 1 thread (no multithreaded calculations invoked).
+Before main variant filters, 487409 founders and 0 nonfounders present.
+Calculating allele frequencies... done.
+Total genotyping rate is 0.975046.
+4 variants and 487409 people pass filters and QC.
+Note: No phenotypes present.
+--recode A to plink.raw ... done.
+
+End time: Wed Feb  5 08:57:42 2020
