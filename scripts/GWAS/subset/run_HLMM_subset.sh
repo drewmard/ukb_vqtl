@@ -2,7 +2,7 @@
 #SBATCH -J vQTL
 #SBATCH -n 1
 #SBATCH --mem=32G
-#SBATCH --array=1-3:1
+#SBATCH --array=1-1857:1
 # #SBATCH --array=123,411,413
 # #SBATCH --array=1-1857:1
 
@@ -32,9 +32,9 @@ END=$( wc -l $BIM | cut -f1 -d' ' )
 PHENO=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.NA.txt
 OUT=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.$x1.$x2.impute.HLMM_results.txt
 
-OUT=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.$x1.$x2.impute.HLMM_results.tmp.txt
-START=4980
-END=5000
+# OUT=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.$x1.$x2.impute.HLMM_results.tmp.txt
+# START=4980
+# END=5000
 
 # 
 i=57 # hard coded for now
