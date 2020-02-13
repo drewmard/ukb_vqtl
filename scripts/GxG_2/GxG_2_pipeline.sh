@@ -6,7 +6,7 @@ pheno=lymphocyte.count
 
 phenoName=${pheno}.rint.ALL
 # Run vQTL screen
-SCRIPTDIR=/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/scripts/GWAS/subset
+SCRIPTDIR=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset
 sbatch $SCRIPTDIR/run_vGWAS_subset.sh $phenoName
 source activate HLMM
 sbatch $SCRIPTDIR/run_HLMM_subset.sh $phenoName
