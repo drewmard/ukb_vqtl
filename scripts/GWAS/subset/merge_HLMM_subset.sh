@@ -8,7 +8,7 @@ phenotype=$1
 #initialize
 outFile=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.$phenotype.HLMM.txt
 rm $outFile
-head -1 /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.1.1.impute.HLMM_results.txt.gz > $outFile
+head -1 /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.1.1.impute.HLMM_results.txt.models.gz > $outFile
 
 # loop
 i=0
@@ -19,7 +19,7 @@ do
  x2=${myArray[1]} #iterator
  i=$(($i+1))
 
- f=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.$x1.$x2.impute.HLMM_results.txt.gz
+ f=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.$x1.$x2.impute.HLMM_results.txt.models.gz
  
  # print to script
  if [ ! -f $f ]; then
