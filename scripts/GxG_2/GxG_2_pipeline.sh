@@ -7,25 +7,33 @@ pheno=lymphocyte.count
 phenoName=${pheno}.rint.ALL
 # Run vQTL screen
 SCRIPTDIR=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset
+
+#########
+# vGWAS
 sbatch $SCRIPTDIR/run_vGWAS_subset.sh $phenoName
-source activate HLMM
-sbatch $SCRIPTDIR/run_HLMM_subset.sh $phenoName
-source deactivate
+
 # Merge together results
 # note: if error on the first run, will RE-RUN!!!
 ./merge_vGWAS_subset.sh $phenoName
-$SCRIPTDIR/merge_HLMM_subset.sh $phenoName
 
-# simple rename & re-adjusting datasets
+# simple rename & re-adjusting datasets for vGWAS
 mv /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.txt /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.old.txt
 Rscript merge_vGWAS_subset_2.R $phenoName
+
+
+#################
+
+source activate HLMM
+
+sbatch $SCRIPTDIR/run_HLMM_subset.sh $phenoName
+
+$SCRIPTDIR/merge_HLMM_subset.sh $phenoName # this does merge & re-run for HLMM
+
 
 #################
 source activate vQTL
 
 # a: trim vGWAS on RINT
-
-# input:
 pheno=$pheno
 suffix1="rint.ALL"
 suffix2="var"
@@ -69,7 +77,6 @@ phenoName=${pheno}.${suffix1}
 # merge into SNPs into single file...
 suffix1="rint.ALL"
 suffix2="var"
-
 phenoName=${pheno}.${suffix1}
 if [ "$suffix2" == "var" ]; then
   dir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_clump # /${phenoName}
@@ -80,7 +87,6 @@ file1=$dir/ukbb.${phenoName}.${suffix2}.clumped.clumped.combined.cut.2.txt
 
 suffix1="ALL"
 suffix2="var"
-
 phenoName=${pheno}.${suffix1}
 if [ "$suffix2" == "var" ]; then
   dir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_clump # /${phenoName}
@@ -91,7 +97,6 @@ file2=$dir/ukbb.${phenoName}.${suffix2}.clumped.clumped.combined.cut.2.txt
 
 suffix1="ALL"
 suffix2="mean"
-
 phenoName=${pheno}.${suffix1}
 if [ "$suffix2" == "var" ]; then
   dir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_clump # /${phenoName}
