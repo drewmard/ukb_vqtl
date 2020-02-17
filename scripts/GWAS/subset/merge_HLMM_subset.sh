@@ -8,7 +8,7 @@ phenotype=$1
 #initialize
 outFile=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.$phenotype.HLMM.txt
 rm $outFile
-head -1 /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.1.1.impute.HLMM_results.txt.models.gz > $outFile
+head -1 /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.1.1.impute.$phenotype.HLMM_results.txt.models.gz > $outFile
 
 # loop
 i=0
