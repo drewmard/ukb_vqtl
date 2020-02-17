@@ -1,10 +1,14 @@
 library(data.table)
 args = commandArgs(trailingOnly=TRUE)
 phenotype=args[1]
-# phenotype='lymphocyte.count.rint.ALL'
+phenotype='lymphocyte.count.rint.ALL'
+
+library(data.table)
+phenotype='bmi.rint.ALL'
 
 f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.',phenotype,'.HLMM.txt')
 results <- fread(f.out,data.table = F,stringsAsFactors = F)
+# results <- fread(f.out,data.table = F,stringsAsFactors = F,fill=TRUE)
 
 f.mean <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/imputed/results/ukbb.lymphocyte.count.rint.ALL.results.txt'
 df.mean <- fread(f.mean,data.table = F,stringsAsFactors = F)
