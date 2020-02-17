@@ -5,6 +5,8 @@ Directory: ./scripts/GWAS/
 
 
 #### pre-processing:
+Want to add another phenotype? Need to add the phenotype using gen_pheno, re-run gen_full_data and preprocess w/ updated PHENOTYPE_NAMES variable. good luck!
+
 split_80_20.R \
 identify_indiv_blood_disorders.R \
 sample_qc.R \

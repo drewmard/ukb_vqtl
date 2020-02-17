@@ -1,5 +1,8 @@
 library(data.table)
 
+PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count',
+                     'rbc.erythrocyte.count','platelet.count','eosinophil.count','basophil.count','bmi')
+
 # sample_qc.R
 df2 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/ukb_sample_qc.txt',data.table = F,stringsAsFactors = F)
 

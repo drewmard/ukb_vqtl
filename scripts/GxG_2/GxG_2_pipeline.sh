@@ -1,11 +1,10 @@
 source activate vQTL
 pheno=lymphocyte.count
+pheno=bmi
 
 #############
-# vGWAS!
 
 phenoName=${pheno}.rint.ALL
-# Run vQTL screen
 SCRIPTDIR=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset
 
 #########

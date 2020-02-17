@@ -11,7 +11,7 @@ phenotypeDataFile.20 <- fam2.20[,c('FID','IID')]
 #initialize
 # PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
 PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count',
-                     'rbc.erythrocyte.count','platelet.count','eosinophil.count','basophil.count')
+                     'rbc.erythrocyte.count','platelet.count','eosinophil.count','basophil.count','bmi')
 
 
 ############
@@ -65,25 +65,42 @@ for (s in c('80','20')) {
       
       phenoName <- PHENOTYPE_NAMES[k]
       
-      # menopause sex related variable
+      # model descriptions
       i <- which(fam2$sex==1); j <- which(fam2$sex==0); 
-      mod.formula.1 <- formula(paste(paste0(phenoName,'.na',suffix),' ~ age+age2+genotyping.array+
+      
+      if (phenoName=='bmi') {
+        mod.formula.1 <- formula(paste(paste0(phenoName,'.na',suffix),' ~ age+age2+genotyping.array+
+               PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
+               PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20'))
+        mod.formula.2 <- formula(paste(paste0(phenoName,'.na',suffix),' ~ age+age2+genotyping.array+sex+age*sex+age2*sex+
+               PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
+               PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20'))
+        # fitting models, not including individuals that are covariate outliers
+        mod1 <- lm(mod.formula.1,
+                   data=fam2[i,],na.action=na.exclude)
+        mod2 <- lm(mod.formula.1,
+                   data=fam2[j,],na.action=na.exclude)
+        mod3 <- lm(mod.formula.2,
+                   data=fam2,na.action=na.exclude)
+      } else {
+        
+        mod.formula.1 <- formula(paste(paste0(phenoName,'.na',suffix),' ~ age+age2+genotyping.array+
                PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
                PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+
                Smoking+Smoking.dummy+alcohol.freq2+alcohol.freq2.dummy+bmi2.dummy+bmi2'))
-      mod.formula.2 <- formula(paste(paste0(phenoName,'.na',suffix),' ~ age+age2+genotyping.array+
+        mod.formula.2 <- formula(paste(paste0(phenoName,'.na',suffix),' ~ age+age2+genotyping.array+
                 PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
                 PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+
                  menopause2+
                  Smoking+Smoking.dummy+alcohol.freq2+alcohol.freq2.dummy+bmi2.dummy+bmi2'))
-
-      # fitting models, not including individuals that are covariate outliers
-      mod1 <- lm(mod.formula.1,
-                 data=fam2[i,],na.action=na.exclude)
-      mod2 <- lm(mod.formula.2,
-                 data=fam2[j,],na.action=na.exclude)
-      mod3 <- lm(mod.formula.2,
-                 data=fam2,na.action=na.exclude)
+        # fitting models, not including individuals that are covariate outliers
+        mod1 <- lm(mod.formula.1,
+                   data=fam2[i,],na.action=na.exclude)
+        mod2 <- lm(mod.formula.2,
+                   data=fam2[j,],na.action=na.exclude)
+        mod3 <- lm(mod.formula.2,
+                   data=fam2,na.action=na.exclude)
+      }
       
       # but calculate residuals in all individuals
       mod1.pred <- predict.lm(mod1,newdata = fam3[i,])
@@ -113,6 +130,9 @@ for (s in c('80','20')) {
     }
   }
   fwrite(phenotypeDataFile,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.',s,'.txt'),sep='\t',quote = F,col.names = T,row.names = F)
+  phenotypeDataFile[phenotypeDataFile==-9] <- NA
+  fwrite(phenotypeDataFile,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.',s,'.NA.txt'),sep='\t',quote = F,col.names = T,row.names = F)
+  
 }
 
 # library(data.table)
