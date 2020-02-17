@@ -19,7 +19,7 @@ do
  x2=${myArray[1]} #iterator
  i=$(($i+1))
 
- f=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.$x1.$x2.impute.HLMM_results.txt.models.gz
+ f=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.$x1.$x2.impute.$phenoName.HLMM_results.txt.models.gz
  
  # print to script
  if [ ! -f $f ]; then

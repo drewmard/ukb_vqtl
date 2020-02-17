@@ -131,7 +131,7 @@ for (s in c('80','20')) {
   }
   fwrite(phenotypeDataFile,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.',s,'.txt'),sep='\t',quote = F,col.names = T,row.names = F)
   phenotypeDataFile[phenotypeDataFile==-9] <- NA
-  fwrite(phenotypeDataFile,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.',s,'.NA.txt'),sep='\t',quote = F,col.names = T,row.names = F)
+  fwrite(phenotypeDataFile,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.',s,'.NA.txt'),sep='\t',quote = F,col.names = T,row.names = F,na='NA')
   
 }
 
