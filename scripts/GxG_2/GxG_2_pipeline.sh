@@ -1,5 +1,5 @@
 source activate vQTL
-pheno=lymphocyte.count
+pheno=monocyte.count
 pheno=bmi
 
 #############
