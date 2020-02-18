@@ -27,7 +27,7 @@ source activate HLMM
 sbatch $SCRIPTDIR/run_HLMM_subset.sh $phenoName
 
 $SCRIPTDIR/merge_HLMM_subset.sh $phenoName # this does merge & re-run for HLMM
-
+wc -l /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.*.*.impute.bmi.rint.ALL.HLMM_results.txt.models.gz > wordcounts.txt
 
 #################
 source activate vQTL
