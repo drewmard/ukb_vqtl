@@ -2,7 +2,7 @@
 #SBATCH -J HLMM
 #SBATCH -n 1
 #SBATCH --mem=32G
-#SBATCH --array=1-1857:1
+#SBATCH --array=220-229:1,88-97:1,542
 # #SBATCH --array=123,411,413
 # #SBATCH --array=1-1857:1
 
