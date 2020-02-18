@@ -19,6 +19,8 @@ source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/bin/estimate_dispersio
 cor(results[,c('add','var','dispersion')])
 cor(results[,c('add_pval','var_pval','av_pval','dispersion_pval')])
 
+subset(results,SNP=='rs1421085')
+
 results <- results[order(results$dispersion_pval,decreasing = T),]; head(results)
 results <- results[order(results$av_pval,decreasing = T),]; head(results)
 df.sub <- subset(results,av_pval < 1e-5 & dispersion_pval > 1e-3)

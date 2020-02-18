@@ -2,7 +2,7 @@
 #SBATCH -J vQTL
 #SBATCH -n 1
 #SBATCH --mem=32G
-#SBATCH --array=1-1857:1
+#SBATCH --array=213-222:1
 # #SBATCH --array=123,411,413
 # #SBATCH --array=1-1857:1
 
@@ -37,7 +37,8 @@ OUT=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/u
 # END=5000
 
 # 
-i=90 # hard coded for now
+i=$(head -1 /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.NA.txt | tr -s '\t' '\n' | nl -nln |  grep $phenoName | cut -f1)
+i=$(($i-2))
 #
 echo "python2.7 /home/anm2868/hlmm/bin/hlmm_chr.py $BED $START $END $PHENO $OUT --phen_index $i --min_maf 0 --missing_char NA --max_missing 100"
 python2.7 /home/anm2868/hlmm/bin/hlmm_chr.py $BED $START $END $PHENO $OUT --phen_index $i --min_maf 0 --missing_char NA --max_missing 100
