@@ -2,9 +2,10 @@ library(data.table)
 args = commandArgs(trailingOnly=TRUE)
 phenotype=args[1]
 phenotype='lymphocyte.count.rint.ALL'
+phenotype='bmi.rint.ALL'
 
 library(data.table)
-phenotype='bmi.rint.ALL'
+phenotype='monocyte.count.rint.ALL'
 
 f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.',phenotype,'.HLMM.txt')
 results <- fread(f.out,data.table = F,stringsAsFactors = F)
@@ -16,13 +17,28 @@ chr6 <- subset(df.mean,CHR==6)$SNP
 
 results <- subset(results,frequency > 0.05 & !(SNP%in%chr6))
 source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/bin/estimate_dispersion_effects.R')
+
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.',phenotype,'.HLMM.dispersion_nochr6.txt')
+fwrite(results,f.out,row.names = F,col.names = T,quote = F,sep = '\t',na = 'NA')
+
+
 cor(results[,c('add','var','dispersion')])
 cor(results[,c('add_pval','var_pval','av_pval','dispersion_pval')])
+x <- subset(results,av_pval > -log10(5e-8) & dispersion_pval > -log10(1e-3))
+dim(subset(results,av_pval > -log10(5e-8) & dispersion_pval > -log10(1e-3)))
+dim(subset(results,var_pval < -log10(5e-8) & dispersion_pval > -log10(1e-5)))
+dim(subset(results,add_pval < -log10(5e-8) & dispersion_pval > -log10(1e-5)))
 
-subset(results,SNP=='rs1421085')
 
 results <- results[order(results$dispersion_pval,decreasing = T),]; head(results)
 results <- results[order(results$av_pval,decreasing = T),]; head(results)
+results <- results[order(results$add_pval,decreasing = T),]; head(results)
+results <- results[order(results$var_pval,decreasing = T),]; head(results)
+
+
+results <- results[order(results$dispersion_pval,decreasing = T),]; head(results[,c('SNP','var_pval','dispersion_pval')],100)
+
+
 df.sub <- subset(results,av_pval < 1e-5 & dispersion_pval > 1e-3)
 
 f.var <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/','ukbb.',phenotype,'.vGWAS.txt')
