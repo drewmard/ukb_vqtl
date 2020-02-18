@@ -32,3 +32,5 @@ do
 done < $ID
 
 
+wc -l /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.*.*.impute.bmi.rint.ALL.HLMM_results.txt.models.gz > wordcounts.txt
+f <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/wordcounts.txt'

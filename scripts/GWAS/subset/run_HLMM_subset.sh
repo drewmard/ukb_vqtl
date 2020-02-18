@@ -1,8 +1,8 @@
 #!/bin/bash -l
-#SBATCH -J vQTL
+#SBATCH -J HLMM
 #SBATCH -n 1
 #SBATCH --mem=32G
-#SBATCH --array=213-222:1
+#SBATCH --array=1-1857:1
 # #SBATCH --array=123,411,413
 # #SBATCH --array=1-1857:1
 
