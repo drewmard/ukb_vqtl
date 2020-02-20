@@ -22,7 +22,7 @@ f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/H
 fwrite(results,f.out,row.names = F,col.names = T,quote = F,sep = '\t',na = 'NA')
 
 
-cor(results[,c('add','var','dispersion')])
+cor(results[,c('add','var','dispersion')],use='p')
 cor(results[,c('add_pval','var_pval','av_pval','dispersion_pval')])
 x <- subset(results,av_pval > -log10(5e-8) & dispersion_pval > -log10(1e-3))
 dim(subset(results,av_pval > -log10(5e-8) & dispersion_pval > -log10(1e-3)))
