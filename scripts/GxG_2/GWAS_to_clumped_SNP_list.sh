@@ -1,11 +1,12 @@
 # GWAS_to_clumped_SNP_list.sh
 
-phenoName=$1
+pheno=$1
 suffix1=$2
 suffix2=$3
 thres=$4
 
 r2thres=0.5
+phenoName=${pheno}.${suffix1}
 
 # initialize directories
 genodir=/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies
