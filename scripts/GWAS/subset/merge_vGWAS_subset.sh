@@ -19,10 +19,19 @@ do
  x2=${myArray[1]} #iterator
  i=$(($i+1))
 
- f=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$x1.$x2.$phenotype.txt
+
+#  x1=11
+#  x2=29
+#  f=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$x1.$x2.$phenotype.txt
+#  # print to script
+#  if [ $(wc -l $f | cut -f1 -d' ') -gt 5001 ];
+#  then
+#    echo "error"
+#  fi
+#  
  
- # print to script
- if [ ! -f $f ]; then
+ if [ ! -f $f ] || [ $(wc -l $f | cut -f1 -d' ') -gt 5001 ]; 
+ then
    echo "ERROR: $i ($x1, $x2)"
    sbatch /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset/run_vGWAS_subset_specific.sh $phenotype $i
  else

@@ -5,7 +5,7 @@ pheno=bmi # newest run
 
 #############
 
-# phenoName=${pheno}.rint.ALL
+phenoName=${pheno}.ALL
 SCRIPTDIR=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset
 
 #########
@@ -14,11 +14,11 @@ sbatch $SCRIPTDIR/run_vGWAS_subset.sh $phenoName
 
 # Merge together results
 # note: if error on the first run, will RE-RUN!!!
-./merge_vGWAS_subset.sh $phenoName
+$SCRIPTDIR/merge_vGWAS_subset.sh $phenoName
 
 # simple rename & re-adjusting datasets for vGWAS
 mv /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.txt /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.old.txt
-Rscript merge_vGWAS_subset_2.R $phenoName
+Rscript $SCRIPTDIR/merge_vGWAS_subset_2.R $phenoName
 
 
 #################
