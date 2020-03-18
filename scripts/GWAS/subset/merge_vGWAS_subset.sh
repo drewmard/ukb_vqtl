@@ -18,19 +18,9 @@ do
  x1=${myArray[0]} #chr
  x2=${myArray[1]} #iterator
  i=$(($i+1))
-
-
-#  x1=11
-#  x2=29
-#  f=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$x1.$x2.$phenoName.txt
-#  # print to script
-#  if [ $(wc -l $f | cut -f1 -d' ') -gt 5001 ];
-#  then
-#    echo "error"
-#  fi
-#  
- 
- if [ ! -f $f ] || [ $(wc -l $f | cut -f1 -d' ') -gt 5001 ]; 
+ f=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$x1.$x2.$phenoName.txt
+ wcl=$(wc -l $f | cut -f1 -d' ')
+ if [ ! -f $f ] || [ $wcl -gt 5001 ]
  then
    echo "ERROR: $i ($x1, $x2)"
    sbatch /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset/run_vGWAS_subset_specific.sh $phenoName $i
