@@ -1,6 +1,6 @@
 # GWAS_to_clumped_SNP_list.sh
 
-pheno=$1
+phenoName=$1
 suffix1=$2
 suffix2=$3
 thres=$4

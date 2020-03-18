@@ -50,7 +50,8 @@ phenoName=${pheno}.${suffix1}
 pheno=$pheno
 suffix1="ALL"
 suffix2="var"
-thres="1e-5"
+# thres="1e-5"
+thres="5e-8"
 phenoName=${pheno}.${suffix1}
 
 /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxG_2/GWAS_to_clumped_SNP_list.sh $pheno $suffix1 $suffix2 $thres
