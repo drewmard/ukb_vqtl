@@ -15,7 +15,7 @@ if [ "$suffix2" == "var" ]; then
   clump_snp_field=rs
 elif [ "$suffix2" == "mean" ]; then
   outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/muGWAS_clump
-  results=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/imputed/results/ukbb.lymphocyte.count.rint.ALL.results.txt
+  results=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/imputed/results/ukbb.${phenoName}.results.txt
   clump_snp_field=SNP
 fi
 

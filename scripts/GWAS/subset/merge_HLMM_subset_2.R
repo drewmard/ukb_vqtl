@@ -5,7 +5,9 @@ phenotype='lymphocyte.count.rint.ALL'
 phenotype='bmi.rint.ALL'
 
 library(data.table)
-phenotype='monocyte.count.rint.ALL'
+# phenotype='monocyte.count.rint.ALL'
+# phenotype='lymphocyte.count.rint.ALL'
+phenotype='bmi.rint.ALL'
 
 f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.',phenotype,'.HLMM.txt')
 results <- fread(f.out,data.table = F,stringsAsFactors = F)
@@ -20,6 +22,16 @@ source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/bin/estimate_dispersio
 
 f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.',phenotype,'.HLMM.dispersion_nochr6.txt')
 fwrite(results,f.out,row.names = F,col.names = T,quote = F,sep = '\t',na = 'NA')
+
+# /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.lymphocyte.count.rint.ALL.HLMM.dispersion_nochr6.txt
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
 
 
 cor(results[,c('add','var','dispersion')],use='p')

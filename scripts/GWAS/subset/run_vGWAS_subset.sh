@@ -26,6 +26,6 @@ x2="$(cut -f2 /athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_cop
 FILE=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$x1.$x2.$phenoName.txt
 if [ ! -f "$FILE" ]; then
 	echo "Let it run!"
-	Rscript run_vGWAS.R $arg1 $phenoName $numCores
+	Rscript /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset/run_vGWAS.R $arg1 $phenoName $numCores
 fi
 echo "Complete."

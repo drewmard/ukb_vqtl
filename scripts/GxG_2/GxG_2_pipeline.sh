@@ -1,15 +1,15 @@
 source activate vQTL
 pheno=monocyte.count # done
 pheno=bmi # newest run
-pheno=lymphocyte.count # running right now
+# pheno=lymphocyte.count # running right now
 
 #############
 
-phenoName=${pheno}.rint.ALL
+# phenoName=${pheno}.rint.ALL
 SCRIPTDIR=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset
 
 #########
-# vGWAS
+# vGWAS on raw
 sbatch $SCRIPTDIR/run_vGWAS_subset.sh $phenoName
 
 # Merge together results
@@ -30,6 +30,8 @@ source activate HLMM
 sbatch $SCRIPTDIR/run_HLMM_subset.sh $phenoName
 
 $SCRIPTDIR/merge_HLMM_subset.sh $phenoName # this does merge & re-run for HLMM
+
+phenoName=lymphocyte.count.rint.ALL
 wc -l /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.*.*.impute.$phenoName.HLMM_results.txt.models.gz > /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/wordcounts.txt
 
 #################

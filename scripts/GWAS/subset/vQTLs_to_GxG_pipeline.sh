@@ -4,8 +4,9 @@
 # phenoName=wbc.leukocyte.count.rint.ALL
 # phenoName=rbc.erythrocyte.count.rint.ALL
 # phenoName=monocyte.count.ALL
-phenoName=lymphocyte.count.ALL
-phenoName=eosinophil.count.rint.ALL
+# phenoName=lymphocyte.count.ALL
+# phenoName=eosinophil.count.rint.ALL
+phenoName=bmi.rint.ALL
 
 # Run vQTL screen
 sbatch run_vGWAS_subset.sh $phenoName
