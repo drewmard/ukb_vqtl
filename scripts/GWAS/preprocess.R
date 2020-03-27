@@ -40,7 +40,7 @@ for (s in c('80','20')) {
     phenoName <- PHENOTYPE_NAMES[k]
     
     # remove outliers
-    i.outlier <- which(abs(scale(fam2[,paste0(phenoName,'.na')])) > 5)
+    i.outlier <- which(abs(scale(fam2[,paste0(phenoName,'.na')])) > 6)
     fam2[,paste0(phenoName,'.na')][i.outlier] <- NA
     
     # apply transformations
