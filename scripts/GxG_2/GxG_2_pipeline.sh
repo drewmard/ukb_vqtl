@@ -20,19 +20,31 @@ $SCRIPTDIR/merge_vGWAS_subset.sh $phenoName
 mv /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.txt /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.old.txt
 Rscript $SCRIPTDIR/merge_vGWAS_subset_2.R $phenoName
 
+# vGWAS on rint
+phenoName=${pheno}.rint.ALL
+sbatch $SCRIPTDIR/run_vGWAS_subset.sh $phenoName
+
+# Merge together results
+# note: if error on the first run, will RE-RUN!!!
+$SCRIPTDIR/merge_vGWAS_subset.sh $phenoName
+
+# simple rename & re-adjusting datasets for vGWAS
+mv /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.txt /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.old.txt
+Rscript $SCRIPTDIR/merge_vGWAS_subset_2.R $phenoName
+
 
 #################
 
-phenoName=${pheno}.rint.ALL
-SCRIPTDIR=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset
-source activate HLMM
-
-sbatch $SCRIPTDIR/run_HLMM_subset.sh $phenoName
-
-$SCRIPTDIR/merge_HLMM_subset.sh $phenoName # this does merge & re-run for HLMM
-
-phenoName=lymphocyte.count.rint.ALL
-wc -l /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.*.*.impute.$phenoName.HLMM_results.txt.models.gz > /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/wordcounts.txt
+# phenoName=${pheno}.rint.ALL
+# SCRIPTDIR=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset
+# source activate HLMM
+# 
+# sbatch $SCRIPTDIR/run_HLMM_subset.sh $phenoName
+# 
+# $SCRIPTDIR/merge_HLMM_subset.sh $phenoName # this does merge & re-run for HLMM
+# 
+# phenoName=lymphocyte.count.rint.ALL
+# wc -l /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.*.*.impute.$phenoName.HLMM_results.txt.models.gz > /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/wordcounts.txt
 
 #################
 source activate vQTL
@@ -41,7 +53,8 @@ source activate vQTL
 pheno=$pheno
 suffix1="rint.ALL"
 suffix2="var"
-thres="0.001"
+# thres="0.001" # old
+thres="1e-5"
 phenoName=${pheno}.${suffix1}
 
 /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxG_2/GWAS_to_clumped_SNP_list.sh $pheno $suffix1 $suffix2 $thres

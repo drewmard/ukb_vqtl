@@ -5,7 +5,10 @@ suffix1=$2
 suffix2=$3
 thres=$4
 
-r2thres=0.5
+# r2thres=0.5 #old
+r2thres=0.1 #new
+# kbthres=250 #old
+kbthres=5000 #new
 phenoName=${pheno}.${suffix1}
 
 # initialize directories
@@ -27,7 +30,7 @@ do
 echo ${CHR}
 geno=$genodir/ukbb.${CHR}.impute
 outFile=ukbb.${phenoName}.${CHR}.${suffix2}.clumped
-plink --bfile $geno --maf 0.05 --clump $results --clump-p1 $thres --clump-p2 $thres --clump-r2 $r2thres --clump-field P --clump-snp-field $clump_snp_field --out $outdir/$outFile
+plink --bfile $geno --maf 0.05 --clump $results --clump-p1 $thres --clump-p2 $thres --clump-r2 $r2thres --clump-field P --clump-snp-field $clump_snp_field --clump-kb $kbthres --out $outdir/$outFile
 done
 
 # merge diff chr clump files
