@@ -1,22 +1,22 @@
 library(data.table)
 
 # original
-# s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.txt'),data.table = F,stringsAsFactors = F)
-# s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.txt'),data.table = F,stringsAsFactors = F)
-# results.mg.diet <- merge(results.80,results.20,by=c('SNP','E'))
-# 
-# s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.txt'),data.table = F,stringsAsFactors = F)
-# s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.txt'),data.table = F,stringsAsFactors = F)
-# results.mg.all <- merge(results.80,results.20,by=c('SNP','E'))
-
-# fake
-s='80';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.txt'),data.table = F,stringsAsFactors = F)
-s='20';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.txt'),data.table = F,stringsAsFactors = F)
+s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.txt'),data.table = F,stringsAsFactors = F)
+s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.txt'),data.table = F,stringsAsFactors = F)
 results.mg.diet <- merge(results.80,results.20,by=c('SNP','E'))
 
-s='80';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.txt'),data.table = F,stringsAsFactors = F)
-s='20';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.txt'),data.table = F,stringsAsFactors = F)
+s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.txt'),data.table = F,stringsAsFactors = F)
+s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.txt'),data.table = F,stringsAsFactors = F)
 results.mg.all <- merge(results.80,results.20,by=c('SNP','E'))
+
+# fake
+# s='80';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.txt'),data.table = F,stringsAsFactors = F)
+# s='20';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.txt'),data.table = F,stringsAsFactors = F)
+# results.mg.diet <- merge(results.80,results.20,by=c('SNP','E'))
+# 
+# s='80';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.txt'),data.table = F,stringsAsFactors = F)
+# s='20';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.txt'),data.table = F,stringsAsFactors = F)
+# results.mg.all <- merge(results.80,results.20,by=c('SNP','E'))
 
 #############
 
