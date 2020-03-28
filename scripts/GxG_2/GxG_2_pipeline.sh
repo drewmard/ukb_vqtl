@@ -63,7 +63,7 @@ phenoName=${pheno}.${suffix1}
 pheno=$pheno
 suffix1="ALL"
 suffix2="var"
-# thres="1e-5"
+# thres="1e-5" # old
 thres="5e-8"
 phenoName=${pheno}.${suffix1}
 

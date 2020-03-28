@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH -J vQTL
 #SBATCH --mem=128G
-#SBATCH --array=20-20:1
+#SBATCH --array=1-22:1
 
 echo "Activating environment..."
 source activate vQTL
@@ -17,7 +17,8 @@ mkdir -p $outdir
 mkdir -p $outdir/MAF
 mkdir -p $outdir/results
 
-phenoName=lymphocyte.count.rint.ALL
+# phenoName=lymphocyte.count.rint.ALL
+phenoName=bmi.ALL
 CHR=$SLURM_ARRAY_TASK_ID
 
 # for CHR in {1..22};
@@ -27,9 +28,9 @@ echo "Chromosome $CHR analysis..."
 prefix=ukbb.$CHR.impute
 
 # 1 : freq
-echo "MAF measurements..."
-outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/imputed/MAF
-plink --bfile $dir/$prefix --freq --allow-no-sex --memory 120000 --out $outdir/$prefix
+# echo "MAF measurements..."
+# outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/imputed/MAF
+# plink --bfile $dir/$prefix --freq --allow-no-sex --memory 120000 --out $outdir/$prefix
 
 # GWAS: ##########
 
