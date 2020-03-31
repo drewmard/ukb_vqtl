@@ -108,7 +108,7 @@ for (k in 1:length(environmental_factors)) {
   }
 }
 
-fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 
 ###### validation testing set
 
@@ -163,13 +163,13 @@ for (k in 1:length(environmental_factors)) {
   }
 }
 
-fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 
 
 ######
 
-s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.txt'),data.table = F,stringsAsFactors = F)
-s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.txt'),data.table = F,stringsAsFactors = F)
+s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
+s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
 results.mg <- merge(results.80,results.20,by=c('SNP','E'))
 results.mg[order(results.mg[,4],decreasing = F),][1:5,]
 subset(results.mg,results.mg[,4] < 0.05 / nrow(results.mg))

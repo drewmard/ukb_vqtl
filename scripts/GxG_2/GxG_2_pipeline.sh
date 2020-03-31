@@ -1,6 +1,7 @@
 source activate vQTL
 pheno=monocyte.count # done
-pheno=bmi # newest run
+# pheno=bmi # newest run
+pheno=lymphocyte.count
 # pheno=lymphocyte.count # running right now
 
 #############
@@ -213,7 +214,7 @@ outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2
 prefix=ukbb.${pheno}.merged_subset
 merged_outFile3=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.${pheno}.SNP_list.txt
 phenoFile=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.80.txt
-phenoName=bmi.rint.ALL
+phenoName=bmi.ALL
 plink --bfile $outdir/$prefix --pheno $phenoFile --pheno-name $phenoName --epistasis set-by-set --set ${merged_outFile3} --epi1 1 --allow-no-sex --out $outdir/$prefix.GxG.80
 plink --bfile $outdir/$prefix --r2 dprime yes-really --ld-window-kb 50000 --ld-window-r2 0 --ld-window 1000 --out $outdir/$prefix.LD
 wc -l $outdir/$prefix.LD.ld
@@ -224,9 +225,6 @@ plink --bfile $outdir/$prefix --ld 6:31242257_AC_A rs2394982
 
 pheno=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.20.txt
 plink --bfile $outdir/$prefix --pheno $pheno --pheno-name $phenoName --epistasis set-by-set --set ${merged_outFile3} --epi1 1 --allow-no-sex --out $outdir/$prefix.GxG.20
-
-plink --bfile $outdir/$prefix --snps 19:16533781_AG_A,rs73511187,rs12461448,rs61420814 --recodeA
-
 
 plink --bfile $outdir/$prefix --freq --out $outdir/$prefix.GxG
 

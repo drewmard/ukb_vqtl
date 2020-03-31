@@ -123,26 +123,23 @@ for (s in c('80','20')) {
   full_dataset <- full_dataset[match(geno_names[ind],full_dataset$IID),]
   fwrite(full_dataset,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/full_data.bmi.GxE.',s,'.txt'),quote = F,sep = '\t',na = 'NA',col.names = T,row.names = F)
   
+  environmental_factors <- c(paste0('DIET_PC',1:10),
+                             # 'DIET_SCORE',
+                             'age','Alcohol_intake_frequency',
+                             'PA','SB','sex','Smoking.E')
+  
   # can loop through and call covariates if necessary
   covariate_adjusted_phenotype <- FALSE
   library(parallel)
   GxE <- function(i) {
     print(i)
-    if (covariate_adjusted_phenotype) { # currently not doing
-      full_dataset$SNP <- geno[ind,i]
-      # full_dataset$PHENO <- pheno[,phenoName]
-      # full_dataset$ENV <- pheno[,envir_name]
-      mod <- lm(PHENO~SNP*ENV)
-      res <- summary(mod)$coef["SNP:ENV",c("Estimate","Pr(>|t|)")]
-    } else if (!covariate_adjusted_phenotype) {
-      full_dataset$SNP <- geno[ind,i]
-      mod.formula <- formula(paste(phenoName,' ~ age+age2+genotyping.array+sex+age*sex+age2*sex+
+    full_dataset$SNP <- geno[ind,i]
+    mod.formula <- formula(paste(phenoName,' ~ age+age2+genotyping.array+sex+age*sex+age2*sex+
                PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
                PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+',
-                                   envir_name,'*SNP'))
-      mod <- lm(mod.formula,data=full_dataset)
-      res <- summary(mod)$coef[paste0(envir_name,':SNP'),c("Estimate","Pr(>|t|)")]
-    }
+                                 envir_name,'*SNP'))
+    mod <- lm(mod.formula,data=full_dataset)
+    res <- summary(mod)$coef[paste0(envir_name,':SNP'),c("Estimate","Pr(>|t|)")]
     return(res)
   }
   
@@ -170,7 +167,7 @@ for (s in c('80','20')) {
   
   # df.results.save[order(df.results.save[,3],decreasing = F),]
   # subset(df.results.save,df.results.save[,3] < 0.05/nrow(df.results.save))
-  fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+  fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 }
 
 df.results.save[order(df.results.save[,3],decreasing = F),][1:20,]

@@ -1,5 +1,5 @@
 library(data.table)
-phenoName='lymphocyte.count.rint.ALL'
+phenoName='bmi.ALL'
 
 
 for (CHR in 1:22) {

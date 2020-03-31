@@ -1,12 +1,12 @@
 library(data.table)
 
 # original
-s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.txt'),data.table = F,stringsAsFactors = F)
-s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.txt'),data.table = F,stringsAsFactors = F)
+s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
+s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
 results.mg.diet <- merge(results.80,results.20,by=c('SNP','E'))
 
-s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.txt'),data.table = F,stringsAsFactors = F)
-s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.txt'),data.table = F,stringsAsFactors = F)
+s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.more_snp.txt'),data.table = F,stringsAsFactors = F)
+s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.more_snp.txt'),data.table = F,stringsAsFactors = F)
 results.mg.all <- merge(results.80,results.20,by=c('SNP','E'))
 
 # fake
@@ -19,7 +19,7 @@ results.mg.all <- merge(results.80,results.20,by=c('SNP','E'))
 # results.mg.all <- merge(results.80,results.20,by=c('SNP','E'))
 
 #############
-
+# results.mg <- results.mg.all
 results.mg <- rbind(results.mg.diet,results.mg.all)
 results.mg[order(results.mg[,4],decreasing = F),][1:5,]
 subset(results.mg,results.mg[,4] < 0.05 / nrow(results.mg))
@@ -63,7 +63,8 @@ for (i in 1:length(thres.vec)) {
 }
 
 # subset(results.mg,results.mg[,4] < 0.05 / nrow(results.mg))
+fwrite(df.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.txt'),quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
 
-fwrite(df.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.reversed.txt'),quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+# fwrite(df.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.reversed.txt'),quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
 
 
