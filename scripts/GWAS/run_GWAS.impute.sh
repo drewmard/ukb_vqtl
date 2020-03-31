@@ -17,7 +17,8 @@ mkdir -p $outdir
 mkdir -p $outdir/MAF
 mkdir -p $outdir/results
 
-phenoName=lymphocyte.count.ALL
+# phenoName=lymphocyte.count.ALL
+phenoName=$1
 # phenoName=bmi.ALL
 CHR=$SLURM_ARRAY_TASK_ID
 

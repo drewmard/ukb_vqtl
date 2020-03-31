@@ -1,5 +1,8 @@
 library(data.table)
-phenoName='bmi.ALL'
+args = commandArgs(trailingOnly=TRUE)
+phenoName=args[1]
+
+# phenoName='bmi.ALL'
 
 
 for (CHR in 1:22) {
