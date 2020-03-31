@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH -J vQTL
 #SBATCH --mem=128G
-#SBATCH --array=2-2:1
+#SBATCH --array=4-4:1
 
 echo "Activating environment..."
 source activate vQTL
