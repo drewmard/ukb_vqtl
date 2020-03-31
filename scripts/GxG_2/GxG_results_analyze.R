@@ -89,6 +89,7 @@ colnames(results.mg.3)[14:18] <- paste0(colnames(results.mg.3)[14:18],'.1')
 results.mg.3 <- merge(results.mg.3,df.mg2,by.x='SNP2',by.y='rs')
 colnames(results.mg.3)[19:23] <- paste0(colnames(results.mg.3)[19:23],'.2')
 
+df.save <- gxg_validation_statistics(results.mg)
 df.save.mean <- gxg_validation_statistics(subset(results.mg.3,P.MEAN.1 < 5e-8 | P.MEAN.2 < 5e-8))
 df.save.var.raw <- gxg_validation_statistics(subset(results.mg.3,P.VAR.RAW.1 < 5e-8 | P.VAR.RAW.2 < 5e-8))
 df.save.var.rint <- gxg_validation_statistics(subset(results.mg.3,P.VAR.RINT.1 < 1e-5 | P.VAR.RINT.2 < 1e-5))
@@ -100,31 +101,31 @@ df.save.var.rint <- gxg_validation_statistics(subset(results.mg.3,P.VAR.RINT.1 <
 
 
 
-
-df.sub <- subset(df2,CHR1!=CHR2 & MAF1 > 0.2 & MAF2 > 0.2 & P.80 < 0.05 & (sign(BETA_INT.80) == sign(BETA_INT.20)))
-df.sub[order(df.sub$P.80)[1:5],] 
-
-
-df <- df.80
-# df.sub <- subset(df,CHR1!=6)
-df.sub <- subset(df,CHR1!=CHR2)
-df.sub[order(df.sub$P.80)[1:5],] 
-
-df.sub <- subset(df,P.80 < 1e-3 & P.20 < 0.05 & CHR1 != CHR2 & sign(BETA_INT.80) == sign(BETA_INT.20))
-df.sub[order(df.sub$P.80)[1:5],] 
-
-df.sub <- subset(df,P.80 < 1e-3 & P.20 < 0.05 & CHR1 == CHR2 & sign(BETA_INT.80) == sign(BETA_INT.20))
-df.sub[order(df.sub$P.80)[1:5],] 
-
-
-df.sub <- df
-# df.sub <- subset(df,SNP2=='rs146125856' & CHR1!=6)
+# 
+# df.sub <- subset(df2,CHR1!=CHR2 & MAF1 > 0.2 & MAF2 > 0.2 & P.80 < 0.05 & (sign(BETA_INT.80) == sign(BETA_INT.20)))
+# df.sub[order(df.sub$P.80)[1:5],] 
+# 
+# 
+# df <- df.80
+# # df.sub <- subset(df,CHR1!=6)
 # df.sub <- subset(df,CHR1!=CHR2)
-# df.sub <- subset(df,CHR1!=CHR2 & SNP2!='rs146125856')
-# df.sub <- subset(df,CHR1!=CHR2 & CHR1!=6 & CHR2!=6)
-df.sub[order(df.sub$P)[1:5],] 
-
-df.sub <- subset(df,CHR1!=CHR2)
-df.sub[order(df.sub$P)[1:5],] 
-
-df.sub <- subset(df,CHR1==15 | CHR2==15)
+# df.sub[order(df.sub$P.80)[1:5],] 
+# 
+# df.sub <- subset(df,P.80 < 1e-3 & P.20 < 0.05 & CHR1 != CHR2 & sign(BETA_INT.80) == sign(BETA_INT.20))
+# df.sub[order(df.sub$P.80)[1:5],] 
+# 
+# df.sub <- subset(df,P.80 < 1e-3 & P.20 < 0.05 & CHR1 == CHR2 & sign(BETA_INT.80) == sign(BETA_INT.20))
+# df.sub[order(df.sub$P.80)[1:5],] 
+# 
+# 
+# df.sub <- df
+# # df.sub <- subset(df,SNP2=='rs146125856' & CHR1!=6)
+# # df.sub <- subset(df,CHR1!=CHR2)
+# # df.sub <- subset(df,CHR1!=CHR2 & SNP2!='rs146125856')
+# # df.sub <- subset(df,CHR1!=CHR2 & CHR1!=6 & CHR2!=6)
+# df.sub[order(df.sub$P)[1:5],] 
+# 
+# df.sub <- subset(df,CHR1!=CHR2)
+# df.sub[order(df.sub$P)[1:5],] 
+# 
+# df.sub <- subset(df,CHR1==15 | CHR2==15)
