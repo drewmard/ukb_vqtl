@@ -36,7 +36,8 @@ for (s in c('80','20')) {
   f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/full_data.',s,'.txt')
   fam <- fread(f,data.table = F,stringsAsFactors = F)
   
-  pheno <- 'bmi'
+  # pheno <- 'bmi'
+  pheno <- 'lymphocyte.count'
   fam[,paste0(pheno,'.na')] <- fam[,pheno]
   fam[,paste0(pheno,'.na')][which(fam$In==0)] <- NA
   fam[,paste0(pheno,'.na')][which(fam$QC_In==0)] <- NA
@@ -111,7 +112,8 @@ for (s in c('80','20')) {
   # merge phenotypic data
   phenotype_dataset <- fam[,c('IID',phenoName)] # read in all phenotypes at once? 
   full_dataset <- merge(covariate_environmental_dataset,phenotype_dataset,by='IID')
-  fwrite(full_dataset,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/full_data.bmi.GxE.',s,'.txt'),quote = F,sep = '\t',na = 'NA',col.names = T,row.names = F)
+  # fwrite(full_dataset,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/full_data.bmi.GxE.',s,'.txt'),quote = F,sep = '\t',na = 'NA',col.names = T,row.names = F)
+  fwrite(full_dataset,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/full_data.',pheno,'.GxE.',s,'.txt'),quote = F,sep = '\t',na = 'NA',col.names = T,row.names = F)
   
   # genetic data
   f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset')
@@ -121,9 +123,10 @@ for (s in c('80','20')) {
   # merge stuff
   ind <- which(geno_names %in% full_dataset$IID)
   full_dataset <- full_dataset[match(geno_names[ind],full_dataset$IID),]
-  fwrite(full_dataset,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/full_data.bmi.GxE.',s,'.txt'),quote = F,sep = '\t',na = 'NA',col.names = T,row.names = F)
+  fwrite(full_dataset,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/full_data.',pheno,'.GxE.',s,'.txt'),quote = F,sep = '\t',na = 'NA',col.names = T,row.names = F)
   
-  environmental_factors <- c(paste0('DIET_PC',1:10),
+  environmental_factors <- c(
+                            paste0('DIET_PC',1:10),
                              # 'DIET_SCORE',
                              'age','Alcohol_intake_frequency',
                              'PA','SB','sex','Smoking.E')
@@ -167,7 +170,7 @@ for (s in c('80','20')) {
   
   # df.results.save[order(df.results.save[,3],decreasing = F),]
   # subset(df.results.save,df.results.save[,3] < 0.05/nrow(df.results.save))
-  fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+  fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 }
 
 df.results.save[order(df.results.save[,3],decreasing = F),][1:20,]
