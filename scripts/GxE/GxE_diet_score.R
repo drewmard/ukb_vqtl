@@ -1,5 +1,5 @@
 # diet score
-
+Sys.sleep(600)
 library(data.table)
 s='80'
 full_dataset <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/full_data.bmi.GxE.',s,'.txt'),data.table = F,stringsAsFactors = F)
@@ -69,6 +69,9 @@ geno_names <- unlist(lapply(strsplit(rownames(geno),'_'),function(x) {return(x[2
 # merge stuff
 ind <- which(geno_names %in% dataf.60$IID)
 dataf.60 <- dataf.60[match(geno_names[ind],dataf.60$IID),]
+s='80'; f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diet_data.',pheno,'.GxE.',s,'.txt')
+fwrite(dataf.60[,c('IID','DIET_SCORE')],f,quote = F,na='NA',row.names = F,col.names = T,sep = '\t')
+
 
 environmental_factors <- c('DIET_SCORE')
 # can loop through and call covariates if necessary
@@ -127,6 +130,8 @@ dataf.20_test$DIET_SCORE <- DIET_SCORE
 # merge stuff
 ind <- which(geno_names %in% dataf.20_test$IID)
 dataf.20_test <- dataf.20_test[match(geno_names[ind],dataf.20_test$IID),]
+s='20'; f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diet_data.',pheno,'.GxE.',s,'.txt')
+fwrite(dataf.20_test[,c('IID','DIET_SCORE')],f,quote = F,na='NA',row.names = F,col.names = T,sep = '\t')
 
 library(parallel)
 GxE <- function(i) {

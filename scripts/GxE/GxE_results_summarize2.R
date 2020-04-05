@@ -1,5 +1,6 @@
 library(data.table)
 pheno <- 'bmi'
+# pheno <- 'lymphocyte.count'
 
 f1 <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.',paste0(pheno,'.ALL'),'.vGWAS.txt')
 f2 <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.',paste0(pheno,'.rint.ALL'),'.vGWAS.txt')
@@ -34,12 +35,12 @@ df.mg2 <- df.mg[,c('rs','CHR','BP','P.MEAN','P.VAR.RAW','P.VAR.RINT')]
 #################################################################
 # GxE
 
-s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
-s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
+s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
+s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
 results.mg.diet <- merge(results.80,results.20,by=c('SNP','E'))
 
-s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.more_snp.txt'),data.table = F,stringsAsFactors = F)
-s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.more_snp.txt'),data.table = F,stringsAsFactors = F)
+s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.txt'),data.table = F,stringsAsFactors = F)
+s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.txt'),data.table = F,stringsAsFactors = F)
 results.mg.all <- merge(results.80,results.20,by=c('SNP','E'))
 
 results.mg <- rbind(results.mg.diet,results.mg.all)
@@ -79,27 +80,52 @@ results.ld_sub <- subset(results,!(SNP %in% snp_to_remove))
 results.mg <- results.ld_sub
 
 subset(results.mg,results.mg[,4] < 0.05 / nrow(results.mg))
+results.mg[order(results.mg[,4],decreasing = F)[1:5],]
+results.trim <- subset(results.mg,E %in% environmental_factors)
+subset(results.trim,results.trim[,4] < 0.05 / nrow(results.trim))
+f.out<-paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.ALL_RESULTS.trim.txt')
+fwrite(results.trim,f.out,quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 
-validation_statistics <- function(results.mg) {
-  thres.vec <- 10^-(seq(0,-log10(min(results.mg[,4]))+0.1,by=0.1))
+validation_statistics <- function(results.mg,thres.vec=10^-(seq(0,3,by=0.5))) {
   start <- T
   for (i in 1:length(thres.vec)) {
     thres <- thres.vec[i]
     
     df.sub <- subset(results.mg,results.mg[,4] < thres); 
-    same_sign_prop <- nrow(df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y)))/nrow(df.sub); 
+    df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y))
+    X=nrow(df.sub.sub); N=nrow(df.sub)
+    binomial.test.results <- binom.test(x=X,n=N,0.5)
+    p=as.numeric(binomial.test.results$estimate)
+    ci=as.numeric(binomial.test.results$conf.int)
+    lower=ci[1]; upper=ci[2]
+    pval=binomial.test.results$p.value
     winners_curse <- nrow(subset(df.sub.sub,abs(Estimate.x) > abs(Estimate.y)))/nrow(df.sub.sub)
-    n=nrow(df.sub)
     
-    df.sub <- subset(results.mg,results.mg[,4] > thres); 
-    same_sign_prop2 <- nrow(df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y)))/nrow(df.sub); 
-    winners_curse2 <- nrow(subset(df.sub.sub,abs(Estimate.x) > abs(Estimate.y)))/nrow(df.sub.sub)
-    n2=nrow(df.sub)
+    # se=sqrt(p*(1-p)/(nrow(df.sub)))
+    # p+1.96*se
+    # same_sign_prop <- nrow(df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y)))/nrow(df.sub); 
+    # winners_curse <- nrow(subset(df.sub.sub,abs(Estimate.x) > abs(Estimate.y)))/nrow(df.sub.sub)
+    # n=nrow(df.sub)
     
-    df.tmp <- data.frame(thres=thres,n=n,
-                         p=same_sign_prop,winner=winners_curse,
-                         n2=n2,
-                         p2=same_sign_prop2,winner2=winners_curse2)
+    df.sub <- subset(results.mg,results.mg[,6] < thres); 
+    df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y))
+    X=nrow(df.sub.sub); N2=nrow(df.sub)
+    binomial.test.results <- binom.test(x=X,n=N2,0.5)
+    p2=as.numeric(binomial.test.results$estimate)
+    ci=as.numeric(binomial.test.results$conf.int)
+    lower2=ci[1]; upper2=ci[2]
+    pval2=binomial.test.results$p.value
+    winners_curse2 <- nrow(subset(df.sub.sub,abs(Estimate.x) < abs(Estimate.y)))/nrow(df.sub.sub)
+    
+    
+    # df.sub <- subset(results.mg,results.mg[,4] > thres); 
+    # same_sign_prop2 <- nrow(df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y)))/nrow(df.sub); 
+    # winners_curse2 <- nrow(subset(df.sub.sub,abs(Estimate.x) > abs(Estimate.y)))/nrow(df.sub.sub)
+    # n2=nrow(df.sub)
+    
+    df.tmp <- data.frame(thres=thres,
+                         N=N,p=p,lower=lower,upper=upper,pval=pval,winner=winners_curse,
+                         N2=N2,p2=p2,lower2=lower2,upper2=upper2,pval2=pval2,winner2=winners_curse2)
     if (start) {
       df.save <- df.tmp
       start <- F
@@ -109,15 +135,50 @@ validation_statistics <- function(results.mg) {
   }
   return(df.save)
 }
+# using results.trim
 df.save <- validation_statistics(results.mg)
 df.save.mean <- validation_statistics(subset(results.mg,P.MEAN < 5e-8))
 df.save.strict_mean <- validation_statistics(subset(results.mg,P.MEAN < 1e-15))
-df.save.var_raw <- validation_statistics(subset(results.mg,P.VAR.RAW < 5e-8))
+df.save.var_raw <- validation_statistics(subset(results.mg,P.VAR.RAW < 5e-8))#,thres.vec=10^-(seq(0,1.5,by=0.5)))
 df.save.var_rint <- validation_statistics(subset(results.mg,P.VAR.RINT < 1e-5))
+# df.save.var_rint <- validation_statistics(subset(results.mg,P.VAR.RINT < 5e-8)) # rs13198716 interesting. all interactions replicate
+# df.save.var_rint <- validation_statistics(subset(results.mg,P.VAR.RINT < 1e-5 & P.VAR.RINT > 5e-8),thres.vec=10^-(seq(0,2,by=0.5)))
 df.save.mean.var_raw <- validation_statistics(subset(results.mg,P.MEAN < 5e-8 & P.VAR.RAW < 5e-8))
 df.save.mean.var_rint <- validation_statistics(subset(results.mg,P.MEAN < 5e-8 & P.VAR.RINT < 1e-5))
 df.save.var_raw.var_rint <- validation_statistics(subset(results.mg,P.VAR.RAW < 5e-8 & P.VAR.RINT < 1e-5))
 df.save.mean.var_raw.var_rint <- validation_statistics(subset(results.mg,P.MEAN < 5e-8 & P.VAR.RAW < 5e-8 & P.VAR.RINT < 1e-5))
+df.save.only_mean <- validation_statistics(subset(results.mg,P.MEAN < 5e-8 & P.VAR.RAW > 5e-8 & P.VAR.RINT > 1e-5))
+df.save.mean.plus_var <- validation_statistics(subset(results.mg,P.MEAN < 5e-8 & (P.VAR.RAW < 5e-8 | P.VAR.RINT < 1e-5)))
+df.save.some_var <- validation_statistics(subset(results.mg,(P.VAR.RAW < 5e-8 | P.VAR.RINT < 1e-5)))
+
+df.save.strict_mean.no_var <- validation_statistics(subset(results.mg,P.MEAN < 1e-15 & P.VAR.RAW > 5e-8 & P.VAR.RINT > 1e-5))
+df.save.strict_mean.plus_var <- validation_statistics(subset(results.mg,P.MEAN < 1e-15 & (P.VAR.RAW < 5e-8 | P.VAR.RINT < 1e-5)))
+
+
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.full.txt')
+fwrite(df.save,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.var_raw.txt')
+fwrite(df.save.var_raw,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.var_rint.txt')
+fwrite(df.save.var_rint,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.mean.var_raw.txt')
+fwrite(df.save.mean.var_raw,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.mean.var_rint.txt')
+fwrite(df.save.mean.var_rint,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.var_raw.var_rint.txt')
+fwrite(df.save.var_raw.var_rint,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.only_mean.txt')
+fwrite(df.save.only_mean,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.mean.plus_var.txt')
+fwrite(df.save.mean.plus_var,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.some_var.txt')
+fwrite(df.save.some_var,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.strict_mean.no_var.txt')
+fwrite(df.save.strict_mean.no_var,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.strict_mean.plus_var.txt')
+fwrite(df.save.strict_mean.plus_var,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+
+
 
 df.save.full <- data.frame(
   thres=df.save$thres,

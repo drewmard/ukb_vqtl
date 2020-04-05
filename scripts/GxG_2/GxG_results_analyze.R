@@ -19,8 +19,6 @@ df.80[order(df.80$P.80)[1:5],]
 # lymphocyte: 28
 # neutrophil: 1
 
-subset(df.80,P.80 < 5e-8)
-
 s <- '20'
 f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',phenoName,'.merged_subset.GxG.',s,'.epi.qt')
 df.20 <- fread(f,data.table = F,stringsAsFactors = F)
@@ -43,25 +41,58 @@ df.sub[order(df.sub$P.80)[1:5],]
 mean(subset(df.sub,P.20 < 1e-3)$Sign.Validate)
 
 # results.mg <- df.sub
-gxg_validation_statistics <- function(results.mg,thres.vec=(10^-(seq(0,3,by=0.1)))) {
+gxg_validation_statistics <- function(results.mg,thres.vec=(10^-(seq(0,3,by=0.5))),flip=TRUE) {
   start <- T
   for (i in 1:length(thres.vec)) {
     thres <- thres.vec[i]
     
-    df.sub <- subset(results.mg,P.20 < thres); 
-    same_sign_prop <- nrow(df.sub.sub <- subset(df.sub,sign(BETA_INT.80)==sign(BETA_INT.20)))/nrow(df.sub); 
-    winners_curse <- nrow(subset(df.sub.sub,abs(BETA_INT.80) < abs(BETA_INT.20)))/nrow(df.sub.sub)
-    n=nrow(df.sub)
+    # df.sub <- subset(results.mg,P.20 < thres); 
+    # same_sign_prop <- nrow(df.sub.sub <- subset(df.sub,sign(BETA_INT.80)==sign(BETA_INT.20)))/nrow(df.sub); 
+    # winners_curse <- nrow(subset(df.sub.sub,abs(BETA_INT.80) < abs(BETA_INT.20)))/nrow(df.sub.sub)
+    # n=nrow(df.sub)
+    # 
+    # df.sub <- subset(results.mg,P.80 < thres); 
+    # same_sign_prop2 <- nrow(df.sub.sub <- subset(df.sub,sign(BETA_INT.80)==sign(BETA_INT.20)))/nrow(df.sub); 
+    # winners_curse2 <- nrow(subset(df.sub.sub,abs(BETA_INT.80) > abs(BETA_INT.20)))/nrow(df.sub.sub)
+    # n2=nrow(df.sub)
     
     df.sub <- subset(results.mg,P.80 < thres); 
-    same_sign_prop2 <- nrow(df.sub.sub <- subset(df.sub,sign(BETA_INT.80)==sign(BETA_INT.20)))/nrow(df.sub); 
-    winners_curse2 <- nrow(subset(df.sub.sub,abs(BETA_INT.80) > abs(BETA_INT.20)))/nrow(df.sub.sub)
-    n2=nrow(df.sub)
+    df.sub.sub <- subset(df.sub,sign(BETA_INT.80)==sign(BETA_INT.20))
+    X=nrow(df.sub.sub); N=nrow(df.sub)
+    binomial.test.results <- binom.test(x=X,n=N,0.5)
+    p=as.numeric(binomial.test.results$estimate)
+    ci=as.numeric(binomial.test.results$conf.int)
+    lower=ci[1]; upper=ci[2]
+    pval=binomial.test.results$p.value
+    winners_curse <- nrow(subset(df.sub.sub,abs(BETA_INT.80) > abs(BETA_INT.20)))/nrow(df.sub.sub)
     
-    df.tmp <- data.frame(thres=thres,n=n,
-                         p=same_sign_prop,winner=winners_curse,
-                         n2=n2,
-                         p2=same_sign_prop2,winner2=winners_curse2)
+    if (flip) {
+      df.sub <- subset(results.mg,P.20 < thres); 
+      df.sub.sub <- subset(df.sub,sign(BETA_INT.80)==sign(BETA_INT.20))
+      X=nrow(df.sub.sub); N2=nrow(df.sub)
+      binomial.test.results <- binom.test(x=X,n=N2,0.5)
+      p2=as.numeric(binomial.test.results$estimate)
+      ci=as.numeric(binomial.test.results$conf.int)
+      lower2=ci[1]; upper2=ci[2]
+      pval2=binomial.test.results$p.value
+      winners_curse2 <- nrow(subset(df.sub.sub,abs(BETA_INT.80) < abs(BETA_INT.20)))/nrow(df.sub.sub)
+    } else {
+      N2=NA
+      p2=NA
+      lower2=NA
+      upper2=NA
+      pval2=NA
+      winners_curse2=NA
+    }
+
+    df.tmp <- data.frame(thres=thres,
+                         N=N,p=p,lower=lower,upper=upper,pval=pval,winner=winners_curse,
+                         N2=N2,p2=p2,lower2=lower2,upper2=upper2,pval2=pval2,winner2=winners_curse2)
+
+    # df.tmp <- data.frame(thres=thres,n=n,
+    #                      p=same_sign_prop,winner=winners_curse,
+    #                      n2=n2,
+    #                      p2=same_sign_prop2,winner2=winners_curse2)
     if (start) {
       df.save <- df.tmp
       start <- F
@@ -87,23 +118,24 @@ results.aggre <-  aggregate(results[,'P.80'],by=list(results$SNP1),min)
 results.ld <- subset(results.aggre, results.aggre[,1] %in% c(ld$SNP_A,ld$SNP_B))
 results.ld <- results.ld[order(results.ld[,2],decreasing = F),]
 
-i=1
-while (i <= nrow(results.ld)) {
-  snp = results.ld[i,1]
-  tmp <- subset(ld,SNP_A==snp | SNP_B==snp)
-  tmp <- subset(c(tmp$SNP_A,tmp$SNP_B),c(tmp$SNP_A,tmp$SNP_B)!=snp)
-  results.ld <- subset(results.ld,!(results.ld[,1] %in% c(tmp)))
-  i=i+1
-}
-
-snp_to_remove <- subset(c(ld$SNP_A,ld$SNP_B), !(c(ld$SNP_A,ld$SNP_B) %in% results.ld[,1]))
-f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',phenoName,'.snp_to_remove.txt')
-fwrite(data.frame(snp_to_remove=snp_to_remove),f.out,quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+# do instead based on gxe
+# i=1
+# while (i <= nrow(results.ld)) {
+#   snp = results.ld[i,1]
+#   tmp <- subset(ld,SNP_A==snp | SNP_B==snp)
+#   tmp <- subset(c(tmp$SNP_A,tmp$SNP_B),c(tmp$SNP_A,tmp$SNP_B)!=snp)
+#   results.ld <- subset(results.ld,!(results.ld[,1] %in% c(tmp)))
+#   i=i+1
+# }
+# snp_to_remove <- subset(c(ld$SNP_A,ld$SNP_B), !(c(ld$SNP_A,ld$SNP_B) %in% results.ld[,1]))
+# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',phenoName,'.snp_to_remove.txt')
+# fwrite(data.frame(snp_to_remove=snp_to_remove),f.out,quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 
 f.snp_to_remove <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/bmi.snp_to_remove.txt'
 snp_to_remove <- fread(f.snp_to_remove,data.table = F,stringsAsFactors = F)
 
-results.mg.2 <- subset(results,!(SNP1 %in% snp_to_remove[,1]) & !(SNP2 %in% snp_to_remove[,1]))
+results.mg.2 <- subset(results,!((SNP1 %in% snp_to_remove[,1]) | (SNP2 %in% snp_to_remove[,1])))
+results.mg.2 <- results.mg.2[1:(nrow(results.mg.2)/2),]
 df.save <- gxg_validation_statistics(results.mg.2)
 f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',phenoName,'.GxG.validation.summary.txt')
 fwrite(df.save,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
@@ -151,44 +183,58 @@ colnames(results.mg.3)[19:23] <- paste0(colnames(results.mg.3)[19:23],'.2')
 
 # df.save <- gxg_validation_statistics(results.mg.3)
 # df.save.mean <- gxg_validation_statistics(subset(results.mg.3,P.MEAN.1 < 5e-8 | P.MEAN.2 < 5e-8))
+gxg_validation_statistics.df <- gxg_validation_statistics(results.mg.3)
+gxg_validation_statistics.df.var_raw <- gxg_validation_statistics(subset(results.mg.3,P.VAR.RAW.2 < 5e-8 | P.VAR.RAW.1 < 5e-8))
+gxg_validation_statistics.df.var_rint <- gxg_validation_statistics(subset(results.mg.3,P.VAR.RINT.2 < 1e-5 | P.VAR.RINT.1 < 1e-5))
+gxg_validation_statistics.df.mean <- gxg_validation_statistics(subset(results.mg.3,P.MEAN.1 < 5e-8 | P.MEAN.2 < 5e-8))
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',pheno,'.GxG.validation.summary.full.txt')
+fwrite(gxg_validation_statistics.df,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',pheno,'.GxG.validation.summary.var_raw.txt')
+fwrite(gxg_validation_statistics.df.var_raw,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',pheno,'.GxG.validation.summary.var_rint.txt')
+fwrite(gxg_validation_statistics.df.var_rint,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',pheno,'.GxG.validation.summary.mean.txt')
+fwrite(gxg_validation_statistics.df.mean,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+
+gxg_validation_statistics(subset(results.mg.3,P.VAR.RINT.2 < 1e-5 & P.VAR.RINT.1 < 1e-5),flip=F,thres.vec=(10^-(seq(0,2,by=0.5))))
+
+
+gxg_validation_statistics(subset(results.mg.3,P.VAR.RINT.2 < 5e-8 | P.VAR.RINT.1 < 5e-8),flip=F)
+
 gxg_validation_statistics(subset(results.mg.3,(P.MEAN.1 < 5e-8 & P.VAR.RAW.2 < 5e-8) | (P.VAR.RAW.1 < 5e-8 & P.MEAN.2 < 5e-8)))
-# gxg_validation_statistics(subset(results.mg.3,(P.MEAN.1 < 5e-8 & P.VAR.RINT.2 < 1e-5) | (P.VAR.RINT.1 < 1e-5 & P.MEAN.2 < 5e-8)))
-
-df.save.var.raw <- gxg_validation_statistics(subset(results.mg.3,P.VAR.RAW.1 < 5e-8 | P.VAR.RAW.2 < 5e-8))
-df.save.var.rint <- gxg_validation_statistics(subset(results.mg.3,P.VAR.RINT.1 < 1e-5 | P.VAR.RINT.2 < 1e-5))
 
 
 
+# subsetting specific gxg:
+# seems bull shit and I am skeptical
+results.mg.3[order(results.mg.3$P.MEAN.2,decreasing = F),][1:5,]
+gxg_validation_statistics(subset(results.mg.3,SNP1=='rs56094641' | SNP2=='rs56094641'),thres = (10^-(seq(0,3,by=0.5))),flip=F)
+gxg_validation_statistics(subset(results.mg.3,SNP1=='rs35608615' | SNP2=='rs35608615'),thres = (10^-(seq(0,3,by=0.5))),flip=F)
+gxg_validation_statistics(subset(results.mg.3,SNP1=='rs2256752' | SNP2=='rs2256752'),thres = (10^-(seq(0,3,by=0.5))),flip=F)
+
+gxg_validation_statistics(subset(results.mg.3,SNP1=='rs35608615' | SNP2=='rs35608615'),thres = (10^-(seq(0,2.5,by=0.5))))
+gxg_validation_statistics(subset(results.mg.3,SNP1=='rs2256752' | SNP2=='rs2256752'),thres = (10^-(seq(0,2.5,by=0.5))))
+# 
+# SNP_list <- unique(c(results.mg.3$SNP1,results.mg.3$SNP2))
+# save <- T
+# for (i in 1:length(SNP_list)) {
+#   SNP=SNP_list[i]
+#   df.tmp <- gxg_validation_statistics(subset(results.mg.3,SNP1==SNP | SNP2==SNP),thres = 0.1)
+#   df.tmp$SNP <- SNP
+#   if (save) {
+#     df.save <- df.tmp
+#     save=F
+#   } else {
+#     df.save <- rbind(df.save,df.tmp)
+#   }
+# } 
+# 
+# df.save.mg <- merge(df.save,df.mg2,by.x='SNP',by.y='rs')
+# df.save.mg[order(df.save.mg$pval,decreasing = F),][1:5,]
 
 
 
 
 
-# 
-# df.sub <- subset(df2,CHR1!=CHR2 & MAF1 > 0.2 & MAF2 > 0.2 & P.80 < 0.05 & (sign(BETA_INT.80) == sign(BETA_INT.20)))
-# df.sub[order(df.sub$P.80)[1:5],] 
-# 
-# 
-# df <- df.80
-# # df.sub <- subset(df,CHR1!=6)
-# df.sub <- subset(df,CHR1!=CHR2)
-# df.sub[order(df.sub$P.80)[1:5],] 
-# 
-# df.sub <- subset(df,P.80 < 1e-3 & P.20 < 0.05 & CHR1 != CHR2 & sign(BETA_INT.80) == sign(BETA_INT.20))
-# df.sub[order(df.sub$P.80)[1:5],] 
-# 
-# df.sub <- subset(df,P.80 < 1e-3 & P.20 < 0.05 & CHR1 == CHR2 & sign(BETA_INT.80) == sign(BETA_INT.20))
-# df.sub[order(df.sub$P.80)[1:5],] 
-# 
-# 
-# df.sub <- df
-# # df.sub <- subset(df,SNP2=='rs146125856' & CHR1!=6)
-# # df.sub <- subset(df,CHR1!=CHR2)
-# # df.sub <- subset(df,CHR1!=CHR2 & SNP2!='rs146125856')
-# # df.sub <- subset(df,CHR1!=CHR2 & CHR1!=6 & CHR2!=6)
-# df.sub[order(df.sub$P)[1:5],] 
-# 
-# df.sub <- subset(df,CHR1!=CHR2)
-# df.sub[order(df.sub$P)[1:5],] 
-# 
-# df.sub <- subset(df,CHR1==15 | CHR2==15)
+
+

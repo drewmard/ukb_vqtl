@@ -6,38 +6,42 @@ pheno=monocyte.count
 
 #############
 
+# vGWAS on raw
 phenoName=${pheno}.ALL
 SCRIPTDIR=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset
-
-# vGWAS on raw
 sbatch $SCRIPTDIR/run_vGWAS_subset.sh $phenoName
-
-# Merge together results
-# note: if error on the first run, will RE-RUN!!!
-$SCRIPTDIR/merge_vGWAS_subset.sh $phenoName
-
-# simple rename & re-adjusting datasets for vGWAS
-mv /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.txt /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.old.txt
-Rscript $SCRIPTDIR/merge_vGWAS_subset_2.R $phenoName
 
 # vGWAS on rint
 phenoName=${pheno}.rint.ALL
+SCRIPTDIR=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset
 sbatch $SCRIPTDIR/run_vGWAS_subset.sh $phenoName
-
-# Merge together results
-# note: if error on the first run, will RE-RUN!!!
-$SCRIPTDIR/merge_vGWAS_subset.sh $phenoName
-
-# simple rename & re-adjusting datasets for vGWAS
-mv /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.txt /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.old.txt
-Rscript $SCRIPTDIR/merge_vGWAS_subset_2.R $phenoName
 
 # muGWAS on raw
 phenoName=${pheno}.ALL
 sbatch /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/run_GWAS.impute.sh $phenoName
 
+phenoName=${pheno}.rint.ALL
+sbatch /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/run_GWAS.impute.sh $phenoName
+
+
 # Merge together results
 # note: if error on the first run, will RE-RUN!!!
+phenoName=${pheno}.ALL
+$SCRIPTDIR/merge_vGWAS_subset.sh $phenoName
+# simple rename & re-adjusting datasets for vGWAS
+mv /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.txt /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.old.txt
+Rscript $SCRIPTDIR/merge_vGWAS_subset_2.R $phenoName
+phenoName=${pheno}.rint.ALL
+$SCRIPTDIR/merge_vGWAS_subset.sh $phenoName
+# simple rename & re-adjusting datasets for vGWAS
+mv /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.txt /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.$phenoName.vGWAS.old.txt
+Rscript $SCRIPTDIR/merge_vGWAS_subset_2.R $phenoName
+# Merge together mean results
+# note: if error on the first run, will RE-RUN!!!
+phenoName=${pheno}.ALL
+Rscript /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/mergeResults_impute.R $phenoName
+
+phenoName=${pheno}.rint.ALL
 Rscript /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/mergeResults_impute.R $phenoName
 
 
@@ -80,13 +84,13 @@ phenoName=${pheno}.${suffix1}
 
 # c: trim vGWAS on mean-based RINT
 ### need to adjust for mean-based GWAS files
-pheno=$pheno
-suffix1="rint.ALL"
-suffix2="mean"
-thres="5e-8"
-phenoName=${pheno}.${suffix1}
-
-/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxG_2/GWAS_to_clumped_SNP_list.sh $pheno $suffix1 $suffix2 $thres
+# pheno=$pheno
+# suffix1="rint.ALL"
+# suffix2="mean"
+# thres="5e-8"
+# phenoName=${pheno}.${suffix1}
+# 
+# /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GxG_2/GWAS_to_clumped_SNP_list.sh $pheno $suffix1 $suffix2 $thres
 
 # d: trim vGWAS on mean-based raw
 ### need to adjust for mean-based GWAS files

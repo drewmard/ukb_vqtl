@@ -36,12 +36,15 @@ for (s in c('80','20')) {
   f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/full_data.',s,'.txt')
   fam <- fread(f,data.table = F,stringsAsFactors = F)
   
-  # pheno <- 'bmi'
-  pheno <- 'lymphocyte.count'
+  pheno <- 'bmi'
+  # pheno <- 'lymphocyte.count'
   fam[,paste0(pheno,'.na')] <- fam[,pheno]
   fam[,paste0(pheno,'.na')][which(fam$In==0)] <- NA
   fam[,paste0(pheno,'.na')][which(fam$QC_In==0)] <- NA
+  # i.outlier <- which(abs(scale(fam[,paste0(pheno,'.na')])) > 6)
+  # fam[,paste0(pheno,'.na')][i.outlier] <- NA
   phenoName <- paste0(pheno,'.na')
+  
   # phenoName <- 'bmi.log.ALL'
   # fam[,phenoName] <- log(fam[,paste0(pheno,'.na')])
   
@@ -112,9 +115,7 @@ for (s in c('80','20')) {
   # merge phenotypic data
   phenotype_dataset <- fam[,c('IID',phenoName)] # read in all phenotypes at once? 
   full_dataset <- merge(covariate_environmental_dataset,phenotype_dataset,by='IID')
-  # fwrite(full_dataset,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/full_data.bmi.GxE.',s,'.txt'),quote = F,sep = '\t',na = 'NA',col.names = T,row.names = F)
-  fwrite(full_dataset,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/full_data.',pheno,'.GxE.',s,'.txt'),quote = F,sep = '\t',na = 'NA',col.names = T,row.names = F)
-  
+
   # genetic data
   f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset')
   geno <- BEDMatrix(f.geno)
@@ -126,7 +127,7 @@ for (s in c('80','20')) {
   fwrite(full_dataset,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/full_data.',pheno,'.GxE.',s,'.txt'),quote = F,sep = '\t',na = 'NA',col.names = T,row.names = F)
   
   environmental_factors <- c(
-                            paste0('DIET_PC',1:10),
+                            # paste0('DIET_PC',1:10),
                              # 'DIET_SCORE',
                              'age','Alcohol_intake_frequency',
                              'PA','SB','sex','Smoking.E')
@@ -173,11 +174,11 @@ for (s in c('80','20')) {
   fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 }
 
-df.results.save[order(df.results.save[,3],decreasing = F),][1:20,]
+df.results.save[order(df.results.save[,3],decreasing = F),][1:10,]
 subset(df.results.save,df.results.save[,3] < 0.05/nrow(df.results.save))
 
-s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.txt'),data.table = F,stringsAsFactors = F)
-s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.ext.txt'),data.table = F,stringsAsFactors = F)
+s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.txt'),data.table = F,stringsAsFactors = F)
+s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.txt'),data.table = F,stringsAsFactors = F)
 results.mg <- merge(results.80,results.20,by=c('SNP','E'))
 results.mg[order(results.mg[,4],decreasing = F),][1:5,]
 subset(results.mg,results.mg[,4] < 0.05 / nrow(results.mg))
