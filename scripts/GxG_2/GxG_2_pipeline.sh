@@ -47,11 +47,11 @@ Rscript /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/mergeResu
 
 #################
 
-# phenoName=${pheno}.rint.ALL
-# SCRIPTDIR=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset
-# source activate HLMM
+phenoName=${pheno}.rint.ALL
+SCRIPTDIR=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset
+source activate HLMM
 # 
-# sbatch $SCRIPTDIR/run_HLMM_subset.sh $phenoName
+sbatch $SCRIPTDIR/run_HLMM_subset.sh $phenoName
 # 
 # $SCRIPTDIR/merge_HLMM_subset.sh $phenoName # this does merge & re-run for HLMM
 # 

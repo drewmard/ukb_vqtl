@@ -192,9 +192,13 @@ g4.4 <- ggplot(gxg_validation_statistics.df.var_rint,aes(x=-log10(thres),y=p)) +
 
 plot_grid(g4.1,g4.2,g4.3,g4.4,nrow = 1)
 
+#################################################################
 
-
-
+f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.ALL_RESULTS.trim.txt'
+df <- fread(f,data.table = F,stringsAsFactors = F)
+library(qqman)
+qq(df[,4])
+qq(df[,6])
 
 
 

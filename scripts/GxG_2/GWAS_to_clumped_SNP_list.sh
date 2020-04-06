@@ -30,6 +30,7 @@ do
 echo ${CHR}
 geno=$genodir/ukbb.${CHR}.impute
 outFile=ukbb.${phenoName}.${CHR}.${suffix2}.clumped
+rm $outdir/$outFile.clumped
 plink --bfile $geno --maf 0.05 --clump $results --clump-p1 $thres --clump-p2 $thres --clump-r2 $r2thres --clump-field P --clump-snp-field $clump_snp_field --clump-kb $kbthres --out $outdir/$outFile
 done
 

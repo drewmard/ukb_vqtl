@@ -1,11 +1,6 @@
 library(data.table)
-# phenoName <- 'lymphocyte.count'
-# phenoName <- 'monocyte.count.rint.ALL'
-# phenoName <- 'neutrophil.count.rint.ALL'
-# phenoName <- 'wbc.leukocyte.count.rint.ALL'
-# phenoName <- 'rbc.erythrocyte.count.rint.ALL'
 phenoName <- 'bmi'
-# phenoName <- 'lymphocyte.count'
+phenoName <- 'lymphocyte.count'
 
 s <- '80'
 f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',phenoName,'.merged_subset.GxG.',s,'.epi.qt')
@@ -33,12 +28,16 @@ df.freq <- fread(f.freq,data.table = F,stringsAsFactors = F)
 df2 <- merge(df,df.freq[,c('SNP','MAF')],by.x='SNP1',by.y='SNP')
 df2 <- merge(df2,df.freq[,c('SNP','MAF')],by.x='SNP2',by.y='SNP')
 colnames(df2)[which(colnames(df2) %in% c('MAF.x','MAF.y'))] <- c('MAF1','MAF2')
+df2 <- subset(df2,MAF1 > 0.05 & MAF2 > 0.05)
+df2$Sign.Validate <- as.numeric(sign(df2$BETA_INT.80) == sign(df2$BETA_INT.20))
 
-df.sub <- subset(df2,CHR1!=CHR2 & MAF1 > 0.05 & MAF2 > 0.05)
-df.sub$Sign.Validate <- as.numeric(sign(df.sub$BETA_INT.80) == sign(df.sub$BETA_INT.20))
+df.sub <- subset(df2,CHR1!=CHR2)
+mean(subset(df.sub,P.20 < 1e-3)$Sign.Validate)
+df.sub <- subset(df2,CHR1==CHR2)
+mean(subset(df.sub,P.20 < 1e-3)$Sign.Validate)
+
 df.sub[order(df.sub$P.80)[1:5],] 
 .05/nrow(df.sub)
-mean(subset(df.sub,P.20 < 1e-3)$Sign.Validate)
 
 # results.mg <- df.sub
 gxg_validation_statistics <- function(results.mg,thres.vec=(10^-(seq(0,3,by=0.5))),flip=TRUE) {
@@ -107,7 +106,7 @@ gxg_validation_statistics <- function(results.mg,thres.vec=(10^-(seq(0,3,by=0.5)
 # f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',pheno,'.GxG.validation.summary.txt')
 # fwrite(df.save,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
 
-results <- df.sub
+results <- df2
 f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',phenoName,'.merged_subset.LD.ld')
 ld <- fread(f,data.table = F,stringsAsFactors = F)
 ld <- subset(ld,R2 > 0.1)
@@ -119,23 +118,40 @@ results.ld <- subset(results.aggre, results.aggre[,1] %in% c(ld$SNP_A,ld$SNP_B))
 results.ld <- results.ld[order(results.ld[,2],decreasing = F),]
 
 # do instead based on gxe
-# i=1
-# while (i <= nrow(results.ld)) {
-#   snp = results.ld[i,1]
-#   tmp <- subset(ld,SNP_A==snp | SNP_B==snp)
-#   tmp <- subset(c(tmp$SNP_A,tmp$SNP_B),c(tmp$SNP_A,tmp$SNP_B)!=snp)
-#   results.ld <- subset(results.ld,!(results.ld[,1] %in% c(tmp)))
-#   i=i+1
-# }
-# snp_to_remove <- subset(c(ld$SNP_A,ld$SNP_B), !(c(ld$SNP_A,ld$SNP_B) %in% results.ld[,1]))
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',phenoName,'.snp_to_remove.txt')
-# fwrite(data.frame(snp_to_remove=snp_to_remove),f.out,quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+i=1
+while (i <= nrow(results.ld)) {
+  snp = results.ld[i,1]
+  tmp <- subset(ld,SNP_A==snp | SNP_B==snp)
+  tmp <- subset(c(tmp$SNP_A,tmp$SNP_B),c(tmp$SNP_A,tmp$SNP_B)!=snp)
+  results.ld <- subset(results.ld,!(results.ld[,1] %in% c(tmp)))
+  i=i+1
+}
+snp_to_remove <- subset(c(ld$SNP_A,ld$SNP_B), !(c(ld$SNP_A,ld$SNP_B) %in% results.ld[,1]))
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',phenoName,'.snp_to_remove.txt')
+fwrite(data.frame(snp_to_remove=snp_to_remove),f.out,quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 
-f.snp_to_remove <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/bmi.snp_to_remove.txt'
+f.snp_to_remove <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',phenoName,'.snp_to_remove.txt')
 snp_to_remove <- fread(f.snp_to_remove,data.table = F,stringsAsFactors = F)
 
 results.mg.2 <- subset(results,!((SNP1 %in% snp_to_remove[,1]) | (SNP2 %in% snp_to_remove[,1])))
 results.mg.2 <- results.mg.2[1:(nrow(results.mg.2)/2),]
+
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',phenoName,'.merged_subset.GxG.','ALL_TRIMMED','.epi.qt')
+fwrite(results.mg.2,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+
+tmp <- merge(results,ld,by.x=c('SNP1','SNP2'),by.y=c('SNP_A','SNP_B'))
+tmp[order(tmp$P.80)[1],]
+
+df.sub <- subset(results.mg.2,CHR1!=CHR2)
+mean(subset(df.sub,P.20 < 1e-3)$Sign.Validate)
+df.sub <- subset(results.mg.2,CHR1==CHR2)
+df.sub[order(df.sub$P.80)[1:2],]
+subset(ld,SNP==SNP_A & SNP==SNP_B)
+mean(subset(df.sub,P.20 < 1e-3)$Sign.Validate)
+
+subset(ld,SNP_B=='rs2442728' & SNP_A=='rs3094194')
+
+
 df.save <- gxg_validation_statistics(results.mg.2)
 f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',phenoName,'.GxG.validation.summary.txt')
 fwrite(df.save,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
@@ -180,6 +196,24 @@ results.mg.3 <- merge(results.mg.2,df.mg2,by.x='SNP1',by.y='rs')
 colnames(results.mg.3)[14:18] <- paste0(colnames(results.mg.3)[14:18],'.1')
 results.mg.3 <- merge(results.mg.3,df.mg2,by.x='SNP2',by.y='rs')
 colnames(results.mg.3)[19:23] <- paste0(colnames(results.mg.3)[19:23],'.2')
+
+x <- subset(results.mg.3,!duplicated(results.mg.3$SNP1))
+results.mg.3[which(!(results.mg.3$SNP2 %in% results.mg.3$SNP1))[1],]
+sum(x$P.MEAN.1 < 5e-8 & x$P.VAR.RAW.1 > 5e-8 & x$P.VAR.RINT.1 > 1e-5) # add plus 1 for missing snp
+sum(x$P.MEAN.1 > 5e-8 & x$P.VAR.RAW.1 < 5e-8 & x$P.VAR.RINT.1 > 1e-5)
+sum(x$P.MEAN.1 > 5e-8 & x$P.VAR.RAW.1 > 5e-8 & x$P.VAR.RINT.1 < 1e-5)
+sum(x$P.MEAN.1 < 5e-8 & x$P.VAR.RAW.1 < 5e-8 & x$P.VAR.RINT.1 > 1e-5)
+sum(x$P.MEAN.1 < 5e-8 & x$P.VAR.RAW.1 > 5e-8 & x$P.VAR.RINT.1 < 1e-5)
+sum(x$P.MEAN.1 > 5e-8 & x$P.VAR.RAW.1 < 5e-8 & x$P.VAR.RINT.1 < 1e-5)
+sum(x$P.MEAN.1 < 5e-8 & x$P.VAR.RAW.1 < 5e-8 & x$P.VAR.RINT.1 < 1e-5)
+sum(x$P.MEAN.1 < 5e-8)
+sum(x$P.VAR.RAW.1 < 5e-8)
+sum(x$P.VAR.RINT.1 < 1e-5)
+
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',phenoName,'.merged_subset.GxG.','ALL_TRIMMED','.epi.qt')
+fwrite(results.mg.2,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+
+
 
 # df.save <- gxg_validation_statistics(results.mg.3)
 # df.save.mean <- gxg_validation_statistics(subset(results.mg.3,P.MEAN.1 < 5e-8 | P.MEAN.2 < 5e-8))
