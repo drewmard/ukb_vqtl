@@ -129,7 +129,7 @@ res
 mod.formula <- paste0('lymphocyte.count.na','~','Additive+Interaction+age+sex+PC1+PC2+PC3+PC4+genotyping.array')
 mod.formula <- formula(mod.formula)
 mod.int_add <- lm(mod.formula,data=dataf)
-mod.int_add <- lm(mod.formula,data=dataf[i,])
+# mod.int_add <- lm(mod.formula,data=dataf[i,])
 # summary(mod.epi)
 mod.formula <- paste0('lymphocyte.count.na','~','Additive','+age+sex+PC1+PC2+PC3+PC4+genotyping.array')
 mod.formula <- formula(mod.formula)

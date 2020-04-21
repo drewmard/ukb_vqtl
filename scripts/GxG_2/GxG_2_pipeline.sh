@@ -220,7 +220,7 @@ done
 
 # 4:
 pheno=lymphocyte.count
-# pheno=bmi
+pheno=bmi
 outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2
 prefix=ukbb.${pheno}.merged_subset
 merged_outFile3=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.${pheno}.SNP_list.txt
@@ -233,6 +233,11 @@ wc -l $outdir/$prefix.LD.ld
 pheno=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.20.txt
 plink --bfile $outdir/$prefix --pheno $pheno --pheno-name $phenoName --epistasis set-by-set --set ${merged_outFile3} --epi1 1 --allow-no-sex --out $outdir/$prefix.GxG.20
 
+plink --bfile $outdir/$prefix --freq --out $outdir/$prefix.GxG
+
+pheno=bmi
+outdir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2
+prefix=ukbb.${pheno}.merged_subset
 plink --bfile $outdir/$prefix --freq --out $outdir/$prefix.GxG
 
 

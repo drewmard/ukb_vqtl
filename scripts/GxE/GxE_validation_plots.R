@@ -30,14 +30,17 @@ g1
 
 #################
 
-f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxG_2/bmi.GxG.validation.summary.txt'
+# f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxG_2/bmi.GxG.validation.summary.txt'
+f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.full.PVAL.txt'
+f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.full.txt'
 validation <- fread(f,data.table = F,stringsAsFactors = F)
 validation <- validation[,c('thres','p','winner','p2','winner2')]
 # colnames(validation) <- c('thres')
 library(reshape2)
 validation.melt <- melt(validation[,c('thres','p','winner','p2','winner2')],id.vars ='thres')
 
-validation.melt.sub <- subset(validation.melt,thres %in% unique(validation.melt$thres)[seq(1,length(unique(validation.melt$thres)),by=5)])
+# validation.melt.sub <- subset(validation.melt,thres %in% unique(validation.melt$thres)[seq(1,length(unique(validation.melt$thres)),by=5)])
+validation.melt.sub <- validation.melt
 g1 <- ggplot(subset(validation.melt.sub,variable %in% c('p','p2')),aes(x=-log10(thres),y=value)) + geom_line(aes(col=variable)) + theme_bw() +
   labs(x='-log10 p-value threshold cutoff',y='proportion w/ same sign in discovery & validation sets') +
   labs(title = 'All interactions w/ p-value < threshold') +
@@ -63,80 +66,107 @@ library(data.table)
 library(ggplot2)
 library(reshape2)
 library(cowplot)
-  
-f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.full.txt'
+
+
+thres=0.05; suff <- ifelse(is.null(thres),'','PVAL.')
+f <- paste0('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.full.',suff,'txt')
 df.save <- fread(f,data.table = F,stringsAsFactors = F)
 g1 <- ggplot(df.save,aes(x=-log10(thres),y=p)) + geom_line() + geom_point() + theme_bw() +
   labs(title='All') +
-  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=0.5,linetype='dashed',col='red') +
+  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=ifelse(is.null(thres),0.5,0.025),linetype='dashed',col='red') +
   theme(axis.title=element_blank())
 
-f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.var_raw.txt'
+f <- paste0('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.var_raw.',suff,'txt')
 df.save.var_raw <- fread(f,data.table = F,stringsAsFactors = F)
 g2 <- ggplot(df.save.var_raw,aes(x=-log10(thres),y=p)) + geom_line() + geom_point() + theme_bw() +
   labs(title='var_raw') +
-  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=0.5,linetype='dashed',col='red') +
+  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=ifelse(is.null(thres),0.5,0.025),linetype='dashed',col='red') +
   theme(axis.title=element_blank())
 
-f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.var_rint.txt'
+f <- paste0('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.var_rint.',suff,'txt')
 df.save.var_rint <- fread(f,data.table = F,stringsAsFactors = F)
 g3 <- ggplot(df.save.var_rint,aes(x=-log10(thres),y=p)) + geom_line() + geom_point() + theme_bw() +
   labs(title='var_rint') +
-  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=0.5,linetype='dashed',col='red')+
+  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=ifelse(is.null(thres),0.5,0.025),linetype='dashed',col='red')+
   theme(axis.title=element_blank()) +
   theme(axis.title=element_blank())
 
-f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.mean.var_raw.txt'
+f <- paste0('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.mean.var_raw.',suff,'txt')
 df.save.mean.var_raw <- fread(f,data.table = F,stringsAsFactors = F)
 g4 <- ggplot(df.save.mean.var_raw,aes(x=-log10(thres),y=p)) + geom_line() + geom_point() + theme_bw() +
   labs(title='mean.var_raw') +
-  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=0.5,linetype='dashed',col='red')+
+  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=ifelse(is.null(thres),0.5,0.025),linetype='dashed',col='red')+
   theme(axis.title=element_blank())
 
-f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.mean.var_rint.txt'
+f <- paste0('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.mean.var_rint.',suff,'txt')
 df.save.mean.var_rint <- fread(f,data.table = F,stringsAsFactors = F)
 g5 <- ggplot(df.save.mean.var_rint,aes(x=-log10(thres),y=p)) + geom_line() + geom_point() + theme_bw() +
   labs(title='mean.var_rint') +
-  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=0.5,linetype='dashed',col='red')+
+  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=ifelse(is.null(thres),0.5,0.025),linetype='dashed',col='red')+
   theme(axis.title=element_blank())
 
-plot_grid(g1,g2,g3,g4,g5,nrow = 1)
+# plot_grid(g1,g2,g3,g4,g5,nrow = 1)
 
-
-f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.only_mean.txt'
+f <- paste0('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.only_mean.',suff,'txt')
 df.save.only_mean <- fread(f,data.table = F,stringsAsFactors = F)
 g2.1 <- ggplot(df.save.only_mean,aes(x=-log10(thres),y=p)) + geom_line() + geom_point() + theme_bw() +
   labs(title='mean only, no var') +
-  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=0.5,linetype='dashed',col='red') +
+  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=ifelse(is.null(thres),0.5,0.025),linetype='dashed',col='red') +
   theme(axis.title=element_blank())
 
-f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.mean.plus_var.txt'
+f <- paste0('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.mean.plus_var.',suff,'txt')
 df.save.mean.plus_var <- fread(f,data.table = F,stringsAsFactors = F)
 g2.2 <- ggplot(df.save.mean.plus_var,aes(x=-log10(thres),y=p)) + geom_line() + geom_point() + theme_bw() +
   labs(title='mean+var rint/raw') +
-  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=0.5,linetype='dashed',col='red') +
+  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=ifelse(is.null(thres),0.5,0.025),linetype='dashed',col='red') +
   theme(axis.title=element_blank())
 
-f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.some_var.txt'
+f <- paste0('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.some_var.',suff,'txt')
 df.save.some_var <- fread(f,data.table = F,stringsAsFactors = F)
 g2.3 <- ggplot(df.save.some_var,aes(x=-log10(thres),y=p)) + geom_line() + geom_point() + theme_bw() +
   labs(title='var rint/raw') +
-  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=0.5,linetype='dashed',col='red')+
+  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=ifelse(is.null(thres),0.5,0.025),linetype='dashed',col='red')+
   theme(axis.title=element_blank()) +
   theme(axis.title=element_blank())
 
-plot_grid(g2.1,g2.2,g2.3,nrow = 1)
+# plot_grid(g2.1,g2.2,g2.3,nrow = 1)
+# 
+# 
+# plot_grid(g1,g2,g3,g4,g5,g2.1,g2.2,g2.3,nrow = 1)
+plot_grid(g1,g2.1,g2.2,g4,g5,g2,g3,g2.3,nrow = 1)
 
+library(data.table)
+library(ggplot2)
+library(reshape2)
+library(cowplot)
+
+
+thres=NULL; suff <- ifelse(is.null(thres),'','PVAL.')
+f <- paste0('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.validation.mean.raw_matched_snp.full.',suff,'txt')
+df.save <- fread(f,data.table = F,stringsAsFactors = F)
+gA <- ggplot(df.save,aes(x=-log10(thres),y=p)) + geom_line() + geom_point() + theme_bw() +
+  labs(title='Matched SNPs') +
+  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=ifelse(is.null(thres),0.5,0.025),linetype='dashed',col='red') +
+  theme(axis.title=element_blank())
+
+thres=0.05; suff <- ifelse(is.null(thres),'','PVAL.')
+f <- paste0('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.validation.mean.raw_matched_snp.full.',suff,'txt')
+df.save.var_raw <- fread(f,data.table = F,stringsAsFactors = F)
+gB <- ggplot(df.save.var_raw,aes(x=-log10(thres),y=p)) + geom_line() + geom_point() + theme_bw() +
+  labs(title='Matched SNPs') +
+  geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) + geom_hline(yintercept=ifelse(is.null(thres),0.5,0.025),linetype='dashed',col='red') +
+  theme(axis.title=element_blank())
+
+plot_grid(gA,gB)
+
+thres=NULL; suff <- ifelse(is.null(thres),'','PVAL.')
+f <- paste0('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.full.',suff,'txt')
+df.save <- fread(f,data.table = F,stringsAsFactors = F)
 df.save.melt <- melt(df.save[,c('thres','winner','winner2')],id.vars = 'thres')
 ggplot(df.save.melt,aes(x=-log10(thres),y=value,col=variable)) + geom_line() + geom_point() + theme_bw() +
   labs(title='All') +
   ylim(0,1) + geom_hline(yintercept=0.5,linetype='dashed',col='red') +
   theme(axis.title=element_blank()) + theme(legend.position = 'none')
-
-
-
-plot_grid(g1,g2,g3,g4,g5,g2.1,g2.2,g2.3,nrow = 1)
-plot_grid(g1,g2.1,g2.2,g4,g5,g2,g3,g2.3,nrow = 1)
 
 
 f <- '/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.validation.summary.strict_mean.no_var.txt'
@@ -200,5 +230,13 @@ library(qqman)
 qq(df[,4])
 qq(df[,6])
 
+########################
+
+df.save <- fread('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/lymphocyte.count.GxE.validation.summary.full.txt',data.table = F,stringsAsFactors = F)
+ggplot(df.save,aes(x=-log10(thres),y=p)) + geom_line() + geom_point() + theme_bw() +
+  labs(title='all qtls') +
+  ylim(0,1) + geom_hline(yintercept=0.5,linetype='dashed',col='red') +
+  geom_ribbon(aes(ymin=lower,ymax=upper),alpha=0.1) + ylim(0,1) +
+  theme(axis.title=element_blank()) + theme(legend.position = 'none')
 
 

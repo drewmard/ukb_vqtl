@@ -1,6 +1,6 @@
 library(data.table)
 phenoName <- 'bmi'
-phenoName <- 'lymphocyte.count'
+# phenoName <- 'lymphocyte.count'
 
 s <- '80'
 f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',phenoName,'.merged_subset.GxG.',s,'.epi.qt')
@@ -30,6 +30,9 @@ df2 <- merge(df2,df.freq[,c('SNP','MAF')],by.x='SNP2',by.y='SNP')
 colnames(df2)[which(colnames(df2) %in% c('MAF.x','MAF.y'))] <- c('MAF1','MAF2')
 df2 <- subset(df2,MAF1 > 0.05 & MAF2 > 0.05)
 df2$Sign.Validate <- as.numeric(sign(df2$BETA_INT.80) == sign(df2$BETA_INT.20))
+
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',phenoName,'.merged_subset.GxG.','ALL_TRIMMED','.epi.qt')
+fwrite(df2,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
 
 df.sub <- subset(df2,CHR1!=CHR2)
 mean(subset(df.sub,P.20 < 1e-3)$Sign.Validate)
@@ -211,16 +214,19 @@ sum(x$P.VAR.RAW.1 < 5e-8)
 sum(x$P.VAR.RINT.1 < 1e-5)
 
 f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',phenoName,'.merged_subset.GxG.','ALL_TRIMMED','.epi.qt')
-fwrite(results.mg.2,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
+fwrite(results.mg.3,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
 
 
 
 # df.save <- gxg_validation_statistics(results.mg.3)
 # df.save.mean <- gxg_validation_statistics(subset(results.mg.3,P.MEAN.1 < 5e-8 | P.MEAN.2 < 5e-8))
-gxg_validation_statistics.df <- gxg_validation_statistics(results.mg.3)
-gxg_validation_statistics.df.var_raw <- gxg_validation_statistics(subset(results.mg.3,P.VAR.RAW.2 < 5e-8 | P.VAR.RAW.1 < 5e-8))
-gxg_validation_statistics.df.var_rint <- gxg_validation_statistics(subset(results.mg.3,P.VAR.RINT.2 < 1e-5 | P.VAR.RINT.1 < 1e-5))
-gxg_validation_statistics.df.mean <- gxg_validation_statistics(subset(results.mg.3,P.MEAN.1 < 5e-8 | P.MEAN.2 < 5e-8))
+df.sub <- subset(results.mg.3,CHR1!=CHR2)
+df.sub <- subset(df.sub,P.VAR.RAW.2 < 5e-8 | P.VAR.RAW.1 < 5e-8)
+df.sub[order(df.sub$P.80)[1:5],]
+gxg_validation_statistics.df <- gxg_validation_statistics(df.sub)
+gxg_validation_statistics.df.var_raw <- gxg_validation_statistics(subset(df.sub,P.VAR.RAW.2 < 5e-8 | P.VAR.RAW.1 < 5e-8))
+gxg_validation_statistics.df.var_rint <- gxg_validation_statistics(subset(df.sub,P.VAR.RINT.2 < 1e-5 | P.VAR.RINT.1 < 1e-5))
+gxg_validation_statistics.df.mean <- gxg_validation_statistics(subset(df.sub,P.MEAN.1 < 5e-8 | P.MEAN.2 < 5e-8))
 f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',pheno,'.GxG.validation.summary.full.txt')
 fwrite(gxg_validation_statistics.df,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
 f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',pheno,'.GxG.validation.summary.var_raw.txt')

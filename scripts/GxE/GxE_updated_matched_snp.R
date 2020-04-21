@@ -1,5 +1,6 @@
 library(data.table)
 library(BEDMatrix)
+library(parallel)
 source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/bin/rntransform.R')
 
 for (s in c('80','20')) {
@@ -36,8 +37,8 @@ for (s in c('80','20')) {
   f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/full_data.',s,'.txt')
   fam <- fread(f,data.table = F,stringsAsFactors = F)
   
-  # pheno <- 'bmi'
-  pheno <- 'lymphocyte.count'
+  pheno <- 'bmi'
+  # pheno <- 'lymphocyte.count'
   fam[,paste0(pheno,'.na')] <- fam[,pheno]
   fam[,paste0(pheno,'.na')][which(fam$In==0)] <- NA
   fam[,paste0(pheno,'.na')][which(fam$QC_In==0)] <- NA
@@ -117,7 +118,9 @@ for (s in c('80','20')) {
   full_dataset <- merge(covariate_environmental_dataset,phenotype_dataset,by='IID')
 
   # genetic data
-  f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset')
+  # f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset')
+  # f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.var.raw_matched_snp.merged_subset')
+  f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.mean.raw_matched_snp.merged_subset')
   geno <- BEDMatrix(f.geno)
   geno_names <- unlist(lapply(strsplit(rownames(geno),'_'),function(x) {return(x[2])}))
   
@@ -171,52 +174,83 @@ for (s in c('80','20')) {
   
   # df.results.save[order(df.results.save[,3],decreasing = F),]
   # subset(df.results.save,df.results.save[,3] < 0.05/nrow(df.results.save))
-  fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+  # fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.var.raw_matched_snp.merged_subset.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+  fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.mean.raw_matched_snp.merged_subset.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 }
 
 df.results.save[order(df.results.save[,3],decreasing = F),][1:10,]
 subset(df.results.save,df.results.save[,3] < 0.05/nrow(df.results.save))
 
-s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.txt'),data.table = F,stringsAsFactors = F)
-s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.txt'),data.table = F,stringsAsFactors = F)
+s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.var.raw_matched_snp.merged_subset.txt'),data.table = F,stringsAsFactors = F)
+s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.var.raw_matched_snp.merged_subset.txt'),data.table = F,stringsAsFactors = F)
+
 results.mg <- merge(results.80,results.20,by=c('SNP','E'))
 results.mg[order(results.mg[,4],decreasing = F),][1:5,]
 subset(results.mg,results.mg[,4] < 0.05 / nrow(results.mg))
 
 
-thres.vec <- 10^-(seq(0,-log10(min(results.mg[,4]))+0.1,by=0.1))
 
-start <- T
-for (i in 1:length(thres.vec)) {
-  thres <- thres.vec[i]
-  
-  df.sub <- subset(results.mg,results.mg[,4] < thres); 
-  same_sign_prop <- nrow(df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y)))/nrow(df.sub); 
-  winners_curse <- nrow(subset(df.sub.sub,abs(Estimate.x) > abs(Estimate.y)))/nrow(df.sub.sub)
-  n=nrow(df.sub)
-  
-  df.sub <- subset(results.mg,results.mg[,4] > thres); 
-  same_sign_prop2 <- nrow(df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y)))/nrow(df.sub); 
-  winners_curse2 <- nrow(subset(df.sub.sub,abs(Estimate.x) > abs(Estimate.y)))/nrow(df.sub.sub)
-  n2=nrow(df.sub)
-  
-  df.tmp <- data.frame(thres=thres,n=n,
-                       p=same_sign_prop,winner=winners_curse,
-                       n2=n2,
-                       p2=same_sign_prop2,winner2=winners_curse2)
-  if (start) {
-    df.save <- df.tmp
-    start <- F
-  } else {
-    df.save <- rbind(df.save,df.tmp)
+
+validation_statistics <- function(results.mg,thres.vec=10^-(seq(0,3,by=0.5)),flip=T) {
+  start <- T
+  for (i in 1:length(thres.vec)) {
+    thres <- thres.vec[i]
+    
+    df.sub <- subset(results.mg,results.mg[,4] < thres); 
+    df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y))
+    X=nrow(df.sub.sub); N=nrow(df.sub)
+    binomial.test.results <- binom.test(x=X,n=N,0.5)
+    p=as.numeric(binomial.test.results$estimate)
+    ci=as.numeric(binomial.test.results$conf.int)
+    lower=ci[1]; upper=ci[2]
+    pval=binomial.test.results$p.value
+    winners_curse <- nrow(subset(df.sub.sub,abs(Estimate.x) > abs(Estimate.y)))/nrow(df.sub.sub)
+    
+    # se=sqrt(p*(1-p)/(nrow(df.sub)))
+    # p+1.96*se
+    # same_sign_prop <- nrow(df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y)))/nrow(df.sub); 
+    # winners_curse <- nrow(subset(df.sub.sub,abs(Estimate.x) > abs(Estimate.y)))/nrow(df.sub.sub)
+    # n=nrow(df.sub)
+    
+    if (flip) {
+      df.sub <- subset(results.mg,results.mg[,6] < thres); 
+      df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y))
+      X=nrow(df.sub.sub); N2=nrow(df.sub)
+      binomial.test.results <- binom.test(x=X,n=N2,0.5)
+      p2=as.numeric(binomial.test.results$estimate)
+      ci=as.numeric(binomial.test.results$conf.int)
+      lower2=ci[1]; upper2=ci[2]
+      pval2=binomial.test.results$p.value
+      winners_curse2 <- nrow(subset(df.sub.sub,abs(Estimate.x) < abs(Estimate.y)))/nrow(df.sub.sub)
+    } else {
+      N2=NA
+      p2=NA
+      lower2=NA
+      upper2=NA
+      pval2=NA
+      winners_curse2=NA
+    }
+    
+    
+    # df.sub <- subset(results.mg,results.mg[,4] > thres); 
+    # same_sign_prop2 <- nrow(df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y)))/nrow(df.sub); 
+    # winners_curse2 <- nrow(subset(df.sub.sub,abs(Estimate.x) > abs(Estimate.y)))/nrow(df.sub.sub)
+    # n2=nrow(df.sub)
+    
+    df.tmp <- data.frame(thres=thres,
+                         N=N,p=p,lower=lower,upper=upper,pval=pval,winner=winners_curse,
+                         N2=N2,p2=p2,lower2=lower2,upper2=upper2,pval2=pval2,winner2=winners_curse2)
+    if (start) {
+      df.save <- df.tmp
+      start <- F
+    } else {
+      df.save <- rbind(df.save,df.tmp)
+    }
   }
+  return(df.save)
 }
-
-# also do 1e-3 to 1e-4, 1e-4 to 1e-5, and calculate proportions w/in each bin
-
-nrow(df.sub)
-results.mg[order(results.mg[,4],decreasing = F),][1:5,]
-subset(results.mg,SNP=='rs11642015_T')
+# using results.trim
+df.save <- validation_statistics(results.mg)
 
 
 
