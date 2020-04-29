@@ -3,24 +3,22 @@ library(lmtest)
 library(dglm)
 
 # source('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/bin/rntransform.R')
-source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/bin/rntransform.R')
+# source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/bin/rntransform.R')
 MAF1 <- 0.4
 MAF2 <- 0.4
 nsim <- 100; 
 
-nindiv <- 100000
-v.epi.exp.vec <- seq(0.005,0.015,by=0.005); j = 1
+nindiv <- 10000
+v.epi.exp.vec <- seq(0.005,0.02,by=0.005); j = 1
 
-# nindiv <- 10000
-# v.epi.exp.vec <- seq(0.02,0.1,by=0.04); j = 1
-
-transform = 'RINT' # 'NONE'
+transform = 'NONE'
 phenotype.vec <- c('NORMAL','CHISQ4'); phenotype <- phenotype.vec[1]
 
-DeviationRegressionModel <- function(Y,x) {
-  Y.i <- tapply(Y, as.factor(x), median)
-  Z.ij <- abs(Y - Y.i[as.factor(x)])
-  p <- summary(lm(Z.ij~x))$coef[2,]
+DeviationRegressionModel <- function(Y,SNP) {
+  X <- as.factor(SNP)
+  Y.i <- tapply(Y, X, median)
+  Z.ij <- abs(Y - Y.i[X])
+  p <- summary(lm(Z.ij~SNP))$coef[2,]
   return(p)
 }
 
