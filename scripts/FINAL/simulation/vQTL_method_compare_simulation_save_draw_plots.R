@@ -67,11 +67,13 @@ png(f,width=5000,height=5000,res=500)
 plot_grid(g2,g3,g4,g5,ncol=2)
 dev.off()
 
-g2 <- ggplot(subset(df.aggre.melt,noise=='NORMAL' & type=='gxg' & variable%in%c('LT','DRM')),aes(x=h,y=value,col=variable)) + geom_line() + geom_point() + theme_bw() + theme(panel.grid = element_blank()) + labs(x='Variance Explained by GxG',y='Power') + scale_color_brewer(palette='Dark2')+ theme(legend.title = element_blank())
-g3 <- ggplot(subset(df.aggre.melt,noise=='CHISQ4' & type=='gxg' & variable%in%c('LT','DRM')),aes(x=h,y=value,col=variable)) + geom_line() + geom_point() + theme_bw() + theme(panel.grid = element_blank()) + labs(x='Variance Explained by GxG',y='Power') + scale_color_brewer(palette='Dark2')+ theme(legend.title = element_blank())
+g2 <- ggplot(subset(df.aggre.melt,noise=='NORMAL' & type=='gxg' & variable%in%c('LT','DRM')),aes(x=h,y=value,col=variable)) + geom_line() + geom_point(size=rel(0.8)) + theme_bw() + theme(panel.grid = element_blank()) + labs(x='Variance Explained by GxG',y='Power') + scale_color_brewer(palette='Dark2')+ theme(legend.title = element_blank())
+g3 <- ggplot(subset(df.aggre.melt,noise=='CHISQ4' & type=='gxg' & variable%in%c('LT','DRM')),aes(x=h,y=value,col=variable)) + geom_line() + geom_point(size=rel(0.8)) + theme_bw() + theme(panel.grid = element_blank()) + labs(x='Variance Explained by GxG',y='Power') + scale_color_brewer(palette='Dark2')+ theme(legend.title = element_blank())
 f='~/Documents/Research/vQTL/ukb_vqtl/output/simulation/power_fpr_plots2.png'
-png(f,width=5000,height=1000,res=500)
-plot_grid(g2,g3,ncol=2)
+# png(f,width=3750,height=1000,res=500)
+# plot_grid(g2,g3,nrow=1)
+png(f,width=2500,height=2500,res=500)
+plot_grid(g2,g3,ncol=1)
 dev.off()
 
 

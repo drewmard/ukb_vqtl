@@ -2,7 +2,7 @@ library(data.table)
 library(ggplot2)
 library(cowplot)
 thres=0.05; suff <- ifelse(is.null(thres),'','PVAL.')
-thres=NULL; suff <- ifelse(is.null(thres),'','PVAL.')
+# thres=NULL; suff <- ifelse(is.null(thres),'','PVAL.')
 
 #1
 thres=0.05; suff <- ifelse(is.null(thres),'','PVAL.')
@@ -111,7 +111,7 @@ df.save$p[6]/df.matched$p[7]
 
 
 
-THRESHOLD=0.05
+THRESHOLD=0.001
 binom.test(
   prod(df.var_raw[df.var_raw$thres==THRESHOLD,c('p','N')]),
   df.var_raw[df.var_raw$thres==THRESHOLD,c('N')],

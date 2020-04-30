@@ -1,0 +1,23 @@
+library(data.table)
+f<-'/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.ALL_RESULTS.trim.txt'
+df <- fread(f,data.table = F,stringsAsFactors = F)
+colnames(df)[4] <- 'P_GxE'
+subset(df,P.VAR.RINT < 5e-8)
+df <- subset(df,!duplicated(df$SNP))
+subset(df,P_GxE < 0.05/nrow(df))
+subset(df,SNP=='rs17451107')
+subset(df,P.VAR.RINT < 1e-5 & P.VAR.RAW < 5e-8 & P.MEAN > 5e-8)
+
+df$Mean.QTL <- as.numeric(df$P.MEAN<5e-8)
+df$Raw.vQTL <- as.numeric(df$P.VAR.RAW<5e-8)
+df$Rint.vQTL <- as.numeric(df$P.VAR.RINT<1e-5)
+nrow(subset(df,Mean.QTL==1 & Raw.vQTL==0 & Rint.vQTL==0))
+nrow(subset(df,Mean.QTL==0 & Raw.vQTL==1 & Rint.vQTL==0))
+nrow(subset(df,Mean.QTL==0 & Raw.vQTL==0 & Rint.vQTL==1))
+nrow(subset(df,Mean.QTL==1 & Raw.vQTL==1 & Rint.vQTL==0))
+nrow(subset(df,Mean.QTL==1 & Raw.vQTL==0 & Rint.vQTL==1))
+nrow(subset(df,Mean.QTL==0 & Raw.vQTL==1 & Rint.vQTL==1))
+nrow(subset(df,Mean.QTL==1 & Raw.vQTL==1 & Rint.vQTL==1))
+nrow(subset(df,Mean.QTL==1))
+nrow(subset(df,Raw.vQTL==1))
+nrow(subset(df,Rint.vQTL==1))
