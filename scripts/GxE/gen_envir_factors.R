@@ -6,13 +6,14 @@ pheno2 <- fread('/home/kulmsc/athena/ukbiobank/setup_morePhenos/ukb33822.csv.gz'
 
 # extract specific data
 x <- c('22001-0.0','21022-0.0',
-         '864-0.0','874-0.0','884-0.0','894-0.0','904-0.0',
-         '914-0.0','1090-0.0','1080-0.0','1070-0.0','1239-0.0',
-         '1249-0.0')
+         '864-0.0','874-0.0','884-0.0','894-0.0','904-0.0','914-0.0',
+       '1090-0.0','1080-0.0','1070-0.0',
+       '1239-0.0','1249-0.0')
 i <- which(x %in% colnames(pheno2))
 COL_NAMES <- c('sex','age',
-  'DayW','DurW','DayM','DurM','DayV',
-  'DurV','TimeD','TimeC','TimeTV','CurS','PastS')
+  'DayW','DurW','DayM','DurM','DayV','DurV',
+  'TimeD','TimeC','TimeTV',
+  'CurS','PastS')
 cov <- pheno2[,c('eid',
                 x[i]
 )]

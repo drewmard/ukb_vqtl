@@ -72,24 +72,12 @@ MAF2 <- 0.4
 nsim <- 1000; 
 nindiv <- 10000
 simulation_type='gxg'
-# genetic_variance_explained.vec <- seq(0.005,0.02,by=0.005);
-# genetic_variance_explained.vec <- seq(0.01,0.1,by=0.01);
-genetic_variance_explained.vec <- seq(0.01,0.03,by=0.01);
-phenotype_noise <- 'NORMAL' # CHISQ4
+genetic_variance_explained.vec <- seq(0.01,0.1,by=0.01);
+# genetic_variance_explained.vec <- seq(0.01,0.03,by=0.01);
 phenotype_noise.vec <- c('NORMAL','CHISQ4')
 results <- list(); genotypes <- list(); phenotypes <- list()
-# for (k in 1:2) {
-#   phenotype_noise <- phenotype_noise.vec[k]
-#   simulation_results <- lapply(1:length(genetic_variance_explained.vec),runSimulation,type=simulation_type)
-#   results[[k]] <- do.call(rbind,lapply(simulation_results,function(x){x[[1]]}))
-#   genotypes[[k]] <- do.call(cbind,lapply(simulation_results,function(x){x[[2]]}))
-#   phenotypes[[k]] <- do.call(cbind,lapply(simulation_results,function(x){x[[3]]}))
-# }
-# results <- as.data.frame(do.call(rbind,results),stringsAsFactors = FALSE)
-# genotypes <- as.data.frame(do.call(cbind,genotypes),stringsAsFactors=FALSE)
-# phenotypes <- as.data.frame(do.call(cbind,phenotypes),stringsAsFactors=FALSE)
 
-for (nindiv in c(30000,40000,50000)) { 
+# for (nindiv in c(10000,20000,30000,40000,50000)) { 
 
 for (k in 1:1) {
   phenotype_noise <- phenotype_noise.vec[k]
@@ -115,9 +103,6 @@ for (k in 1:1) {
   rm(results);rm(genotypes);rm(phenotypes)
 }
 
-}
-
-# aggregate(.~MAF1+MAF2+N+noise+h+type,results[,-c(7)],mean)
-# aggregate(.~MAF1+MAF2+N+noise+h+type,results[,-c(7)],function(x) {mean(x < 0.05)})
+# }
 
 

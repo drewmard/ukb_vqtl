@@ -3,7 +3,7 @@ ID=/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/subset/
 # ID=/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/andrew_copies/subset/ID.impute.txt.tmp # testing!
 
 phenotype=$1
-# phenotype=monocyte.count.rint.ALL # hard input
+phenotype=bmi.rint.ALL # hard input
 
 #initialize
 outFile=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.$phenotype.HLMM.txt

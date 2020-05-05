@@ -13,7 +13,7 @@ f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/H
 results <- fread(f.out,data.table = F,stringsAsFactors = F)
 # results <- fread(f.out,data.table = F,stringsAsFactors = F,fill=TRUE)
 
-f.mean <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/imputed/results/ukbb.',phenotype,'.results.txt')
+f.mean <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/imputed/results/ukbb.lymphocyte.count.rint.ALL.results.txt'
 df.mean <- fread(f.mean,data.table = F,stringsAsFactors = F)
 chr6 <- subset(df.mean,CHR==6)$SNP
 
