@@ -6,6 +6,10 @@ run_HLMM_subset.sh
 
 merge_HLMM_subset.sh
 
+# You can also run the following to check killed jobs:
+
+HLMM_Killed.txt
+
 ### 3: Perform DET and generate combined data frame with vQTL/muQTL results.
 
 spack load -r r@3.5.0

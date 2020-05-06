@@ -1,8 +1,5 @@
 source activate vQTL
-pheno=monocyte.count # done
-# pheno=bmi # newest run
-pheno=monocyte.count
-# pheno=lymphocyte.count # running right now
+pheno=bmi
 
 #############
 
@@ -18,11 +15,13 @@ sbatch $SCRIPTDIR/run_vGWAS_subset.sh $phenoName
 
 # muGWAS on raw
 phenoName=${pheno}.ALL
-sbatch /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/run_GWAS.impute.sh $phenoName
+sbatch /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/FINAL/gwas/run/run_GWAS.impute.sh $phenoName
 
 # muGWAS on rint
 phenoName=${pheno}.rint.ALL
-sbatch /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/run_GWAS.impute.sh $phenoName
+sbatch /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/FINAL/gwas/run/run_GWAS.impute.sh $phenoName
+
+# Run DET
 
 
 # Merge together results

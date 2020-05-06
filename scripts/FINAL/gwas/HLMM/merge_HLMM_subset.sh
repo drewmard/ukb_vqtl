@@ -24,7 +24,7 @@ do
  # print to script
  if [ ! -f $f ]; then
    echo "ERROR: $i ($x1, $x2)"
-   sbatch /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/GWAS/subset/run_HLMM_subset_specific.sh $phenotype $i
+   sbatch /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/scripts/FINAL/gwas/HLMM/errors/run_HLMM_subset_specific.sh $phenotype $i
  else
    tail -n +2 $f >> $outFile
  fi
