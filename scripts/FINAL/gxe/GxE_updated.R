@@ -36,8 +36,8 @@ for (s in c('80','20')) {
   f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/full_data.',s,'.txt')
   fam <- fread(f,data.table = F,stringsAsFactors = F)
   
-  # pheno <- 'bmi'
-  pheno <- 'lymphocyte.count'
+  pheno <- 'bmi'
+  # pheno <- 'lymphocyte.count'
   fam[,paste0(pheno,'.na')] <- fam[,pheno]
   fam[,paste0(pheno,'.na')][which(fam$In==0)] <- NA
   fam[,paste0(pheno,'.na')][which(fam$QC_In==0)] <- NA
@@ -117,8 +117,11 @@ for (s in c('80','20')) {
   full_dataset <- merge(covariate_environmental_dataset,phenotype_dataset,by='IID')
 
   # genetic data
-  f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset')
+  # f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset2')
+  # geno <- BEDMatrix(f.geno)
+  f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.QTL_matched_snp.merged_subset.fam')
   geno <- BEDMatrix(f.geno)
+  
   geno_names <- unlist(lapply(strsplit(rownames(geno),'_'),function(x) {return(x[2])}))
   
   # merge stuff
@@ -169,10 +172,14 @@ for (s in c('80','20')) {
     }
   }
   
-  # df.results.save[order(df.results.save[,3],decreasing = F),]
-  # subset(df.results.save,df.results.save[,3] < 0.05/nrow(df.results.save))
-  fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+  # fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+  fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.QTL_matched_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 }
+
+
+
+
+
 
 df.results.save[order(df.results.save[,3],decreasing = F),][1:10,]
 subset(df.results.save,df.results.save[,3] < 0.05/nrow(df.results.save))

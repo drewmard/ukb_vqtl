@@ -1,5 +1,5 @@
 # diet score
-Sys.sleep(600)
+# Sys.sleep(600)
 library(data.table)
 s='80'
 full_dataset <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/full_data.bmi.GxE.',s,'.txt'),data.table = F,stringsAsFactors = F)
@@ -62,7 +62,7 @@ dataf.60$DIET_SCORE <- DIET_SCORE
 
 # genetic data
 library(BEDMatrix)
-f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset')
+f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset2')
 geno <- BEDMatrix(f.geno)
 geno_names <- unlist(lapply(strsplit(rownames(geno),'_'),function(x) {return(x[2])}))
 
@@ -173,11 +173,11 @@ fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl
 
 ######
 
-s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
-s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
-results.mg <- merge(results.80,results.20,by=c('SNP','E'))
-results.mg[order(results.mg[,4],decreasing = F),][1:5,]
-subset(results.mg,results.mg[,4] < 0.05 / nrow(results.mg))
+# s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
+# s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
+# results.mg <- merge(results.80,results.20,by=c('SNP','E'))
+# results.mg[order(results.mg[,4],decreasing = F),][1:5,]
+# subset(results.mg,results.mg[,4] < 0.05 / nrow(results.mg))
 
 
 

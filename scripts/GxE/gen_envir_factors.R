@@ -59,11 +59,16 @@ TimeTV[which(is.na(cov$TimeTV))] <- median(TimeTV,na.rm = T)
 
 envir_data$SB <- TimeD + TimeC + TimeTV
 envir_data$SB[which(abs(scale(envir_data$SB)) > 5)] <- NA
+table(envir_data$SB)
 
 # smoking:
 envir_data$Smoking.E <- rep(NA,nrow(cov))
 envir_data$Smoking.E[which( cov$CurS==0 & (cov$PastS==3 | cov$PastS==4) )] <- 0
 envir_data$Smoking.E[which( (cov$CurS==1 | cov$CurS==2) | (cov$PastS==1 | cov$PastS==2) )] <- 1
+table(envir_data$Smoking.E)
+
+# ind <- unique(c(which(cov$CurS %in% c(1,2)),which(cov$PastS %in% c(1,2))))
+# envir_data$Smoking.E[ind] <- 1
 
 # need to impute medians
 

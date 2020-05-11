@@ -1,37 +1,6 @@
 library(data.table)
 pheno <- 'bmi'
-# pheno <- 'lymphocyte.count'
 
-f1 <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.',paste0(pheno,'.ALL'),'.vGWAS.txt')
-f2 <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/vGWAS_subset/ukbb.',paste0(pheno,'.rint.ALL'),'.vGWAS.txt')
-f3 <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/imputed/results/ukbb.',paste0(pheno,'.ALL'),'.results.txt')
-
-var.raw <- fread(f1,data.table = F,stringsAsFactors = F)
-var.rint <- fread(f2,data.table = F,stringsAsFactors = F)
-mean.raw <- fread(f3,data.table = F,stringsAsFactors = F); colnames(mean.raw)[1] <- 'rs'
-
-f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset.bim')
-bim <- fread(f,data.table = F,stringsAsFactors = F)
-var.raw.sub <- subset(var.raw,rs %in% bim[,2])
-var.rint.sub <- subset(var.rint,rs %in% bim[,2])
-mean.raw.sub <- subset(mean.raw,rs %in% bim[,2])
-
-mean.raw.sub <- mean.raw.sub[,c('rs','CHR','BP','A1','A2','MAF','BETA','P')]
-colnames(mean.raw.sub)[(ncol(mean.raw.sub)-1):ncol(mean.raw.sub)] <- paste0(colnames(mean.raw.sub)[(ncol(mean.raw.sub)-1):ncol(mean.raw.sub)],'.MEAN')
-var.raw.sub <- var.raw.sub[,c('rs','BETA','P')]; colnames(var.raw.sub)[2:3] <- paste0(colnames(var.raw.sub)[2:3],'.VAR.RAW')
-var.rint.sub <- var.rint.sub[,c('rs','BETA','P')]; colnames(var.rint.sub)[2:3] <- paste0(colnames(var.rint.sub)[2:3],'.VAR.RINT')
-
-df.mg <- merge(merge(mean.raw.sub,var.raw.sub,by='rs'),var.rint.sub,by='rs')
-
-#################################################################
-
-f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset.LD.ld')
-ld <- fread(f,data.table = F,stringsAsFactors = F)
-ld <- subset(ld,R2 > 0.1)
-df.mg.ld <- subset(df.mg, rs %in% c(ld$SNP_A,ld$SNP_B))
-df.mg.ld <- df.mg.ld[order(df.mg.ld$CHR),]
-
-df.mg2 <- df.mg[,c('rs','CHR','BP','P.MEAN','P.VAR.RAW','P.VAR.RINT')]
 #################################################################
 # GxE
 
@@ -50,7 +19,25 @@ results.mg$SNP <- substring(results.mg$SNP,1,g)
 
 f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/sig_results/',pheno,'.sig.txt')
 df.mg2 <- fread(f,data.table = F,stringsAsFactors = F)
-results = merge(results.mg,df.mg2,by.x='SNP',by.y='rs')
+results.mg = merge(results.mg,df.mg2,by.x='SNP',by.y='rs')
+
+f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/sig_results/',pheno,'.sig.GxE.txt')
+fwrite(results.mg,f.out,quote = F,na = 'NA',sep = '\t',row.names = F,col.names = T)
+
+library(plyr)
+ddply(df.mg2,.(Mean.QTL,Raw.vQTL,Rint.vQTL,dQTL),nrow)
+ddply(df.mg2,.(Rint.vQTL,Rint.log_vQTL),nrow)
+ddply(df.mg2,.(Rint.vQTL,dQTL),nrow)
+ddply(df.mg2,.(Rint.log_vQTL,dQTL),nrow)
+ddply(df.mg2,.(Mean.QTL,Raw.vQTL),nrow)
+ddply(df.mg2,.(Mean.QTL,Rint.vQTL),nrow)
+ddply(df.mg2,.(Mean.QTL,dQTL),nrow)
+df.mg2[order(df.mg2$dispersion_pval)[1:5],]
+
+ddply(df.mg2,.(Mean.QTL,Raw.vQTL,Rint.vQTL),nrow)
+ddply(df.mg2,.(Mean.QTL,Raw.vQTL,dQTL),nrow)
+
+apply(df.mg2[,c('Mean.QTL','Raw.vQTL','Rint.vQTL','dQTL')],2,sum)
 
 environmental_factors <- c(
                            'DIET_SCORE',
@@ -59,36 +46,10 @@ environmental_factors <- c(
 results <- subset(results,E %in% environmental_factors)
 subset(results,results[,4] < 0.05 / nrow(results))
 subset(results,SNP=='rs4743930')
+subset(results,SNP=='rs17451107')
+subset(df.mg2,rs=='rs17451107')
+##################################################
 
-f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset.LD.ld')
-ld <- fread(f,data.table = F,stringsAsFactors = F)
-ld <- subset(ld,R2 > 0.1)
-results.aggre <-  aggregate(results[,'Pr(>|t|).x'],by=list(results$SNP),min)
-results.ld <- subset(results.aggre, results.aggre[,1] %in% c(ld$SNP_A,ld$SNP_B))
-results.ld <- results.ld[order(results.ld[,2],decreasing = F),]
-
-i=1
-while (i <= nrow(results.ld)) {
-  snp = results.ld[i,1]
-  tmp <- subset(ld,SNP_A==snp | SNP_B==snp)
-  tmp <- subset(c(tmp$SNP_A,tmp$SNP_B),c(tmp$SNP_A,tmp$SNP_B)!=snp)
-  results.ld <- subset(results.ld,!(results.ld[,1] %in% c(tmp)))
-  i=i+1
-}
-
-snp_to_remove <- subset(c(ld$SNP_A,ld$SNP_B), !(c(ld$SNP_A,ld$SNP_B) %in% results.ld[,1]))
-f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',pheno,'.snp_to_remove.txt')
-fwrite(data.frame(snp_to_remove=snp_to_remove),f.out,quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
-snp_to_remove <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/',pheno,'.snp_to_remove.txt'),data.table = F,stringsAsFactors = F)
-results.ld_sub <- subset(results,!(SNP %in% snp_to_remove[,1]))
-results.mg <- results.ld_sub
-
-subset(results.mg,results.mg[,4] < 0.05 / nrow(results.mg))
-results.mg[order(results.mg[,4],decreasing = F)[1:5],]
-results.trim <- subset(results.mg,E %in% environmental_factors)
-subset(results.trim,results.trim[,4] < 0.05 / nrow(results.trim))
-f.out<-paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.ALL_RESULTS.trim.txt')
-fwrite(results.trim,f.out,quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 
 validation_statistics <- function(results.mg,thres.vec=10^-(seq(0,3,by=0.5)),flip=T,PVAL.THRES=NULL) {
   start <- T
@@ -169,43 +130,33 @@ validation_statistics <- function(results.mg,thres.vec=10^-(seq(0,3,by=0.5)),fli
   return(df.save)
 }
 
-read_data=FALSE
-if (read_data) {
-  library(data.table)
-  pheno='bmi'
-  f<-paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.ALL_RESULTS.trim.txt')
-  results.mg <- fread(f,data.table = F,stringsAsFactors = F)
-  f <- "/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.80.var.raw_matched_snp.merged_subset.txt"
-  results.80 <- fread(f,data.table = F,stringsAsFactors = F)
-  f <- "/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.20.var.raw_matched_snp.merged_subset.txt"
-  results.20 <- fread(f,data.table = F,stringsAsFactors = F)
-  f <- "/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.80.mean.raw_matched_snp.merged_subset.txt"
-  results.80 <- fread(f,data.table = F,stringsAsFactors = F)
-  f <- "/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.20.mean.raw_matched_snp.merged_subset.txt"
-  results.20 <- fread(f,data.table = F,stringsAsFactors = F)
-  results.mg <- merge(results.80,results.20,by=c('SNP','E'))
-}
-
-# using matched snps
-thres=NULL; suff <- ifelse(is.null(thres),'','PVAL.')
-df.save <- validation_statistics(results.mg,thres.vec = THRESHOLD_VECTOR,flip = F)
-f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.validation.mean.raw_matched_snp.full.',suff,'txt')
-fwrite(df.save,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-thres=0.05; suff <- ifelse(is.null(thres),'','PVAL.')
-df.save <- validation_statistics(results.mg,PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.validation.mean.raw_matched_snp.full.',suff,'txt')
-fwrite(df.save,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-
 # using results.trim
 results.mg$FDR <- p.adjust(results.mg[,4],method = 'fdr')
 tmp <- subset(results.mg,FDR<0.1); P.FDR_0.1 <- tmp[which.max(tmp$FDR),4]; nrow(tmp)
 tmp <- subset(results.mg,FDR<0.05); P.FDR_0.05 <- tmp[which.max(tmp$FDR),4]; nrow(tmp)
 tmp <- subset(results.mg,FDR<0.01); P.FDR_0.01 <- tmp[which.max(tmp$FDR),4]; nrow(tmp)
 
-thres=0.05; suff <- ifelse(is.null(thres),'','PVAL.')
+# NEED NULL FOR WINNER'S CURSE
+# thres=0.05; suff <- ifelse(is.null(thres),'','PVAL.')
 thres=NULL; suff <- ifelse(is.null(thres),'','PVAL.')
 # THRESHOLD_VECTOR <- sort(c(1,0.1,0.05,0.01,0.005,0.001,0.05/length(unique(results.mg$SNP)),0.05/nrow(results.mg),P.FDR_0.1,P.FDR_0.05,P.FDR_0.01),decreasing = T)
 THRESHOLD_VECTOR <- sort(c(1,0.1,0.05,0.01,0.005,0.001,P.FDR_0.1,P.FDR_0.05,P.FDR_0.01),decreasing = T)
+df.save <- validation_statistics(results.mg,PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
+# df.save <- validation_statistics(results.mg,PVAL.THRES = thres,thres.vec = 6e-5,flip = F) 
+df.save.var_raw <- validation_statistics(subset(results.mg,Raw.vQTL==1),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)#,thres.vec=10^-(seq(0,1.5,by=0.5)))
+df.save.only_mean <- validation_statistics(subset(results.mg,Mean.QTL==1 & Criteria==1),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
+df.save.var_rint <- validation_statistics(subset(results.mg,Rint.vQTL==1 & Raw.vQTL==0 & Mean.QTL==0),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
+df.save.dispersion <- validation_statistics(subset(results.mg,dQTL==1  & Raw.vQTL==0 & Mean.QTL==0),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
+df.save.dispersion <- validation_statistics(subset(results.mg,(dQTL==1 | Rint.vQTL==1)  & Raw.vQTL==0 & Mean.QTL==0),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
+
+df.save.young <- validation_statistics(subset(results.mg,Mean.QTL==1 & dispersion_pval < 0.05),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
+
+
+
+
+
+
+
 df.save <- validation_statistics(results.mg,PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
 df.save.var_raw <- validation_statistics(subset(results.mg,P.VAR.RAW < 5e-8),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)#,thres.vec=10^-(seq(0,1.5,by=0.5)))
 df.save.only_mean <- validation_statistics(subset(results.mg,P.MEAN < 5e-8 & P.VAR.RAW > 5e-8 & P.VAR.RINT > 1e-5),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)

@@ -39,9 +39,9 @@ results.maf$dispersion_t=results.maf$dispersion/results.maf$dispersion_se
 results.maf$dispersion_pval=-log10(pchisq(results.maf$dispersion_t^2,1,lower.tail=F))
 
 ###
-
+results.maf$dispersion_pval_10neg <- 10^-(results.maf$dispersion_pval)
 f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.',phenotype,'.HLMM.dispersion_nochr6.txt')
-fwrite(results,f.out,row.names = F,col.names = T,quote = F,sep = '\t',na = 'NA')
+fwrite(results.maf,f.out,row.names = F,col.names = T,quote = F,sep = '\t',na = 'NA')
 
 # /athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/HLMM_results/ukbb.lymphocyte.count.rint.ALL.HLMM.dispersion_nochr6.txt
 ########################################################################################################################

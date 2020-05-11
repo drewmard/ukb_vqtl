@@ -2,7 +2,8 @@
 
 library(data.table)
 library(ggplot2)
-f<-'/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.ALL_RESULTS.trim.txt'
+# f<-'/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.ALL_RESULTS.trim.txt'
+f<-'/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/sig_results/bmi.sig.GxE.txt'
 df <- fread(f,data.table = F,stringsAsFactors = F)
 colnames(df)[4] <- 'P_GxE'
 df$FDR <- p.adjust(df$P_GxE,method = 'fdr')
@@ -11,10 +12,6 @@ df$Sig[df$FDR < 0.1] <- 1
 df$Sig[df$FDR < 0.05] <- 2
 df$Sig[df$FDR < 0.01] <- 3
 df <- subset(df,SNP %in% subset(df,Sig > 0)$SNP)
-
-subset(df,SNP=='rs7132908')
-sum(table(subset(df,Sig>0 & P.VAR.RAW < 5e-8)$SNP)>=2)/sum(table(subset(df,Sig>0)$SNP)>=2)
-
 
 axis_colors <- c('black','orange')[as.numeric(subset(df,!duplicated(df$SNP))$P.VAR.RAW < 5e-8) + 1]
 g <- ggplot(df,aes(x=SNP,y=E,fill=Sig)) +

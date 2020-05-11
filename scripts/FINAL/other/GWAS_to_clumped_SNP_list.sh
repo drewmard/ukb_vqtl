@@ -70,4 +70,4 @@ echo $phenoName > $merged_outFile3
 # cut -f2 -d' ' $dir/$merged_outFile2 >> $outdir/$merged_outFile3
 cut -f2 -d' ' $merged_outFile2 >> $merged_outFile3
 echo "END" >> $merged_outFile3
-echo $merged_outFile3
+echo $merged_outfile3
