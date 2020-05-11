@@ -62,7 +62,7 @@ dataf.60$DIET_SCORE <- DIET_SCORE
 
 # genetic data
 library(BEDMatrix)
-f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset')
+f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.QTL_matched_snp.merged_subset')
 geno <- BEDMatrix(f.geno)
 geno_names <- unlist(lapply(strsplit(rownames(geno),'_'),function(x) {return(x[2])}))
 
@@ -70,7 +70,7 @@ geno_names <- unlist(lapply(strsplit(rownames(geno),'_'),function(x) {return(x[2
 ind <- which(geno_names %in% dataf.60$IID)
 dataf.60 <- dataf.60[match(geno_names[ind],dataf.60$IID),]
 s='80'; f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diet_data.',pheno,'.GxE.',s,'.txt')
-fwrite(dataf.60[,c('IID','DIET_SCORE')],f,quote = F,na='NA',row.names = F,col.names = T,sep = '\t')
+# fwrite(dataf.60[,c('IID','DIET_SCORE')],f,quote = F,na='NA',row.names = F,col.names = T,sep = '\t')
 
 
 environmental_factors <- c('DIET_SCORE')
@@ -90,7 +90,7 @@ GxE <- function(i) {
 }
 
 Fit_Model <- function(start=1,p=5000) {
-  df.save <- mclapply(start:p,GxE,mc.cores=8)
+  df.save <- mclapply(start:p,GxE,mc.cores=16)
   df.save <- do.call(rbind,df.save)
   df.save <- as.data.frame(df.save)
   df.save$SNP <- colnames(geno)[start:p]
@@ -111,7 +111,7 @@ for (k in 1:length(environmental_factors)) {
   }
 }
 
-fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.QTL_matched_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 
 ###### validation testing set
 
@@ -131,7 +131,7 @@ dataf.20_test$DIET_SCORE <- DIET_SCORE
 ind <- which(geno_names %in% dataf.20_test$IID)
 dataf.20_test <- dataf.20_test[match(geno_names[ind],dataf.20_test$IID),]
 s='20'; f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diet_data.',pheno,'.GxE.',s,'.txt')
-fwrite(dataf.20_test[,c('IID','DIET_SCORE')],f,quote = F,na='NA',row.names = F,col.names = T,sep = '\t')
+# fwrite(dataf.20_test[,c('IID','DIET_SCORE')],f,quote = F,na='NA',row.names = F,col.names = T,sep = '\t')
 
 library(parallel)
 GxE <- function(i) {
@@ -147,7 +147,7 @@ GxE <- function(i) {
 }
 
 Fit_Model <- function(start=1,p=5000) {
-  df.save <- mclapply(start:p,GxE,mc.cores=8)
+  df.save <- mclapply(start:p,GxE,mc.cores=16)
   df.save <- do.call(rbind,df.save)
   df.save <- as.data.frame(df.save)
   df.save$SNP <- colnames(geno)[start:p]
@@ -168,16 +168,16 @@ for (k in 1:length(environmental_factors)) {
   }
 }
 
-fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.QTL_matched_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 
 
 ######
 
-s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
-s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
-results.mg <- merge(results.80,results.20,by=c('SNP','E'))
-results.mg[order(results.mg[,4],decreasing = F),][1:5,]
-subset(results.mg,results.mg[,4] < 0.05 / nrow(results.mg))
+# s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.QTL_matched_snp.txt'),data.table = F,stringsAsFactors = F)
+# s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.QTL_matched_snp.txt'),data.table = F,stringsAsFactors = F)
+# results.mg <- merge(results.80,results.20,by=c('SNP','E'))
+# results.mg[order(results.mg[,4],decreasing = F),][1:5,]
+# subset(results.mg,results.mg[,4] < 0.05 / nrow(results.mg))
 
 
 
