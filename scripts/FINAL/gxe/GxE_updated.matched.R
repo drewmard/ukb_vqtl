@@ -151,7 +151,7 @@ for (s in c('80','20')) {
   }
   
   Fit_Model <- function(start=1,p=5000) {
-    df.save <- mclapply(start:p,GxE,mc.cores=32)
+    df.save <- mclapply(start:p,GxE,mc.cores=16)
     df.save <- do.call(rbind,df.save)
     df.save <- as.data.frame(df.save)
     df.save$SNP <- colnames(geno)[start:p]
