@@ -119,7 +119,7 @@ for (s in c('80','20')) {
   # genetic data
   # f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset2')
   # geno <- BEDMatrix(f.geno)
-  f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.QTL_matched_snp.merged_subset.fam')
+  f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.QTL_matched_snp.merged_subset')
   geno <- BEDMatrix(f.geno)
   
   geno_names <- unlist(lapply(strsplit(rownames(geno),'_'),function(x) {return(x[2])}))
