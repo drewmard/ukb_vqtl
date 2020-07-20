@@ -115,10 +115,46 @@ Directory: ./scripts/GxG
 
  
 ## vQTLs are linked to environmentally-influenced pathways and phenotypes
+Directory: ./scripts/phewas
 
+#### (A) variant_index_query.sh
+**Description:** Maps list of SNPs from UK Biobank's SNP IDs to Open Target's variant IDs.
+
+#### (B) pheWAS.R
+**Description:** The pheWAS() function takes a variant ID and finds all associated phenotypes in Open Targets (P < 0.05).
+
+#### (C) pheWAS_QTL_run.R
+**Description:** Runs the pheWAS() function for a series of input SNPs and saves the results.
+
+#### (D) pheWAS_enrich.R
+**Description:** This script runs the PheWAS enrichment analysis, where the proportion of raw vQTLs associated with some phenotype are compared to the proportion of muQTLs associated with the same phenotype.
+
+#### (E) phewas_plot.R
+**Description:** Scatterplot figure displaying the PheWAS results.
 
 
 ## Polygenic heritability analysis implicates stomach cell types in regulating BMI variance
+
+#### Various scripts
+**Description:** Three scripts used to generate summary statistics for LDSC input (1), to run LDSC and receive results (2), and to visualize the output (3).
+
+	1. ldsc_SS_generate.R
+	2. ldsc_run.txt
+	3. ldsc_plot.R
+
+## Other scripts
+
+#### (A) FPR_inflation_vqtl.R
+**Description:** Generates a SNP associated with the variance of a phenotype with no true phenotypic effect, and assesses the false positive rate and visualizes the results.
+
+#### (B) population_statistics_QTL_compare.R
+**Description:** Comparison of several population attributes between muQTLs and raw vQTLs.
+
+#### (C) variance_of_statistics.R
+**Description:** Analysis of the standard error of a mean estimate and a variance estimate.
+
+#### (D) ./match directory
+**Description:** Match random genome-wide SNPs to the observed QTLs using population attributes, and create a genotype file in PLINK BED format.
 
 
 

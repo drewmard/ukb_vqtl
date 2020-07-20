@@ -1,0 +1,32 @@
+# script to run partitioned ld score regression
+
+scottDir=/home/kulmsc/athena/herit/v2LDSC/
+dir=/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/ldsc
+ldsc=/athena/elementolab/scratch/anm2868/software/ldsc/ldsc.py
+munge_sumstats=/athena/elementolab/scratch/anm2868/software/ldsc/munge_sumstats.py
+
+prefix=mean.sumSS
+python munge_sumstats.py --sumstats $dir/$prefix.txt --out $dir/$prefix.mg.txt --merge-alleles $scottDir/extras/w_hm3.snplist --a1-inc
+python ldsc.py --h2 $dir/$prefix.mg.txt.sumstats.gz --ref-ld-chr $scottDir/baseline_v1.1/baseline. \
+        --w-ld-chr $scottDir/weights_noHLA/weights. --overlap-annot \
+        --frqfile-chr $scottDir/frqs/1000G.EUR.QC. --out $dir/$prefix.coef1 --print-coefficients
+
+prefix=var.sumSS
+python munge_sumstats.py --sumstats $dir/$prefix.txt --out $dir/$prefix.mg.txt --merge-alleles $scottDir/extras/w_hm3.snplist --a1-inc
+python ldsc.py --h2 $dir/$prefix.mg.txt.sumstats.gz --ref-ld-chr $scottDir/baseline_v1.1/baseline. \
+        --w-ld-chr $scottDir/weights_noHLA/weights. --overlap-annot \
+        --frqfile-chr $scottDir/frqs/1000G.EUR.QC. --out $dir/$prefix.coef1 --print-coefficients
+
+# using cell types
+cts_name=Multi_tissue_gene_expr
+prefix=mean.sumSS
+python $ldsc --h2-cts $dir/$prefix.mg.txt.sumstats.gz --ref-ld-chr $scottDir/baseline_v1.1/baseline. \
+        --w-ld-chr $scottDir/weights_noHLA/weights. \
+        --ref-ld-chr-cts /athena/elementolab/scratch/anm2868/software/ldsc/bin/$cts_name.ldcts \
+         --out $dir/$prefix.$cts_name.coef1 --print-coefficients
+
+prefix=var.sumSS
+python $ldsc --h2-cts $dir/$prefix.mg.txt.sumstats.gz --ref-ld-chr $scottDir/baseline_v1.1/baseline. \
+        --w-ld-chr $scottDir/weights_noHLA/weights. \
+        --ref-ld-chr-cts /athena/elementolab/scratch/anm2868/software/ldsc/bin/$cts_name.ldcts \
+         --out $dir/$prefix.$cts_name.coef1 --print-coefficients
