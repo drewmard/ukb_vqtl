@@ -19,14 +19,14 @@ ggplot(subset(df.aggre,h<=0.03),aes(h,N)) + geom_tile(aes(fill=DRM),col='white')
   geom_text(aes(label=DRM)) +
   scale_fill_gradient(low = "white", high = "steelblue",name='Power') +
   theme_bw()  + theme(panel.grid = element_blank()) + #,legend.title = element_blank()) + 
-  labs(x='Variance Explained by GxG',y='Sample Size') + scale_y_continuous(breaks=seq(min(df.aggre$N),max(df.aggre$N),by=10000))
+  labs(x='Variance explained by interaction effect',y='Sample Size') + scale_y_continuous(breaks=seq(min(df.aggre$N),max(df.aggre$N),by=10000))
 
 df.aggre <- aggregate(.~MAF1+MAF2+N+noise+h+type,df,function(x) {mean(x < 0.05)})
 g <- ggplot(subset(df.aggre,h<=0.03),aes(N,h)) + geom_tile(aes(fill=DRM),col='white') +
   geom_text(aes(label=format(DRM,nsmall=3))) +
   scale_fill_gradient(low = "white", high = "steelblue",name='Power') +
   theme_bw()  + theme(panel.grid = element_blank()) + #,legend.title = element_blank()) + 
-  labs(y='Variance Explained by GxG',x='Sample Size') + scale_x_continuous(breaks=seq(min(df.aggre$N),max(df.aggre$N),by=10000)) + 
+  labs(y='Variance explained by interaction effect',x='Sample Size') + scale_x_continuous(breaks=seq(min(df.aggre$N),max(df.aggre$N),by=10000)) + 
   theme(axis.title = element_text(size = rel(1.2)),legend.position = 'none')
 x=1
 png('~/Documents/Research/vQTL/ukb_vqtl/output/simulation/power_heatmap.png',width=5000*x,height=4000*x,res=700*x)
@@ -36,7 +36,7 @@ dev.off()
 df.aggre <- aggregate(.~MAF1+MAF2+N+noise+h+type,df,mean)
 ggplot(subset(df,h<=0.03),aes(x=as.factor(h),y=beta,fill=as.factor(N))) + geom_boxplot(alpha=0.5) + 
   theme_bw() + theme(panel.grid = element_blank()) +#,legend.position = 'none') + 
-  labs(x='Variance Explained by GxG',y=expression(beta['var']),fill='Sample Size')
+  labs(x='Variance Explained by interaction effect',y=expression(beta['var']),fill='Sample Size')
   # +
   # scale_color_continuous(low='orange',high='blue')
   scale_fill_continuous(low='yellow',high='red')

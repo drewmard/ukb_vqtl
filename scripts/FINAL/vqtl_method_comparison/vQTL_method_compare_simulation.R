@@ -1,9 +1,9 @@
 # initialize
 library(car)
-# library(lmtest)
 library(dglm)
 library(parallel)
 library(data.table)
+
 DeviationRegressionModel <- function(PHENOTYPE,SNP) {
   # Function to perform DRM test for vqtls
   X <- as.factor(SNP)
@@ -17,8 +17,7 @@ testing <- function(j,i=1,type='gxg') {
   
   genetic_variance_explained <- genetic_variance_explained.vec[i]
   if (j %% 50 == 0) {print(paste0('Iteration ',j,', ',i,'/',length(genetic_variance_explained.vec)))}
-  # if (j %% 1 == 0) {print(paste0('Iteration ',j,', ',i,'/',length(genetic_variance_explained.vec)))}
-  
+
   # generate SNPs & causal effects on phenotype
   if (type=='gxg') {
     G <- cbind(rbinom(nindiv,2,MAF1),rbinom(nindiv,2,MAF2))
@@ -73,10 +72,11 @@ nsim <- 1000;
 nindiv <- 10000
 simulation_type='gxg'
 genetic_variance_explained.vec <- seq(0.01,0.1,by=0.01);
-# genetic_variance_explained.vec <- seq(0.01,0.03,by=0.01);
 phenotype_noise.vec <- c('NORMAL','CHISQ4')
 results <- list(); genotypes <- list(); phenotypes <- list()
 
+# settings to create the heatmap boxplot found as a supp figure:
+# genetic_variance_explained.vec <- seq(0.01,0.03,by=0.01);
 # for (nindiv in c(10000,20000,30000,40000,50000)) { 
 
 for (k in 1:1) {
@@ -103,6 +103,5 @@ for (k in 1:1) {
   rm(results);rm(genotypes);rm(phenotypes)
 }
 
-# }
 
 

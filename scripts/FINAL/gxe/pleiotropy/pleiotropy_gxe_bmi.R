@@ -69,7 +69,7 @@ for (s in c('80','20')) {
     mod.formula <- formula(paste(phenoName,' ~ age+age2+genotyping.array+sex+age*sex+age2*sex+
                PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
                PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+',
-                               envir_name,'*SNP'))
+                               envir_name,'*SNP+bmi.na'))
     mod <- glm(mod.formula,data=full_dataset,family=binomial(link="logit"))
     res <- summary(mod)$coef[paste0(envir_name,':SNP'),c("Estimate","Pr(>|z|)")]
     return(res)
@@ -97,19 +97,20 @@ for (s in c('80','20')) {
     }
   }
   
-  f<-paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.pleiotropy.txt')
+  f<-paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.pleiotropy.used_bmi.txt')
   fwrite(df.results.save,f,quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
   print(f)
 }
 
-s='80'; results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.pleiotropy.txt'),data.table = F,stringsAsFactors = F)
-s='20'; results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.pleiotropy.txt'),data.table = F,stringsAsFactors = F)
+s='80'; results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.pleiotropy.used_bmi.txt'),data.table = F,stringsAsFactors = F)
+s='20'; results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.pleiotropy.used_bmi.txt'),data.table = F,stringsAsFactors = F)
 df.results.save <- merge(results.80,results.20,by=c('SNP','E','pheno'))
 df.results.save$FDR <- p.adjust(df.results.save[,5],method = 'fdr')
 
-f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.','ALL','.pleiotropy.txt')
+f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.','ALL','.pleiotropy.used_bmi.txt')
 fwrite(df.results.save,f,quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 
 # df.results.save$FDR <- p.adjust(df.results.save[,2],method = 'fdr')
 subset(df.results.save,FDR<0.1)
 
+df.results.save[order(df.results.save$FDR)[1:5],]

@@ -117,10 +117,10 @@ for (s in c('80','20')) {
   full_dataset <- merge(covariate_environmental_dataset,phenotype_dataset,by='IID')
 
   # genetic data
-  # f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset2')
-  # geno <- BEDMatrix(f.geno)
-  f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.QTL_matched_snp.merged_subset.fam')
+  f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset2')
   geno <- BEDMatrix(f.geno)
+  # f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.QTL_matched_snp.merged_subset.fam')
+  # geno <- BEDMatrix(f.geno)
   
   geno_names <- unlist(lapply(strsplit(rownames(geno),'_'),function(x) {return(x[2])}))
   
@@ -135,8 +135,8 @@ for (s in c('80','20')) {
                              'age','Alcohol_intake_frequency',
                              'PA','SB','sex','Smoking.E')
   
+  # grep('rs56094641',colnames(geno))
   # can loop through and call covariates if necessary
-  covariate_adjusted_phenotype <- FALSE
   library(parallel)
   GxE <- function(i) {
     print(i)

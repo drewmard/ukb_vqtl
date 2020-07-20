@@ -74,7 +74,21 @@ df.full <- subset(df.full,rs %in% query[ind,1])
 
 
 df.mg2 <- pheWAS_enrichment_analysis(qtl.full,df.full)
-df.mg2[order(df.mg2$FDR)[1:10],]
+df.mg2[order(df.mg2$Observed,decreasing = T)[1:10],]
+df.mg2[order(df.mg2$FDR,decreasing = F)[1:10],]
+df.mg2.sub <- subset(df.mg2,FDR<0.1)
+fwrite(df.mg2.sub,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/phewas/phewas_muqtl_vs_vqtl.txt',quote = F,na = 'NA',sep = '\t',row.names = F,col.names = T)
+fwrite(df.mg2,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/phewas/phewas_muqtl_vs_vqtl.full.txt',quote = F,na = 'NA',sep = '\t',row.names = F,col.names = T)
+
+rs.uniq=unique(df.full$rs)
+i <- sample(1:length(rs.uniq),21,replace = F)
+
+df.mg2 <- pheWAS_enrichment_analysis(subset(df.full,rs%in%rs.uniq[i]),
+                                     subset(df.full,!(rs%in%rs.uniq[i])))
+df.mg2.sub <- subset(df.mg2,FDR<0.1)
+df.mg2.sub
+fwrite(df.mg2.sub,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/phewas/phewas_muqtl_vs_muqtl.txt',quote = F,na = 'NA',sep = '\t',row.names = F,col.names = T)
+fwrite(df.mg2,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/phewas/phewas_muqtl_vs_muqtl.full.txt',quote = F,na = 'NA',sep = '\t',row.names = F,col.names = T)
 
 
 # raw vQTLs vs pure muQTLs

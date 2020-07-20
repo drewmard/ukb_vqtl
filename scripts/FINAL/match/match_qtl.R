@@ -6,15 +6,6 @@ f <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/sig_results/bmi.S
 df <- fread(f,data.table = F,stringsAsFactors = F,header = F)
 
 df.sub <- subset(df.frqx,SNP%in%df[,1])
-# 
-# f <- '/athena/elementolab/scratch/anm2868/open_targets/query/bmi.mean.txt'
-# df <- fread(f,data.table = F,stringsAsFactors = F,header = F)
-# 
-# mean.raw <- subset(df.frqx,SNP%in%df[,1])
-# mean.raw <- subset(mean.raw,!(SNP%in%var.raw[,1]))
-# t.test(mean.raw[,2],var.raw[,2])
-# t.test(mean.raw[,3],var.raw[,3])
-# t.test(mean.raw[,4],var.raw[,4])
 
 # match
 ind_lst <- list()

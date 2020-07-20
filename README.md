@@ -1,7 +1,41 @@
-# vQTL analysis in UK Biobank
+# Leveraging phenotypic variability to identify genetic interactions in human phenotypes
+
+This repository contains all code to conduct the analyses present in the manuscript, "Leveraging phenotypic variability to identify genetic interactions in human phenotypes". This research describes a statistical framework to find SNPs associated with the means and variances of a quantitative phenotype, and then using these SNPs to search for gene-environment interactions. We applied these methods to study the genetic basis of body mass index levels and diabetes risk.
+
+All scripts are written in the R or Bash programming languages. The analysis was performed on a linux system. Plots were created on a macOS Catalina system.
+
+If you can not find the code you are looking for or have any questions, please contact:
+
+Andrew Marderstein \
+anm2868@med.cornell.edu
+
+
+## Deviation Regression Model discovers vQTLs that are due to GxE interactions
+
+Directory: ./scripts/vqtl_method_comparison.R
+
+#### vQTL_method_compare_simulation.R
+**Description:** Simulating population genetic data and comparing the false positive rates and power for different variance tests. Results are saved using various parameter settings.
+
+
+
+
+	beta_vs_variance_explained_boxplots.R
+	heatmap_h2_vs_N.R
+	muqtl_vqtl_plot.R
+	old:
+		vQTL_method_simulate.R
+	plot_random_vqtl.R
+	two_most_significant_gxg.R
+	vQTL_method_compare_simulation_save_draw_plots.R
+	vQTL_vs_muQTL_compare_simulation.R
+
+
+
 
 ## UKB GWAS of blood cell phenotypes
 Directory: ./scripts/GWAS/
+
 
 
 #### pre-processing:
