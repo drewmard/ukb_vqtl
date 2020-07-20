@@ -1,25 +1,13 @@
 library(data.table)
 
-PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count',
-                     'rbc.erythrocyte.count','platelet.count','eosinophil.count','basophil.count','bmi')
+PHENOTYPE_NAMES <- c('bmi')
 
 # sample_qc.R
 df2 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/ukb_sample_qc.txt',data.table = F,stringsAsFactors = F)
 
-# gen_pheno.R
-pheno3 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes.txt',data.table = F,stringsAsFactors = F)
-
 for (s in c('80','20')) {
   # gen_cov1.R
   pheno2 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/covariates1.',s,'.txt'),data.table = F,stringsAsFactors = F)
-  
-  # gen_cov2.R
-  pheno.new2 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/covariates2.',s,'.txt'),data.table = F,stringsAsFactors = F)
-  pheno.new2$menopause2 <- as.factor(pheno.new2$menopause2)
-  
-  # merge files
-  pheno2 <- merge(pheno2,pheno3,by='eid')
-  pheno2 <- merge(pheno2,pheno.new2,by='eid')
   
   # Read in fam & merge w/ covariate & phenotype data
   fam <- fread('/home/kulmsc/athena/ukbiobank/calls/ukbb.1.fam',data.table = F,stringsAsFactors = F)
@@ -27,10 +15,6 @@ for (s in c('80','20')) {
   fam2 <- merge(x=fam2,y=pheno2,by.x='V1',by.y='eid')
   # fam2 <- merge(x=fam2,y=pheno2,by.x='V1',by.y='eid',all.x=TRUE)
 
-  # for (i in 1:length(PHENOTYPE_NAMES)) {
-  #   phenoName <- PHENOTYPE_NAMES[i]
-  # }
-  
   # Neale subset:
   Neale_subset <- read.table('/athena/elementolab/scratch/anm2868/vQTL/UKB/Neale_GWAS/samples.both_sexes.tsv.bgz',header=T,stringsAsFactors = F)
   Neale_subset$In <- 1

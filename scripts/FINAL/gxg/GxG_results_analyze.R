@@ -69,17 +69,3 @@ fwrite(df,f,quote = F,na = 'NA',sep = '\t',row.names = F,col.names = T)
 f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',phenoName,'.merged_subset2.GxG.FULL.valid.txt')
 fwrite(df.save,f,quote = F,na = 'NA',sep = '\t',row.names = F,col.names = T)
 
-
-
-# f.freq <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',phenoName,'.merged_subset.GxG.frq')
-# # f.freq <- '/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.lymphocyte.count.merged_subset.GxG.frq'
-# df.freq <- fread(f.freq,data.table = F,stringsAsFactors = F)
-# df2 <- merge(df,df.freq[,c('SNP','MAF')],by.x='SNP1',by.y='SNP')
-# df2 <- merge(df2,df.freq[,c('SNP','MAF')],by.x='SNP2',by.y='SNP')
-# colnames(df2)[which(colnames(df2) %in% c('MAF.x','MAF.y'))] <- c('MAF1','MAF2')
-# df2 <- subset(df2,MAF1 > 0.05 & MAF2 > 0.05)
-# df2$Sign.Validate <- as.numeric(sign(df2$BETA_INT.80) == sign(df2$BETA_INT.20))
-# 
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',phenoName,'.merged_subset.GxG.','ALL_TRIMMED','.epi.qt')
-# fwrite(df2,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# 

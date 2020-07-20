@@ -1,6 +1,6 @@
 # Leveraging phenotypic variability to identify genetic interactions in human phenotypes
 
-This repository contains all code to conduct the analyses present in the manuscript, "Leveraging phenotypic variability to identify genetic interactions in human phenotypes". This research describes a statistical framework to find SNPs associated with the means and variances of a quantitative phenotype, and then using these SNPs to search for gene-environment interactions. We applied these methods to study the genetic basis of body mass index levels and diabetes risk.
+This repository contains all code to conduct the analyses present in the manuscript, "Leveraging phenotypic variability to identify genetic interactions in human phenotypes". This research describes a statistical framework to find SNPs associated with the means and variances of a quantitative phenotype, and then using these SNPs to discover gene-environment interactions. We applied these methods to study the genetic basis of body mass index levels and diabetes risk.
 
 All scripts are written in the R or Bash programming languages. The analysis was performed on a linux system. Plots were created on a macOS Catalina system.
 
@@ -12,108 +12,113 @@ anm2868@med.cornell.edu
 
 ## Deviation Regression Model discovers vQTLs that are due to GxE interactions
 
-Directory: ./scripts/vqtl_method_comparison.R
+Directory: ./scripts/vqtl_method_comparison
 
-#### vQTL_method_compare_simulation.R
+#### (A) vQTL_method_compare_simulation.R
 **Description:** Main script 1. Simulating population genetic data and comparing the false positive rates and power for different variance tests. Results are saved using various parameter settings.
 
-#### vQTL_vs_muQTL_compare_simulation.R
+#### (B) vQTL_vs_muQTL_compare_simulation.R
 **Description:** Main script 2. Simulating population genetic data and contrasting power for a muQTL test versus a vQTL test. Results are saved using various parameter settings.
 
-#### Other scripts:
+#### (C) Other scripts:
 **Description:** (1) Supplementary figure of interaction effect size versus variance effect size. (2) Power heatmap (supp fig). (3) muQTL vs vQTL output & plots. (4) vQTL method comparison figure.
 
 	1. beta_vs_variance_explained_boxplots.R
 	2. heatmap_vg_vs_N.R
 	3. muqtl_vqtl_plot.R
-	5. vQTL_method_compare_simulation_save_draw_plots.R
+	4. vQTL_method_compare_simulation_save_draw_plots.R
 
 
 
+## Genome-wide association studies in UK Biobank
 
-## UKB GWAS of blood cell phenotypes
-Directory: ./scripts/GWAS/
+Directory: ./scripts/gwas
 
+### Directory: preprocess
 
+#### (A) Various scripts
+**Description:** Various scripts to partition UKB into discovery and validation cohorts (1), pull study covariates (2, 3, 4), and generate the full dataset for GWAS (5).
 
-#### pre-processing:
-Want to add another phenotype? Need to add the phenotype using gen_pheno, re-run gen_full_data and preprocess w/ updated PHENOTYPE_NAMES variable. good luck!
-
-split_80_20.R \
-identify_indiv_blood_disorders.R \
-sample_qc.R \
-gen_cov1.R \
-gen_cov2.R \
-gen_pheno.R \
-gen_full_data.R \
-preprocess.R
-
-#### Script to perform DRM variance testing in Plink
-vGWAS.R
-
-#### run GWAS
-This is a standard GWAS analysis, where SNPs are tested one-by-one for association with the marginal means of a quantitative phenotype.
-
-run_GWAS.sh (run on cannes; local)
-
-### run vGWAS
-In the vGWAS setting, SNPs are tested one-by-one for association with the marginal variance of a quantitative phenotype. In our testing framework, we developed a Deviation Regression Model for variance testing, which is a linear model modification to the  Levene's and Brown-Forsythe's classical tests. The DRM assesses whether additive differences in the variance exist across genotypes. The test is also robust to any genetic effects on the mean of the phenotype.
-
-#### run vGWAS using plink's R plug-in
-array job: sbatch run_vGWAS_5.sh <phenotype> (run on cannes locally/curie.pbtech cluster for all chr) \
-(sbatch) run_vGWAS_4.sh <phenotype> <CHR> (run on cannes locally/curie.pbtech cluster for spec chr) \
-run_vGWAS_3.sh <phenotype> (run on cannes locally in a loop) \
-
-#### run vGWAS -> GxG pipeline using R's BEDMatrix library
-Use ./scripts/GWAS/subset/vQTLs_to_GxG_pipeline.sh
+	1. split_80_20.R
+	2. sample_qc.R
+	3. gen_cov1.R
+	4. gen_cov2.R
+	5. gen_full_data.R
+	
+#### (B) preprocess.R
+**Description:** Adjust phenotype for covariates prior to running a GWAS.
 
 
-#### merge diff assoc files together:
-mergeResults.R ########## note: might need to change directories for mean gwas analyses
-mergeTransform.R
+### Directory: run
 
-#### clump to significant hits, identify top snps, extract from genotype file
-clump_identify_extract.sh
+#### (A) PIPELINE.sh
+**Description:** This is the master pipeline script used to perform a GWAS for muQTLs, raw vQTLs, and RINT vQTLs in UKB. It was manually ran piece-by-piece. 
+
+	1. run_GWAS.impute.sh
+	2. run_vGWAS_subset.sh
+	3. mergeResults_impute.R
+	4. merge_vGWAS_subset.sh
+	5. merge_vGWAS_subset_2.R
+	6. ./errors/run_vGWAS_subset_specific.sh
+	
+Briefly, it runs a GWAS for muQTLs using (1) and for vQTLs using (2). Next, it merges the different files together, using (3) for muQTLs and (4, 5) for vQTLs. If an error occurs for vQTL script executions, then it will re-run using (6). Finally, the results are clumped and an all-by-all SNP-by-SNP epistasis analysis was performed from the clumped loci.
 
 
+#### (B) run_vGWAS.R
+**Description:** This is the script to perform the Deviation Regression Model on PLINK BED formatted genotype files. It is used within (A2).
 
-## GxG testing
-Directory: ./scripts/GxG
 
-#### pipeline
-see GxG_pipeline.sh
+### Directory: HLMM
 
-#### analyze results
-GxG_results_analyze.R
+**Description:** See *README.md* within the HLMM directory.
+
+### output
+
+#### (A) generate_sig_results.R
+**Description:** This script merges the muQTL, raw vQTL, RINT vQTL, and dQTL results together, and extracts out the significant SNPs.
+
+#### (B) mean_vs_var_plots.R
+**Description:** Creates figures that visualize the results from the different GWAS analyses. For example, displaying muQTL effects versus raw vQTL effects.
+
+#### (C) assign_genes.R
+**Description:** Pipeline to map SNPs to the most likely gene.
 
 
 
-
-## UKB GxE testing (post-vQTL screening)
-Directory: ./scripts/GxE
-
+## Discovery and validation of gene-environment interactions 
 
 #### generate environmental factors
 gen_envir_factors.R
 
-#### generate genotype files
-gen_geno.R (need to run clump_identify_extract.sh first)
 
-#### Run GxE
-GxE.R (might need to clean up?) \
-(need to switch var hits file to be automated) \
-(switch to calculating residuals, identical to preprocess; maybe just extract preprocess) \
-(need to make it look cleaner)
+## Large gene-environment interactions influence BMI
 
 
-## UKB downstream testing (post-GxE)
-Directory: ./scripts/downstream
+## GxE interactions have pleiotropic effects over BMI and diabetes risk
 
-#### new phenotypes
-gen_pheno_other.R
 
-#### do PGS calculations
-create_PGS.R # for creating PGS file for scott to run \
-PGS.R
+
+## Evidence for weak epistatic interactions associated with BMI
+Directory: ./scripts/GxG
+
+#### (A) GxG_results_analyze.R
+**Description:** Analyzing the GxG results.
+
+#### (B) disc_vs_valid.R
+**Description:** Subsetting the tested GxG interactions and comparing the correlation of observed effects between discovery and validation sets.
+
+#### (C) gxg_corr_plot_disc_vs_valid.R
+**Description:** Plot of the results from (B).
+
+#### (D) gxg_panel_plot.R
+**Description:** Figure panel for the GxG results.
+
+ 
+## vQTLs are linked to environmentally-influenced pathways and phenotypes
+
+
+
+## Polygenic heritability analysis implicates stomach cell types in regulating BMI variance
+
 
 

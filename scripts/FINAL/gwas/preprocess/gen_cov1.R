@@ -7,10 +7,6 @@ pheno2 <- pheno[,c('eid','22001-0.0','21022-0.0','22000-0.0','22007-0.0','22008-
 colnames(pheno2)[2:ncol(pheno2)] <- c('sex','age','batch','plate','well','p.c.1',
                                       'bmi')
 
-# remove individuals w/ disease
-df.disease <- fread('/athena/elementolab/scratch/anm2868/vQTL/UKB/blood_disease.indiv_id.txt',data.table = F,stringsAsFactors = F,header = T)
-pheno2 <- subset(pheno2, !(eid %in% df.disease$eid)) 
-
 # split 80/20 train/test
 df.20 <- fread('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_blood.indiv_id.txt',data.table = F,stringsAsFactors = F)
 pheno2.80 <- subset(pheno2,!(eid %in% df.20$IID))

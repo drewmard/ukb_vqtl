@@ -1,3 +1,5 @@
+# script also calculates male-only and female-only residuals.
+
 library(data.table)
 
 # read in data
@@ -9,9 +11,8 @@ phenotypeDataFile.80 <- fam2.80[,c('FID','IID')]
 phenotypeDataFile.20 <- fam2.20[,c('FID','IID')]
 
 #initialize
-# PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
-PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count',
-                     'rbc.erythrocyte.count','platelet.count','eosinophil.count','basophil.count','bmi')
+# example: PHENOTYPE_NAMES <- c('lymphocyte.count','monocyte.count','neutrophil.count','neutrophil.percentage','wbc.leukocyte.count')
+PHENOTYPE_NAMES <- c('bmi')
 
 
 ############
@@ -82,24 +83,6 @@ for (s in c('80','20')) {
                    data=fam2[j,],na.action=na.exclude)
         mod3 <- lm(mod.formula.2,
                    data=fam2,na.action=na.exclude)
-      } else {
-        
-        mod.formula.1 <- formula(paste(paste0(phenoName,'.na',suffix),' ~ age+age2+genotyping.array+
-               PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
-               PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+
-               Smoking+Smoking.dummy+alcohol.freq2+alcohol.freq2.dummy+bmi2.dummy+bmi2'))
-        mod.formula.2 <- formula(paste(paste0(phenoName,'.na',suffix),' ~ age+age2+genotyping.array+
-                PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
-                PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+
-                 menopause2+
-                 Smoking+Smoking.dummy+alcohol.freq2+alcohol.freq2.dummy+bmi2.dummy+bmi2'))
-        # fitting models, not including individuals that are covariate outliers
-        mod1 <- lm(mod.formula.1,
-                   data=fam2[i,],na.action=na.exclude)
-        mod2 <- lm(mod.formula.2,
-                   data=fam2[j,],na.action=na.exclude)
-        mod3 <- lm(mod.formula.2,
-                   data=fam2,na.action=na.exclude)
       }
       
       # but calculate residuals in all individuals
@@ -135,10 +118,6 @@ for (s in c('80','20')) {
   
 }
 
-# library(data.table)
-# s <- '80'
-# phenotypeDataFile <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotypes_processed.',s,'.txt'),data.table = F,stringsAsFactors = F)
-fwrite(as.data.frame(colnames(phenotypeDataFile)[-c(1:2)]),'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GWAS/preprocess/phenotype_names.txt',col.names = F,row.names = F,sep = '\t',quote = F)
 
 
 
