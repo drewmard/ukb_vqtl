@@ -15,20 +15,18 @@ anm2868@med.cornell.edu
 Directory: ./scripts/vqtl_method_comparison.R
 
 #### vQTL_method_compare_simulation.R
-**Description:** Simulating population genetic data and comparing the false positive rates and power for different variance tests. Results are saved using various parameter settings.
+**Description:** Main script 1. Simulating population genetic data and comparing the false positive rates and power for different variance tests. Results are saved using various parameter settings.
 
+#### vQTL_vs_muQTL_compare_simulation.R
+**Description:** Main script 2. Simulating population genetic data and contrasting power for a muQTL test versus a vQTL test. Results are saved using various parameter settings.
 
+#### Other scripts:
+**Description:** (1) Supplementary figure of interaction effect size versus variance effect size. (2) Power heatmap (supp fig). (3) muQTL vs vQTL output & plots. (4) vQTL method comparison figure.
 
-
-	beta_vs_variance_explained_boxplots.R
-	heatmap_h2_vs_N.R
-	muqtl_vqtl_plot.R
-	old:
-		vQTL_method_simulate.R
-	plot_random_vqtl.R
-	two_most_significant_gxg.R
-	vQTL_method_compare_simulation_save_draw_plots.R
-	vQTL_vs_muQTL_compare_simulation.R
+	1. beta_vs_variance_explained_boxplots.R
+	2. heatmap_vg_vs_N.R
+	3. muqtl_vqtl_plot.R
+	5. vQTL_method_compare_simulation_save_draw_plots.R
 
 
 

@@ -71,25 +71,8 @@ nsim <- 1000;
 nindiv <- 10000
 simulation_type='gxg'
 genetic_variance_explained.vec <- seq(0.01,0.1,by=0.01);
-# genetic_variance_explained.vec <- seq(0.01,0.03,by=0.01);
 phenotype_noise.vec <- c('NORMAL','CHISQ4')
 results <- list(); genotypes <- list(); phenotypes <- list()
-
-k=2
-phenotype_noise <- phenotype_noise.vec[k]
-results.tmp <- runSimulation(1)[[1]]
-# mean(results.tmp$LR_p<0.05)
-# mean(results.tmp$DRM_p<0.05)
-# table(results.tmp$LR_p<0.05,results.tmp$DRM_p<0.05)
-# fisher.test(table(results.tmp$LR_p<0.05,results.tmp$DRM_p<0.05))$p.value
-# cor(results.tmp$LR_beta,results.tmp$DRM_beta)
-cor(-log10(results.tmp$LR_p),-log10(results.tmp$DRM_p))
-library(ggplot2)
-mean(results.tmp$DRM_p[(results.tmp$LR_p >= 0.05)] < 0.05)
-mean(results.tmp$DRM_p[(results.tmp$LR_p < 0.05)] < 0.05)
-mean(results.tmp$DRM_p[(results.tmp$LR_p < 0.001)] < 0.05)
-
-ggplot(results.tmp,aes(x=-log10(LR_p),y=-log10(DRM_p))) + geom_point()
 
 genetic_variance_explained.vec <- genetic_variance_explained.vec[1:3]
 for (k in 1:1) {
@@ -100,9 +83,7 @@ for (k in 1:1) {
   # genotypes <- do.call(cbind,lapply(simulation_results,function(x){x[[2]]}))
   # phenotypes <- do.call(cbind,lapply(simulation_results,function(x){x[[3]]}))
   results <- as.data.frame(results,stringsAsFactors = FALSE)
-  # genotypes <- as.data.frame(genotypes,stringsAsFactors=FALSE)
-  # phenotypes <- as.data.frame(phenotypes,stringsAsFactors=FALSE)
-  
+
   #1
   results$LR_p.reject <- (results$LR_p<0.05)
   results$DRM_p.reject <- (results$DRM_p<0.05)
