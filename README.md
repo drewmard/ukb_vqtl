@@ -122,7 +122,7 @@ Directory: ./scripts/gxe
 
 ## Large gene-environment interactions influence BMI
 
-./scripts/gxe
+Directory: ./scripts/gxe
 
 ### Directory: fto
 
@@ -143,7 +143,7 @@ Directory: ./scripts/gxe
 
 ## GxE interactions have pleiotropic effects over BMI and diabetes risk
 
-./scripts/gxe/pleiotropy
+Directory: ./scripts/gxe/pleiotropy
 
 #### (A) create_clinical_pheno.R
 **Description:** Create disease case phenotypes.
@@ -162,6 +162,7 @@ Directory: ./scripts/gxe
 
 
 ## Evidence for weak epistatic interactions associated with BMI
+
 Directory: ./scripts/GxG
 
 #### (A) GxG_results_analyze.R
@@ -178,6 +179,7 @@ Directory: ./scripts/GxG
 
  
 ## vQTLs are linked to environmentally-influenced pathways and phenotypes
+
 Directory: ./scripts/phewas
 
 #### (A) variant_index_query.sh
