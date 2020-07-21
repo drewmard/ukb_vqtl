@@ -80,12 +80,6 @@ validation_statistics <- function(results.mg,thres.vec=10^-(seq(0,3,by=0.5)),fli
       winners_curse=NA
     }
     
-    # se=sqrt(p*(1-p)/(nrow(df.sub)))
-    # p+1.96*se
-    # same_sign_prop <- nrow(df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y)))/nrow(df.sub); 
-    # winners_curse <- nrow(subset(df.sub.sub,abs(Estimate.x) > abs(Estimate.y)))/nrow(df.sub.sub)
-    # n=nrow(df.sub)
-    
     if (flip) {
       df.sub <- subset(results.mg,results.mg[,6] < thres); 
       df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y))
@@ -110,12 +104,6 @@ validation_statistics <- function(results.mg,thres.vec=10^-(seq(0,3,by=0.5)),fli
       pval2=NA
       winners_curse2=NA
     }
-    
-    
-    # df.sub <- subset(results.mg,results.mg[,4] > thres); 
-    # same_sign_prop2 <- nrow(df.sub.sub <- subset(df.sub,sign(Estimate.x)==sign(Estimate.y)))/nrow(df.sub); 
-    # winners_curse2 <- nrow(subset(df.sub.sub,abs(Estimate.x) > abs(Estimate.y)))/nrow(df.sub.sub)
-    # n2=nrow(df.sub)
     
     df.tmp <- data.frame(thres=thres,
                          N=N,p=p,lower=lower,upper=upper,pval=pval,winner=winners_curse,
@@ -245,91 +233,3 @@ fwrite(df.save.only_mean.strict,f.out,quote = F,na='NA',sep = '\t',row.names = F
 
 
 
-
-# df.save <- validation_statistics(results.mg,PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.var_raw <- validation_statistics(subset(results.mg,P.VAR.RAW < 5e-8),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)#,thres.vec=10^-(seq(0,1.5,by=0.5)))
-# df.save.only_mean <- validation_statistics(subset(results.mg,P.MEAN < 5e-8 & P.VAR.RAW > 5e-8 & P.VAR.RINT > 1e-5),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.mean.plus_var <- validation_statistics(subset(results.mg,P.MEAN < 5e-8 & (P.VAR.RAW < 5e-8 | P.VAR.RINT < 1e-5)),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.mean <- validation_statistics(subset(results.mg,P.MEAN < 5e-8),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.strict_mean <- validation_statistics(subset(results.mg,P.MEAN < 1e-15),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# # df.save.var_raw <- validation_statistics(subset(results.mg,P.VAR.RAW < 5e-8),flip = F,thres.vec=10^-(seq(0,2.5,by=0.5)),PVAL.THRES = thres)
-# df.save.var_raw <- validation_statistics(subset(results.mg,P.VAR.RAW < 5e-8),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)#,thres.vec=10^-(seq(0,1.5,by=0.5)))
-# df.save.var_rint <- validation_statistics(subset(results.mg,P.VAR.RINT < 1e-5),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.strict_var_rint <- validation_statistics(subset(results.mg,P.VAR.RINT < 5e-8),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.only_var_rint <- validation_statistics(subset(results.mg,P.VAR.RINT < 1e-5 & P.VAR.RAW > 5e-8 & P.MEAN > 5e-8),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.var_raw <- validation_statistics(subset(results.mg,P.VAR.RAW < 5e-8),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)#,thres.vec=10^-(seq(0,1.5,by=0.5)))
-# df.save.mean.var_raw_matched_mean <- validation_statistics(subset(results.mg,P.VAR.RAW > 5e-8 & P.MEAN < 5e-17),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)#,thres.vec=10^-(seq(0,1.5,by=0.5)))
-# 
-# x <- subset(results.mg,P.VAR.RAW > 5e-8 & P.MEAN < 5e-17); x[order(x[,4])[1:5],]
-# x <- subset(results.mg,P.VAR.RAW > 5e-8); x[order(x[,4])[1:5],]
-# 
-# nrow(subset(results.mg,P.MEAN < 5e-8 & FDR < 0.1))
-# nrow(subset(results.mg,P.VAR.RAW < 5e-8 & FDR < 0.1))
-# nrow(subset(results.mg,P.MEAN < 5e-8 & P.VAR.RAW > 5e-8 & FDR < 0.1))
-# 
-# # median(subset(results.mg,P.VAR.RAW < 5e-8)$P.MEAN)
-# # median(subset(results.mg,P.VAR.RAW > 5e-8 & P.MEAN < 5e-17)$P.MEAN)
-# 
-# # df.save.var_rint <- validation_statistics(subset(results.mg,P.VAR.RINT < 1e-5),flip = F,thres.vec=10^-(seq(0,2,by=0.5)),PVAL.THRES = thres)
-# 
-# # df.save.var_rint <- validation_statistics(subset(results.mg,P.VAR.RINT < 5e-8)) # rs13198716 interesting. all interactions replicate
-# # df.save.var_rint <- validation_statistics(subset(results.mg,P.VAR.RINT < 1e-5 & P.VAR.RINT > 5e-8),thres.vec=10^-(seq(0,2,by=0.5)))
-# df.save.mean.var_raw <- validation_statistics(subset(results.mg,P.MEAN < 5e-8 & P.VAR.RAW < 5e-8),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.mean.var_rint <- validation_statistics(subset(results.mg,P.MEAN < 5e-8 & P.VAR.RINT < 1e-5),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.var_raw.var_rint <- validation_statistics(subset(results.mg,P.VAR.RAW < 5e-8 & P.VAR.RINT < 1e-5),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.mean.var_raw.var_rint <- validation_statistics(subset(results.mg,P.MEAN < 5e-8 & P.VAR.RAW < 5e-8 & P.VAR.RINT < 1e-5),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.only_mean <- validation_statistics(subset(results.mg,P.MEAN < 5e-8 & P.VAR.RAW > 5e-8 & P.VAR.RINT > 1e-5),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.mean.plus_var <- validation_statistics(subset(results.mg,P.MEAN < 5e-8 & (P.VAR.RAW < 5e-8 | P.VAR.RINT < 1e-5)),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.some_var <- validation_statistics(subset(results.mg,(P.VAR.RAW < 5e-8 | P.VAR.RINT < 1e-5)),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# 
-# df.save.strict_mean.no_var <- validation_statistics(subset(results.mg,P.MEAN < 1e-15 & P.VAR.RAW > 5e-8 & P.VAR.RINT > 1e-5),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# df.save.strict_mean.plus_var <- validation_statistics(subset(results.mg,P.MEAN < 1e-15 & (P.VAR.RAW < 5e-8 | P.VAR.RINT < 1e-5)),PVAL.THRES = thres,thres.vec = THRESHOLD_VECTOR,flip = F)
-# 
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.full.',suff,'txt')
-# fwrite(df.save,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.var_raw.',suff,'txt')
-# fwrite(df.save.var_raw,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.var_rint.',suff,'txt')
-# fwrite(df.save.var_rint,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.mean.var_raw.',suff,'txt')
-# fwrite(df.save.mean.var_raw,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.mean.var_rint.',suff,'txt')
-# fwrite(df.save.mean.var_rint,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.var_raw.var_rint.',suff,'txt')
-# fwrite(df.save.var_raw.var_rint,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.only_mean.',suff,'txt')
-# fwrite(df.save.only_mean,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.mean.plus_var.',suff,'txt')
-# fwrite(df.save.mean.plus_var,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.some_var.',suff,'txt')
-# fwrite(df.save.some_var,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.strict_mean.no_var.',suff,'txt')
-# fwrite(df.save.strict_mean.no_var,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.strict_mean.plus_var.',suff,'txt')
-# fwrite(df.save.strict_mean.plus_var,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.mean.var_raw_matched_mean.',suff,'txt')
-# fwrite(df.save.mean.var_raw_matched_mean,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# 
-# 
-# 
-# df.save.full <- data.frame(
-#   thres=df.save$thres,
-#   p.all=df.save$p,
-#   p.mean=df.save.mean$p,
-#   p.strict_mean=df.save.strict_mean$p,
-#   p.var_raw=df.save.var_raw$p,
-#   p.var_rint=df.save.var_rint$p,
-#   p.mean.var_raw=df.save.mean.var_raw$p,
-#   p.mean.var_rint=df.save.mean.var_rint$p,
-#   p.var_raw.var_rint=df.save.var_raw.var_rint$p,
-#   p.mean.var_raw.var_rint=df.save.mean.var_raw.var_rint$p
-# )
-# 
-# f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.validation.summary.',suff,'txt')
-# fwrite(df.save.full,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# 
-# # f.out <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.','ALL','.ext.more_snp.',suff,'txt')
-# # fwrite(results.mg,f.out,quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
-# 
-# 
-# 

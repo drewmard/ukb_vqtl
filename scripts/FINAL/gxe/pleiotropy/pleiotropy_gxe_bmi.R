@@ -110,7 +110,5 @@ df.results.save$FDR <- p.adjust(df.results.save[,5],method = 'fdr')
 f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.','ALL','.pleiotropy.used_bmi.txt')
 fwrite(df.results.save,f,quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 
-# df.results.save$FDR <- p.adjust(df.results.save[,2],method = 'fdr')
 subset(df.results.save,FDR<0.1)
-
 df.results.save[order(df.results.save$FDR)[1:5],]

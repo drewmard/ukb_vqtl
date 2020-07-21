@@ -12,8 +12,6 @@ set.seed(031995)
 i.20 <- sample(1:nrow(full_dataset),floor(0.25*nrow(full_dataset)),replace = F)
 dataf.20 <- full_dataset[i.20,]
 dataf.60 <- full_dataset[-i.20,]
-# sum(!is.na(dataf.20[,phenoName]))
-# sum(!is.na(dataf.60[,phenoName]))
 
 food_covariates <- c('Cooked vegetable intake',
                      'Salad / raw vegetable intake',
@@ -33,17 +31,6 @@ food_covariates <- c('Cooked vegetable intake',
                      'Pork intake',
                      'Cheese intake',
                      'Salt added to food')
-                     #,'Variation in diet')# ,'Alcohol intake frequency')
-# food_covariates <- c(
-#   'Bread intake',
-#   'Cereal intake',
-#   'Tea intake',
-#   'Coffee intake',
-#   'Water intake',
-#   'Cheese intake',
-#   'Salt added to food',
-#   c('veggie_intake','fruit_intake','fish_intake','meat_intake')
-# )
 food_covariates <- gsub("-| |/",'_',c(food_covariates))
 
 mod.formula.2 <- formula(paste(
@@ -71,7 +58,6 @@ ind <- which(geno_names %in% dataf.60$IID)
 dataf.60 <- dataf.60[match(geno_names[ind],dataf.60$IID),]
 s='80'; f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diet_data.',pheno,'.GxE.',s,'.txt')
 fwrite(dataf.60[,c('IID','DIET_SCORE')],f,quote = F,na='NA',row.names = F,col.names = T,sep = '\t')
-
 
 environmental_factors <- c('DIET_SCORE')
 # can loop through and call covariates if necessary
@@ -170,14 +156,6 @@ for (k in 1:length(environmental_factors)) {
 
 fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 
-
-######
-
-s='20';results.20 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
-s='80';results.80 <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.',s,'.diet_score.more_snp.txt'),data.table = F,stringsAsFactors = F)
-results.mg <- merge(results.80,results.20,by=c('SNP','E'))
-results.mg[order(results.mg[,4],decreasing = F),][1:5,]
-subset(results.mg,results.mg[,4] < 0.05 / nrow(results.mg))
 
 
 

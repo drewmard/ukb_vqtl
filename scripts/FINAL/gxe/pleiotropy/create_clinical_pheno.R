@@ -65,10 +65,5 @@ HBP$HBP[HBP$HBP == 4] <- 1
 f.out<-'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/HBP.txt'
 fwrite(HBP,f.out,quote = F,na='NA',sep = '\t',col.names = T,row.names = F)
 
-hypertension <- data.frame(eid=pheno$eid,Hypertension=as.numeric(pheno[,'20002-0.0']))
-hypertension$Hypertension <- as.numeric(hypertension$Hypertension==1065)
-f.out<-'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/Hypertension.txt'
-fwrite(hypertension,f.out,quote = F,na='NA',sep = '\t',col.names = T,row.names = F)
-
 
 

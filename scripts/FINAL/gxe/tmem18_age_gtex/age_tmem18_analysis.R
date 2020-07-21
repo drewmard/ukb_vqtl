@@ -13,14 +13,8 @@ EXPR.df$SAMP2 <- sapply(strsplit(EXPR.df$SAMP,"-"),paste.s)
 df.infil <- fread('/athena/elementolab/scratch/anm2868/GTEx/GTEx_infil/output/infiltration_profiles/GTEx_v7_genexpr_ALL.CIBERSORT.ABS-T.QN-F.perm-1000.txt',data.table = F,stringsAsFactors = F)
 
 df.mg <- merge(EXPR.df[,c('SAMP',GENE[[1]])],df.infil,by.x='SAMP',by.y='Input Sample')
-df.mg.sub <- subset(df.mg,SMTSD %in% c('Adipose - Subcutaneous','Adipose - Visceral (Omentum)'))
-df.mg.sub <- subset(df.mg,SMTSD %in% c('Adipose - Subcutaneous'))
 df.mg.sub <- subset(df.mg,SMTSD %in% c('Adipose - Visceral (Omentum)'))
 
-t.test(subset(df.mg.sub,SMTSD=='Adipose - Subcutaneous')[,GENE[[1]]],
-       subset(df.mg.sub,SMTSD=='Adipose - Visceral (Omentum)')[,GENE[[1]]])
-
-cor.test(df.mg.sub[,GENE[[1]]],as.numeric(as.factor(df.mg.sub$AGE)))
 cor.test(df.mg.sub[,GENE[[1]]],as.numeric(as.factor(df.mg.sub$AGE)))
 
 tmp <- df.mg.sub[,c(GENE[[1]],'AGE')]

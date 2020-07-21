@@ -1,6 +1,8 @@
 # Leveraging phenotypic variability to identify genetic interactions in human phenotypes
 
-This repository contains all code to conduct the analyses present in the manuscript, "Leveraging phenotypic variability to identify genetic interactions in human phenotypes". This research describes a statistical framework to find SNPs associated with the means and variances of a quantitative phenotype, and then using these SNPs to discover gene-environment interactions. We applied these methods to study the genetic basis of body mass index levels and diabetes risk.
+## Information about the repository
+
+This repository contains all computer code to conduct the analyses present in the manuscript, "Leveraging phenotypic variability to identify genetic interactions in human phenotypes". This research describes a statistical framework to find SNPs associated with the means and variances of a quantitative phenotype, and then using these SNPs to discover gene-environment interactions. We applied these methods to study the genetic basis of body mass index levels and diabetes risk.
 
 All scripts are written in the R or Bash programming languages. The analysis was performed on a linux system. Plots were created on a macOS Catalina system.
 
@@ -37,13 +39,12 @@ Directory: ./scripts/gwas
 ### Directory: preprocess
 
 #### (A) Various scripts
-**Description:** Various scripts to partition UKB into discovery and validation cohorts (1), pull study covariates (2, 3, 4), and generate the full dataset for GWAS (5).
+**Description:** Various scripts to partition UKB into discovery and validation cohorts (1), pull study covariates (2,3), and generate the full dataset for GWAS (4).
 
 	1. split_80_20.R
 	2. sample_qc.R
 	3. gen_cov1.R
-	4. gen_cov2.R
-	5. gen_full_data.R
+	4. gen_full_data.R
 	
 #### (B) preprocess.R
 **Description:** Adjust phenotype for covariates prior to running a GWAS.
@@ -52,7 +53,7 @@ Directory: ./scripts/gwas
 ### Directory: run
 
 #### (A) PIPELINE.sh
-**Description:** This is the master pipeline script used to perform a GWAS for muQTLs, raw vQTLs, and RINT vQTLs in UKB. It was manually ran piece-by-piece. 
+**Description:** This is the master pipeline script used to perform a GWAS for muQTLs, raw vQTLs, and RINT vQTLs in UKB. It was manually ran piece-by-piece, and uses the following scripts:
 
 	1. run_GWAS.impute.sh
 	2. run_vGWAS_subset.sh
@@ -87,15 +88,77 @@ Briefly, it runs a GWAS for muQTLs using (1) and for vQTLs using (2). Next, it m
 
 ## Discovery and validation of gene-environment interactions 
 
-#### generate environmental factors
-gen_envir_factors.R
+Directory: ./scripts/gxe
+
+#### (A) gen_envir_factors.R
+**Description:** Pull environmental information and create co-factors for GxE interaction analysis, with the exception of the diet score co-factor.
+
+#### (B) Scripts to perform GxE analysis
+**Description:** (1,2) perform GxE interaction testing. (3,4) perform SNP-by-diet score interaction testing. (1,3) is using SNP candidates, while (2,4) uses matched genome-wide SNPs. 
+
+	(1) GxE_updated.R
+	(2) GxE_updated.matched.R
+	(3) GxE_diet_score.R
+	(4) GxE_diet_score.matched.R
+
+#### (C) GxE_results.summarize.R
+**Description:** This is a broad script used to parse the GxE interaction results and extract discovery rates, validation rates, and other insights.
+
+#### (D) Figures describing validation rates
+**Description:** (1,2) create figures describing validation rates between discovery and validation cohorts.
+
+	(1) GxE_validation_plots.R
+	(2) GxE_validation_plots2.R
+
+#### (E) gxe_heatmap.R
+**Description:** Creates a heat map of GxE results.
+
+#### (F) results_vs_matched_discovery.R
+**Description:** Compares discovery rates between SNP candidates and random, matched genome-wide SNPs using a permutation procedure.
+
+#### (G) correlation_with_gxe_effects.R
+**Description:** Estimates correlation between interaction effects and muQTL effects, raw vQTL effects, RINT vQTL effects, and dQTL effects, and visualizes the results.
 
 
 ## Large gene-environment interactions influence BMI
 
+./scripts/gxe
+
+### Directory: fto
+
+#### (A) joint_model.R
+**Description:** Fits a model that jointly fits all individual significant GxE interactions found with the *FTO* intronic genotype.
+
+#### (B) marginal_effects.R
+**Description:** Marginal *FTO* effects on BMI, conditional on environmental factor levels.
+
+#### (C) bmi_marginal_forest_plot.R
+**Description:** Forest plot visualization of the estimated effects measured in (B).
+
+### Directory: tmem18_age_gtex
+
+#### (A) age_tmem18_analysis.R
+**Description:** Correlation between age and *TMEM18* gene expression in visceral adipose tissue GTEx samples.
+
 
 ## GxE interactions have pleiotropic effects over BMI and diabetes risk
 
+./scripts/gxe/pleiotropy
+
+#### (A) create_clinical_pheno.R
+**Description:** Create disease case phenotypes.
+
+#### (B) pleiotropy_gxe_bmi.R
+**Description:** Perform GxE testing in case-control disease phenotypes.
+
+#### (C) pleiotropy_gxe_plots.R
+**Description:** Plot estimated (BMI) effects in the discovery cohort with the (diabetes) effects estimated in the validation cohort.
+
+#### (D) diabetes_gxe_marginal.R
+**Description:** Estimate the marginal effect of the *BARX1* regulatory SNP on diabetes risk, conditional on physical activity level.
+
+#### (E) diabetes_gxe_marginal_plots.R
+**Description:** Forest plot of the estimated effects from (D).
 
 
 ## Evidence for weak epistatic interactions associated with BMI
@@ -135,6 +198,8 @@ Directory: ./scripts/phewas
 
 ## Polygenic heritability analysis implicates stomach cell types in regulating BMI variance
 
+Directory: ./scripts/ldsc
+
 #### Various scripts
 **Description:** Three scripts used to generate summary statistics for LDSC input (1), to run LDSC and receive results (2), and to visualize the output (3).
 
@@ -143,6 +208,8 @@ Directory: ./scripts/phewas
 	3. ldsc_plot.R
 
 ## Other scripts
+
+Directory: ./scripts/other
 
 #### (A) FPR_inflation_vqtl.R
 **Description:** Generates a SNP associated with the variance of a phenotype with no true phenotypic effect, and assesses the false positive rate and visualizes the results.

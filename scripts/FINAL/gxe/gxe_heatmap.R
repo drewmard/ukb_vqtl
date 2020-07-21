@@ -1,8 +1,5 @@
-
-
 library(data.table)
 library(ggplot2)
-# f<-'/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxE/GxE_results/bmi.GxE.ALL_RESULTS.trim.txt'
 f<-'/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/sig_results/bmi.sig.GxE.txt'
 df <- fread(f,data.table = F,stringsAsFactors = F)
 colnames(df)[4] <- 'P_GxE'

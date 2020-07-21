@@ -172,7 +172,6 @@ for (s in c('80','20')) {
     }
   }
   
-  # fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
   fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.QTL_matched_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 }
 

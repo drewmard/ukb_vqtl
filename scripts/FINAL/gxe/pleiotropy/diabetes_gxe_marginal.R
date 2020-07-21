@@ -125,14 +125,3 @@ results.df.save <- as.data.frame(do.call(rbind,results.df.lst))
 fwrite(results.df.save,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diabetes_bmi_marginal.used_bmi.txt',quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
 # fwrite(results.df.save,'/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diabetes_bmi_marginal.txt',quote = F,na='NA',sep = '\t',row.names = F,col.names = T)
 
-# mod.formula <- formula(paste(phenoName,' ~ age+age2+genotyping.array+sex+age*sex+age2*sex+
-#                PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
-#                PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+SNP'))
-# mod <- glm(mod.formula,data=full_dataset,family=binomial(link="logit"))
-# res <- summary(mod)$coef['SNP',c("Estimate",'Std. Error',"Pr(>|t|)")]
-
-# cor.test(full_dataset$SNP,full_dataset$PA)
-
-# do the same for the 20% set.
-
-
