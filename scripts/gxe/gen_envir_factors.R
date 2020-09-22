@@ -81,8 +81,8 @@ cov <- pheno2[,c('eid',
 )]
 colnames(cov)[2:ncol(cov)] <- COL_NAMES
 
-envir_data$alcohol.freq.E <- cov$alcohol.freq;
-envir_data$alcohol.freq.E[which(envir_data$alcohol.freq.E %in% c(-3))] <- NA
+envir_data$Alcohol_intake_frequency <- cov$alcohol.freq;
+envir_data$Alcohol_intake_frequency[which(envir_data$Alcohol_intake_frequency %in% c(-3))] <- NA
 
 x <- c('1289-0.0','1299-0.0','1309-0.0','1319-0.0','1329-0.0','1339-0.0',
        '1349-0.0','1359-0.0','1369-0.0','1379-0.0','1389-0.0',

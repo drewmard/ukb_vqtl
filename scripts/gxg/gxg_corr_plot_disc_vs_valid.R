@@ -10,7 +10,7 @@ g <- ggplot(data=df, aes(x=SUB, y=cor, ymin=LOW, ymax=HI,col=SUB,fill=SUB)) +
   geom_point(size=3, shape=21, colour="white", stroke = 0.5,position=position_dodge(width = 0.5)) +
   geom_hline(yintercept=0, lty=2,col='red') +
   coord_flip() +
-  labs(x="Subset",y="Correlation of GxG effects (Discovery vs Validation)",col='Subset') +
+  labs(x="Subset",y="Correlation of GxG effects (Discovery vs Replication)",col='Subset') +
   theme_bw()  +
   theme(axis.text = element_text(family = 'Helvetica'),legend.position = 'none')
 

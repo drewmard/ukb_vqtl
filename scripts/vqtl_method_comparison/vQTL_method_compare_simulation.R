@@ -38,6 +38,14 @@ testing <- function(j,i=1,type='gxg') {
   }
   PHENOTYPE <- scale(phenotype.g + phenotype.e)[,1]
   
+  # 
+  min_phenotype <- abs(min(phenotype))+1
+  tested_phenotype <- list()
+  tested_phenotype[['orig']]  <- phenotype
+  tested_phenotype[['rint']]  <- rntransform(phenotype)
+  tested_phenotype[['log']] <- log(phenotype+min_phenotype)
+  tested_phenotype[['recip']]  <- 1/phenotype
+  
   # perform vqtl tests
   res <- as.numeric(DeviationRegressionModel(PHENOTYPE,SNP))
   beta <- res[1]
@@ -45,7 +53,7 @@ testing <- function(j,i=1,type='gxg') {
   LT <- leveneTest(PHENOTYPE,as.factor(SNP))$"Pr(>F)"[1]
   BT <- bartlett.test(PHENOTYPE,as.factor(SNP))$p.value
   FK <- fligner.test(PHENOTYPE,as.factor(SNP))$p.value
-  DGLM <- summary(dglm(PHENOTYPE~SNP))$dispersion.summary$coef[1,4]
+  DGLM <- summary(dglm(PHENOTYPE~SNP))$dispersion.summary$coef[2,4]
   TSSR <- summary(lm(PHENOTYPE^2 ~ SNP))$coef[2,4]
   
   # save results

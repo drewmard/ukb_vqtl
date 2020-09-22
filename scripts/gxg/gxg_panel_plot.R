@@ -28,7 +28,7 @@ g2 <- ggplot(df,aes(x=(BETA_INT.80),y=(BETA_INT.20),col=as.factor(Validate))) +
   geom_point(size=rel(0.8)) + 
   geom_abline(slope=1,intercept = 0,col='red',lty='dashed') + geom_smooth(method='lm',col='red',se=F) +
   scale_color_manual(values=c('black','red')) + 
-  labs(x='Interaction effects (80% discovery set)',y='Interaction effects (20% validation set)') +
+  labs(x='Interaction effects (80% discovery set)',y='Interaction effects (20% replication set)') +
    theme_bw() + theme(legend.position = 'none',panel.grid=element_blank())
 
 df.sub <- subset(df,P.80<0.001)
@@ -36,7 +36,7 @@ g4 <- ggplot(df.sub,aes(x=(BETA_INT.80),y=(BETA_INT.20),col=as.factor(Validate))
   geom_point(size=rel(1)) + 
   geom_abline(slope=1,intercept = 0,col='red',lty='dashed') + geom_smooth(method='lm',col='red',se=F) +
   scale_color_manual(values=c('black','red')) + 
-  labs(x='Interaction effects (80% discovery set)',y='Interaction effects (20% validation set)') +
+  labs(x='Interaction effects (80% discovery set)',y='Interaction effects (20% replication set)') +
   theme_bw() + theme(legend.position = 'none',panel.grid=element_blank())
 
 cor.test((df$BETA_INT.80),(df$BETA_INT.20))
@@ -46,7 +46,7 @@ thres=0.05; suff <- ifelse(is.null(thres),'','PVAL.')
 f <- paste0('/Users/andrewmarderstein/Documents/Research/vQTL/ukb_vqtl/output/GxG_2/ukbb.bmi.merged_subset2.GxG.FULL.valid.txt')
 df.valid <- fread(f,data.table = F,stringsAsFactors = F)
 g3<-ggplot(subset(df.valid,thres >= 1e-4),aes(x=-log10(thres),y=p)) + geom_line() + geom_point() + theme_bw() +
-  labs(x=expression(~-log[10](italic(P)) ~ threshold),y='Validation Rate') +
+  labs(x=expression(~-log[10](italic(P)) ~ threshold),y='Replication Rate') +
   geom_hline(yintercept=ifelse(is.null(thres),0.5,0.025),linetype='dashed',col='red') +
   geom_ribbon(aes(ymin=lower,ymax=upper),linetype=2,alpha=0.1) + ylim(0,1) +
   theme(panel.grid = element_blank()) + scale_x_continuous(breaks = c(1,2,3,4,5))

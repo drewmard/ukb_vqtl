@@ -19,6 +19,8 @@ df.mg$Stomach <- 0
 df.mg$Stomach[df.mg$Name=='A03.556.875.875.Stomach'] <- 1
 df.mg$Stomach[df.mg$Name=='Stomach'] <- 2
 
+subset(df.mg,Stomach!=0)
+
 cor.res<-cor.test(df.mg$Coefficient.MEAN,df.mg$Coefficient.VAR)
 cor.res$estimate; cor.res$p.value
 

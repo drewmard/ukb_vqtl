@@ -1,37 +1,50 @@
 # diet score
 # Sys.sleep(600)
+use_rint <- TRUE
+
+# recommend pre-processing using GxE_updated.R to get bmi raw or rint
 library(data.table)
 s='80'
 full_dataset <- fread(paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/full_data.bmi.GxE.',s,'.txt'),data.table = F,stringsAsFactors = F)
 colnames(full_dataset) <- gsub("-| |/",'_',colnames(full_dataset))
 
 pheno <- 'bmi'
-phenoName <- paste0(pheno,'.na')
+if (use_rint) {
+  # full_dataset[,paste0(pheno,'.na.RINT')] <- rntransform(full_dataset[,paste0(pheno,'.na')])
+  phenoName <- paste0(pheno,'.na.RINT')
+} else {
+  phenoName <- paste0(pheno,'.na')
+}
 
 set.seed(031995)
 i.20 <- sample(1:nrow(full_dataset),floor(0.25*nrow(full_dataset)),replace = F)
 dataf.20 <- full_dataset[i.20,]
 dataf.60 <- full_dataset[-i.20,]
 
-food_covariates <- c('Cooked vegetable intake',
-                     'Salad / raw vegetable intake',
-                     'Fresh fruit intake',
-                     'Dried fruit intake',
-                     'Bread intake',
-                     'Cereal intake',
-                     'Tea intake',
-                     'Coffee intake',
-                     'Water intake',
-                     'Oily fish intake',
-                     'Non-oily fish intake',
-                     'Processed meat intake',
-                     'Poultry intake',
-                     'Beef intake',
-                     'Lamb/mutton intake',
-                     'Pork intake',
-                     'Cheese intake',
-                     'Salt added to food')
-food_covariates <- gsub("-| |/",'_',c(food_covariates))
+# food_covariates <- c('Cooked vegetable intake',
+#                      'Salad / raw vegetable intake',
+#                      'Fresh fruit intake',
+#                      'Dried fruit intake',
+#                      'Bread intake',
+#                      'Cereal intake',
+#                      'Tea intake',
+#                      'Coffee intake',
+#                      'Water intake',
+#                      'Oily fish intake',
+#                      'Non-oily fish intake',
+#                      'Processed meat intake',
+#                      'Poultry intake',
+#                      'Beef intake',
+#                      'Lamb/mutton intake',
+#                      'Pork intake',
+#                      'Cheese intake',
+#                      'Salt added to food')
+# food_covariates <- gsub("-| |/",'_',c(food_covariates))
+
+food_covariates <- c('cooked.veggie','raw.veggie','fresh.fruit','dried.fruit','oily.fish','non.oily.fish',
+                      'processed.meat','poultry','beef','lamb','pork',
+                      'cheese','milk','bread.intake','cereal.intake',
+                      'salt.added.to.food','tea','coffee')
 
 mod.formula.2 <- formula(paste(
   phenoName,
@@ -49,14 +62,19 @@ dataf.60$DIET_SCORE <- DIET_SCORE
 
 # genetic data
 library(BEDMatrix)
-f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset')
+f.geno <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxG_2/ukbb.',pheno,'.merged_subset2')
 geno <- BEDMatrix(f.geno)
 geno_names <- unlist(lapply(strsplit(rownames(geno),'_'),function(x) {return(x[2])}))
 
 # merge stuff
 ind <- which(geno_names %in% dataf.60$IID)
 dataf.60 <- dataf.60[match(geno_names[ind],dataf.60$IID),]
-s='80'; f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diet_data.',pheno,'.GxE.',s,'.txt')
+s='80'
+if (!use_rint) {
+  f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diet_data.',pheno,'.GxE.',s,'.txt')
+} else {
+  f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diet_data.',pheno,'.GxE.',s,'.RINT.txt')
+}
 fwrite(dataf.60[,c('IID','DIET_SCORE')],f,quote = F,na='NA',row.names = F,col.names = T,sep = '\t')
 
 environmental_factors <- c('DIET_SCORE')
@@ -97,9 +115,14 @@ for (k in 1:length(environmental_factors)) {
   }
 }
 
-fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+if (use_rint) {
+  f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.RINT.txt')
+} else {
+  f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.txt')
+}
+fwrite(df.results.save,f,quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
 
-###### validation testing set
+###### replication testing set
 
 library(data.table)
 s='20'
