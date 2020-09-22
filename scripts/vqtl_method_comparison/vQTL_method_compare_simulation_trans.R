@@ -169,7 +169,8 @@ runSimulation <- function(i,type='gxg') {
 MAF1 <- 0.4
 MAF2 <- 0.4
 nsim <- 1; 
-nindiv <- 250000
+nindiv <- 1000
+# nindiv <- 250000
 # genetic_variance_explained.vec <- seq(0.002,0.02,by=0.002)
 genetic_variance_explained.vec <- seq(0.002,0.02,by=0.002)[1:2]
 # phenotype_noise <- 'NORMAL'
