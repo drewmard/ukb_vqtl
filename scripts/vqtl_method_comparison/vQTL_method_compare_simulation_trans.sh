@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH -J sim
-#SBATCH -n 64
-#SBATCH --mem=128G
+#SBATCH -n 16
+#SBATCH --mem=48G
 
 spack load /kvarx7m # car
 spack load /gmwzft7 # quantreg

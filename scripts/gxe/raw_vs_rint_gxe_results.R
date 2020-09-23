@@ -41,6 +41,7 @@ sum(res.sub$FDR.RAW < 0.1)/nrow(res.sub)
 sum(res.sub$FDR.RINT < 0.1)/nrow(res.sub)
 
 
+aggregate(results.mg[,c('FDR.RAW','FDR.RINT')],by=list(results.mg$E),function(x) {mean(x<0.1)})
 
 
 

@@ -156,7 +156,7 @@ testing <- function(j,i=1,type='gxg') {
 }
 
 runSimulation <- function(i,type='gxg') {
-  tests <- mclapply(1:nsim,testing,i=i,type=type,mc.cores = 64)
+  tests <- mclapply(1:nsim,testing,i=i,type=type,mc.cores = 16)
   results.tmp <- do.call(rbind,tests)
   # genotypes.tmp <- do.call(cbind,lapply(tests,function(x){x[[2]]}))
   # phenotypes.tmp <- do.call(cbind,lapply(tests,function(x){x[[3]]}))
@@ -176,7 +176,7 @@ genetic_variance_explained.vec <- seq(0.002,0.02,by=0.002)[3:5]
 # phenotype_noise <- 'NORMAL'
 # phenotype_noise <- 'CHISQ4'
 # simulation_type='gxg'
-for (phenotype_noise in c('NORMAL','CHISQ4')) {
+for (phenotype_noise in c('CHISQ4','NORMAL')) {
   for (simulation_type in c('gxg','mean')) {
     simulation_results <- lapply(1:length(genetic_variance_explained.vec),runSimulation,type=simulation_type)
     results <- do.call(rbind,simulation_results)
