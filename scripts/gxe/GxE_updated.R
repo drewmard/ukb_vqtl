@@ -49,7 +49,7 @@ for (s in c('80','20')) {
   covariate_environmental_dataset <- merge(covariate_dataset,environmental_dataset,by='IID')
   
   # merge phenotypic data
-  phenotype_dataset <- fam[,c('IID',phenoName)] # read in all phenotypes at once? 
+  phenotype_dataset <- fam[,c('IID',unique(c(pheno,paste0(pheno,'.na'),phenoName)))] # read in all phenotypes at once? 
   full_dataset <- merge(covariate_environmental_dataset,phenotype_dataset,by='IID')
 
   # genetic data

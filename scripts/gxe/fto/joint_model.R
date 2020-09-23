@@ -29,7 +29,7 @@ phenoName <- paste0(pheno,'.na')
 mod.formula <- formula(paste(phenoName,' ~ age+age2+genotyping.array+sex+age*sex+age2*sex+
                PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
                PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+SNP'))
-mod <- lm(mod.formula,data = df)
+mod <- lm(mod.formula,data = df,na.action = na.exclude)
 summary(mod)$coef['SNP',c(1,4)]
 
 mod.formula <- formula(paste(phenoName,' ~ age+age2+genotyping.array+sex+age*sex+age2*sex+
