@@ -174,14 +174,14 @@ nsim <- 1000;
 # nindiv <- 1000
 nindiv <- 250000
 # genetic_variance_explained.vec <- seq(0.002,0.02,by=0.002)
-genetic_variance_explained.vec <- seq(0.002,0.02,by=0.002)[4:5]
+genetic_variance_explained.vec <- seq(0.002,0.02,by=0.002)[6:10]
 # phenotype_noise <- 'NORMAL'
 # phenotype_noise <- 'CHISQ4'
 # simulation_type='gxg'
 # choose_transformations <- c('orig','rint','log','recip')
 choose_transformations <- c('orig')
-for (phenotype_noise in c('CHISQ15')) {
-# for (phenotype_noise in c('CHISQ4','NORMAL')) {
+# for (phenotype_noise in c('CHISQ15')) {
+for (phenotype_noise in c('CHISQ4','NORMAL')) {
   for (simulation_type in c('gxg','mean')) {
     simulation_results <- lapply(1:length(genetic_variance_explained.vec),runSimulation,type=simulation_type)
     results <- do.call(rbind,simulation_results)
