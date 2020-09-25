@@ -1,6 +1,7 @@
 # diet score
 # Sys.sleep(600)
-use_rint <- TRUE
+use_rint <- FALSE
+use_log <- TRUE
 
 # recommend pre-processing using GxE_updated.R to get bmi raw or rint
 library(data.table)
@@ -12,6 +13,8 @@ pheno <- 'bmi'
 if (use_rint) {
   # full_dataset[,paste0(pheno,'.na.RINT')] <- rntransform(full_dataset[,paste0(pheno,'.na')])
   phenoName <- paste0(pheno,'.na.RINT')
+} else if (use_log) {
+  phenoName <- paste0(pheno,'.na.log')
 } else {
   phenoName <- paste0(pheno,'.na')
 }
@@ -70,10 +73,12 @@ geno_names <- unlist(lapply(strsplit(rownames(geno),'_'),function(x) {return(x[2
 ind <- which(geno_names %in% dataf.60$IID)
 dataf.60 <- dataf.60[match(geno_names[ind],dataf.60$IID),]
 s='80'
-if (!use_rint) {
-  f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diet_data.',pheno,'.GxE.',s,'.txt')
-} else {
+if (use_rint) {
   f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diet_data.',pheno,'.GxE.',s,'.RINT.txt')
+} else if (use_log) {
+  f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diet_data.',pheno,'.GxE.',s,'.log.txt')
+} else {
+  f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/diet_data.',pheno,'.GxE.',s,'.txt')
 }
 fwrite(dataf.60[,c('IID','DIET_SCORE')],f,quote = F,na='NA',row.names = F,col.names = T,sep = '\t')
 
@@ -117,6 +122,8 @@ for (k in 1:length(environmental_factors)) {
 
 if (use_rint) {
   f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.RINT.txt')
+} else if (use_log) {
+  f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.log.txt')
 } else {
   f <- paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.diet_score.more_snp.txt')
 }

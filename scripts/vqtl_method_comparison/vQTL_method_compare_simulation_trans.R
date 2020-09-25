@@ -114,6 +114,8 @@ testing <- function(j,i=1,type='gxg') {
     phenotype.e <- rnorm(nindiv,0,sqrt(environmental_variance))
   } else if (phenotype_noise=='CHISQ4') {
     phenotype.e <- as.numeric(sqrt(environmental_variance)*scale(rchisq(nindiv,df=4)))
+  } else if (phenotype_noise=='CHISQ15') {
+    phenotype.e <- as.numeric(sqrt(environmental_variance)*scale(rchisq(nindiv,df=15)))
   }
   PHENOTYPE <- scale(phenotype.g + phenotype.e)[,1]
   
@@ -127,7 +129,7 @@ testing <- function(j,i=1,type='gxg') {
   
   # perform vqtl tests
   res <- list()
-  for (transformation in c('orig','rint','log','recip')) {
+  for (transformation in choose_transformations) {
   # for (transformation in c('orig')) {
     print(transformation)
     PHENOTYPE <- tested_phenotype[[transformation]]
@@ -172,11 +174,14 @@ nsim <- 1000;
 # nindiv <- 1000
 nindiv <- 250000
 # genetic_variance_explained.vec <- seq(0.002,0.02,by=0.002)
-genetic_variance_explained.vec <- seq(0.002,0.02,by=0.002)[3:5]
+genetic_variance_explained.vec <- seq(0.002,0.02,by=0.002)[4:5]
 # phenotype_noise <- 'NORMAL'
 # phenotype_noise <- 'CHISQ4'
 # simulation_type='gxg'
-for (phenotype_noise in c('CHISQ4','NORMAL')) {
+# choose_transformations <- c('orig','rint','log','recip')
+choose_transformations <- c('orig')
+for (phenotype_noise in c('CHISQ15')) {
+# for (phenotype_noise in c('CHISQ4','NORMAL')) {
   for (simulation_type in c('gxg','mean')) {
     simulation_results <- lapply(1:length(genetic_variance_explained.vec),runSimulation,type=simulation_type)
     results <- do.call(rbind,simulation_results)

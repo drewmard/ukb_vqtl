@@ -1,7 +1,8 @@
 library(data.table)
 library(BEDMatrix)
 source('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/bin/rntransform.R')
-use_rint <- TRUE
+use_rint <- FALSE
+use_log <- FALSE
 
 for (s in c('80','20')) {
   
@@ -19,9 +20,12 @@ for (s in c('80','20')) {
   fam[,paste0(pheno,'.na')] <- fam[,pheno]
   fam[,paste0(pheno,'.na')][which(fam$In==0)] <- NA
   fam[,paste0(pheno,'.na')][which(fam$QC_In==0)] <- NA
+  fam[,paste0(pheno,'.na.RINT')] <- rntransform(fam[,paste0(pheno,'.na')])
+  fam[,paste0(pheno,'.na.log')] <- log(fam[,paste0(pheno,'.na')])
   if (use_rint) {
-    fam[,paste0(pheno,'.na.RINT')] <- rntransform(fam[,paste0(pheno,'.na')])
     phenoName <- paste0(pheno,'.na.RINT')
+  } else if (use_log) {
+    phenoName <- paste0(pheno,'.na.log')
   } else {
     phenoName <- paste0(pheno,'.na')
   }
@@ -49,7 +53,7 @@ for (s in c('80','20')) {
   covariate_environmental_dataset <- merge(covariate_dataset,environmental_dataset,by='IID')
   
   # merge phenotypic data
-  phenotype_dataset <- fam[,c('IID',unique(c(pheno,paste0(pheno,'.na'),phenoName)))] # read in all phenotypes at once? 
+  phenotype_dataset <- fam[,c('IID',unique(c(pheno,paste0(pheno,'.na'),paste0(pheno,'.na.log'),paste0(pheno,'.na.RINT'))))] # read in all phenotypes at once? 
   full_dataset <- merge(covariate_environmental_dataset,phenotype_dataset,by='IID')
 
   # genetic data
@@ -70,6 +74,7 @@ for (s in c('80','20')) {
   GxE <- function(i) {
     print(i)
     full_dataset$SNP <- geno[ind,i]
+    full_dataset$SNP2 <- full_dataset$SNP^2
     mod.formula <- formula(paste(phenoName,' ~ age+age2+genotyping.array+sex+age*sex+age2*sex+
                PC1+PC2+PC3+PC4+PC5+PC6+PC7+PC8+PC9+PC10+
                PC11+PC12+PC13+PC14+PC15+PC16+PC17+PC18+PC19+PC20+',
@@ -89,7 +94,7 @@ for (s in c('80','20')) {
     return(df.save)
   }
   
-  for (k in 2:length(environmental_factors)) {
+  for (k in 1:length(environmental_factors)) {
     envir_name <- environmental_factors[k]
     df.results <- Fit_Model(1,length(colnames(geno)))
     # df.results <- Fit_Model(60,60)
@@ -100,8 +105,11 @@ for (s in c('80','20')) {
       df.results.save <- rbind(df.results.save,df.results)
     }
   }
+  
   if (use_rint) {
     fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.RINT.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
+  } else if (use_log) {
+    fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.log.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
   } else {
     fwrite(df.results.save,paste0('/athena/elementolab/scratch/anm2868/vQTL/ukb_vqtl/output/GxE/GxE_results/',pheno,'.GxE.',s,'.ext.more_snp.txt'),quote = F,sep = '\t',na = 'NA',row.names = F,col.names = T)
   }
