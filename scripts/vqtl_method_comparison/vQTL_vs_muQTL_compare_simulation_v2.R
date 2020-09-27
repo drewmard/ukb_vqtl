@@ -52,15 +52,17 @@ testing <- function(j,i=1,type='gxg') {
   # tmp <- data.frame(SNP1=G[,1],SNP2=G[,2],PHENO=PHENOTYPE)
   # ggplot(tmp,aes(SNP1,PHENOTYPE,col=as.factor(SNP2))) + geom_jitter(width=0.1) + geom_smooth(method='lm',se=F) + theme_bw()
   
-  return(list(res,SNP,PHENOTYPE))
+  return(res)
 }
 
 runSimulation <- function(i,type='gxg') {
   tests <- mclapply(1:nsim,testing,i=i,type=type,mc.cores = 8)
+  results.tmp <- do.call(rbind,tests)
+  return(results.tmp)
   results.tmp <- do.call(rbind,lapply(tests,function(x){x[[1]]}))
-  genotypes.tmp <- do.call(cbind,lapply(tests,function(x){x[[2]]}))
-  phenotypes.tmp <- do.call(cbind,lapply(tests,function(x){x[[3]]}))
-  return(list(results.tmp,genotypes.tmp,phenotypes.tmp))
+  # genotypes.tmp <- do.call(cbind,lapply(tests,function(x){x[[2]]}))
+  # phenotypes.tmp <- do.call(cbind,lapply(tests,function(x){x[[3]]}))
+  # return(list(results.tmp,genotypes.tmp,phenotypes.tmp))
 }
 
 
@@ -80,66 +82,65 @@ for (k in 1:2) {
   set.seed(03191995)
   phenotype_noise <- phenotype_noise.vec[k]
   simulation_results <- lapply(1:length(genetic_variance_explained.vec),runSimulation,type=simulation_type)
-  results <- do.call(rbind,lapply(simulation_results,function(x){x[[1]]}))
-  # genotypes <- do.call(cbind,lapply(simulation_results,function(x){x[[2]]}))
-  # phenotypes <- do.call(cbind,lapply(simulation_results,function(x){x[[3]]}))
+  results <- do.call(rbind,simulation_results)
   results <- as.data.frame(results,stringsAsFactors = FALSE)
 
-  #1
-  results$LR_p.reject <- (results$LR_p<0.05)
-  results$DRM_p.reject <- (results$DRM_p<0.05)
-  res <- aggregate(results[,c('LR_p.reject','DRM_p.reject')],by = list(h=results$h),mean)
-  colnames(res)[2:3] <- c('LR','DRM')
-  png('~/Documents/Research/vQTL/ukb_vqtl/output/simulation/muqtl_vs_vqtl.png',width = 2700,height = 2700,res=650)
-  ggplot(melt(res,id.vars='h'),aes(x=h,y=value,col=variable)) + geom_line() + geom_point() + theme_bw() + theme(panel.grid=element_blank()) + labs(col='Method',x='Variance explained by GxG',y='Power')
-  dev.off()
-  #2
-  val <- 0.01
-  results.sub <- subset(results,h==val)
-  tab <- table(results.sub[,c('LR_p.reject','DRM_p.reject')])
-  fisher.test(tab)$p.value
-  tab[1,2]/(tab[1,1]+tab[1,2])
-  tab[2,2]/(tab[2,1]+tab[2,2])
-  
-  #3
-  val <- 0.02
-  results.sub <- subset(results,h==val)
-  tab <- table(results.sub[,c('LR_p.reject','DRM_p.reject')])
-  fisher.test(tab)$p.value
-  tab[1,2]/(tab[1,1]+tab[1,2])
-  tab[2,2]/(tab[2,1]+tab[2,2])
-  
-  #4
-  val <- 0.03
-  results.sub <- subset(results,h==val)
-  tab <- table(results.sub[,c('LR_p.reject','DRM_p.reject')])
-  fisher.test(tab)$p.value
-  tab[1,2]/(tab[1,1]+tab[1,2])
-  tab[2,2]/(tab[2,1]+tab[2,2])
-  
-  
   dir <- '~/Documents/Research/vQTL'
   dir <- '/athena/elementolab/scratch/anm2868/vQTL'
   f <- paste0(dir,'/ukb_vqtl/output/simulation/MAF1_',MAF1,'.MAF2_',MAF2,'.NSIM_',nsim,'.NINDIV_',nindiv,'.TYPE_',simulation_type,'.NOISE_',phenotype_noise,'.txt')
   fwrite(results,f,quote = F,na = 'NA',sep = '\t',row.names = F,col.names = T)
-  
-  # f <- paste0(dir,'/ukb_vqtl/output/simulation/MAF1_',MAF1,'.MAF2_',MAF2,'.NSIM_',nsim,'.NINDIV_',nindiv,'.TYPE_',simulation_type,'.NOISE_',phenotype_noise,'.geno.txt')
-  # fwrite(genotypes,f,quote = F,na = 'NA',sep = '\t',row.names = F,col.names = T)
-  # 
-  # f <- paste0(dir,'/ukb_vqtl/output/simulation/MAF1_',MAF1,'.MAF2_',MAF2,'.NSIM_',nsim,'.NINDIV_',nindiv,'.TYPE_',simulation_type,'.NOISE_',phenotype_noise,'.pheno.txt')
-  # fwrite(phenotypes,f,quote = F,na = 'NA',sep = '\t',row.names = F,col.names = T)
-  
-  rm(results);rm(genotypes);rm(phenotypes)
 }
 
-
-# yep
-phenotype_noise <- phenotype_noise.vec[k]
-simulation_results <- lapply(1:length(genetic_variance_explained.vec),runSimulation,type=simulation_type)
-results <- do.call(rbind,lapply(simulation_results,function(x){x[[1]]}))
-genotypes <- do.call(cbind,lapply(simulation_results,function(x){x[[2]]}))
-phenotypes <- do.call(cbind,lapply(simulation_results,function(x){x[[3]]}))
-results <- as.data.frame(results,stringsAsFactors = FALSE)
-genotypes <- as.data.frame(genotypes,stringsAsFactors=FALSE)
-phenotypes <- as.data.frame(phenotypes,stringsAsFactors=FALSE)
+#   #1
+#   results$LR_p.reject <- (results$LR_p<0.05)
+#   results$DRM_p.reject <- (results$DRM_p<0.05)
+#   res <- aggregate(results[,c('LR_p.reject','DRM_p.reject')],by = list(h=results$h),mean)
+#   colnames(res)[2:3] <- c('LR','DRM')
+#   png('~/Documents/Research/vQTL/ukb_vqtl/output/simulation/muqtl_vs_vqtl.png',width = 2700,height = 2700,res=650)
+#   ggplot(melt(res,id.vars='h'),aes(x=h,y=value,col=variable)) + geom_line() + geom_point() + theme_bw() + theme(panel.grid=element_blank()) + labs(col='Method',x='Variance explained by GxG',y='Power')
+#   dev.off()
+#   #2
+#   val <- 0.01
+#   results.sub <- subset(results,h==val)
+#   tab <- table(results.sub[,c('LR_p.reject','DRM_p.reject')])
+#   fisher.test(tab)$p.value
+#   tab[1,2]/(tab[1,1]+tab[1,2])
+#   tab[2,2]/(tab[2,1]+tab[2,2])
+#   
+#   #3
+#   val <- 0.02
+#   results.sub <- subset(results,h==val)
+#   tab <- table(results.sub[,c('LR_p.reject','DRM_p.reject')])
+#   fisher.test(tab)$p.value
+#   tab[1,2]/(tab[1,1]+tab[1,2])
+#   tab[2,2]/(tab[2,1]+tab[2,2])
+#   
+#   #4
+#   val <- 0.03
+#   results.sub <- subset(results,h==val)
+#   tab <- table(results.sub[,c('LR_p.reject','DRM_p.reject')])
+#   fisher.test(tab)$p.value
+#   tab[1,2]/(tab[1,1]+tab[1,2])
+#   tab[2,2]/(tab[2,1]+tab[2,2])
+#   
+#   
+#   # f <- paste0(dir,'/ukb_vqtl/output/simulation/MAF1_',MAF1,'.MAF2_',MAF2,'.NSIM_',nsim,'.NINDIV_',nindiv,'.TYPE_',simulation_type,'.NOISE_',phenotype_noise,'.geno.txt')
+#   # fwrite(genotypes,f,quote = F,na = 'NA',sep = '\t',row.names = F,col.names = T)
+#   # 
+#   # f <- paste0(dir,'/ukb_vqtl/output/simulation/MAF1_',MAF1,'.MAF2_',MAF2,'.NSIM_',nsim,'.NINDIV_',nindiv,'.TYPE_',simulation_type,'.NOISE_',phenotype_noise,'.pheno.txt')
+#   # fwrite(phenotypes,f,quote = F,na = 'NA',sep = '\t',row.names = F,col.names = T)
+#   
+#   rm(results);rm(genotypes);rm(phenotypes)
+# }
+# 
+# 
+# # yep
+# phenotype_noise <- phenotype_noise.vec[k]
+# simulation_results <- lapply(1:length(genetic_variance_explained.vec),runSimulation,type=simulation_type)
+# results <- do.call(rbind,lapply(simulation_results,function(x){x[[1]]}))
+# genotypes <- do.call(cbind,lapply(simulation_results,function(x){x[[2]]}))
+# phenotypes <- do.call(cbind,lapply(simulation_results,function(x){x[[3]]}))
+# results <- as.data.frame(results,stringsAsFactors = FALSE)
+# genotypes <- as.data.frame(genotypes,stringsAsFactors=FALSE)
+# phenotypes <- as.data.frame(phenotypes,stringsAsFactors=FALSE)
 
