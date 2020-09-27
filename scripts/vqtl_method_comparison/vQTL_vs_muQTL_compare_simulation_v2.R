@@ -78,6 +78,7 @@ phenotype_noise.vec <- c('NORMAL','CHISQ4')
 results <- list(); genotypes <- list(); phenotypes <- list()
 
 genetic_variance_explained.vec <- genetic_variance_explained.vec[1:3]
+genetic_variance_explained.vec <- c(0.0005,0.001,0.0015)
 for (k in 1:2) {
   set.seed(03191995)
   phenotype_noise <- phenotype_noise.vec[k]
