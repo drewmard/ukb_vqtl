@@ -56,7 +56,7 @@ testing <- function(j,i=1,type='gxg') {
 }
 
 runSimulation <- function(i,type='gxg') {
-  tests <- mclapply(1:nsim,testing,i=i,type=type,mc.cores = 8)
+  tests <- mclapply(1:nsim,testing,i=i,type=type,mc.cores = 16)
   results.tmp <- do.call(rbind,tests)
   return(results.tmp)
   results.tmp <- do.call(rbind,lapply(tests,function(x){x[[1]]}))
