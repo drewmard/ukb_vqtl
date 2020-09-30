@@ -73,12 +73,12 @@ nsim <- 1000;
 nindiv <- 250000
 simulation_type='gxg'
 # genetic_variance_explained.vec <- seq(0.01,0.1,by=0.01);
-genetic_variance_explained.vec <- seq(0.002,0.02,by=0.002)
+genetic_variance_explained.vec <- seq(0.008,0.02,by=0.002)
 phenotype_noise.vec <- c('NORMAL','CHISQ4')
 results <- list(); genotypes <- list(); phenotypes <- list()
 
-genetic_variance_explained.vec <- genetic_variance_explained.vec[1:3]
-genetic_variance_explained.vec <- c(0.0005,0.001,0.0015)
+# genetic_variance_explained.vec <- genetic_variance_explained.vec[1:3]
+# genetic_variance_explained.vec <- c(0.0005,0.001,0.0015)
 for (k in 1:2) {
   set.seed(03191995)
   phenotype_noise <- phenotype_noise.vec[k]
