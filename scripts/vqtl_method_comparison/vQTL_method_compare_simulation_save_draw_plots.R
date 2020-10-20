@@ -77,6 +77,13 @@ x <- aggregate(.~MAF1+MAF2+N+type,df.mg[,-ind2],function(x) {mean(x < 0.05)})
 x <- subset(x,type=='gxg')
 x$DRM;x$gS
 
+# time to complete
+df.mg <- subset(df.mg,transformation=='orig')
+ind2 <- which(colnames(df.mg) %in% paste0(c('DRM','LT','BF','BT','FK','DGLM','TSSR','SVLM','gJLS'),'.time'))
+x <- aggregate(df.mg[,ind2],list(df.mg$N),median)
+x$gJLS.time/x$DRM
+
+
 results.sub <- subset(df.mg,h<=0.01 & noise=='CHISQ4' & type=='gxg' & transformation=='orig')
 t.test(results.sub$DRM < 0.05,results.sub$BF < 0.05,paired=T)$p.value
 t.test(results.sub$DRM < 0.05,results.sub$SVLM < 0.05,paired=T)$p.value
@@ -120,7 +127,7 @@ df.mg.melt <- melt(df.mg[,ind])
 df.mg.melt[,1] <- substring(df.mg.melt[,1],1,nchar(as.character(df.mg.melt[,1]))-5)
 df.mg.melt[df.mg.melt[,1]=='gJLS',1] <- 'gS'
 mycolors = c(brewer.pal(name="Dark2", n = 6), brewer.pal(name="Paired", n = 3))
-g2 <- ggplot(df.mg.melt,aes(x=variable,y=value,fill=variable)) + geom_boxplot(outlier.shape = NA,col='black') + theme_bw() + theme(panel.grid=element_blank(),legend.position = 'none') + labs(y='Elapsed time in seconds',x='Method')# + scale_color_manual(values=mycolors)
+g2 <- ggplot(df.mg.melt,aes(x=variable,y=value,fill=variable)) + geom_boxplot(outlier.shape = NA,col='black') + theme_bw() + theme(panel.grid=element_blank(),legend.position = 'none') + labs(y='Elapsed time in seconds',x='Method')# + geom_jitter(alpha=0.1,col='black')
 f='~/Documents/Research/vQTL/ukb_vqtl/output/simulation/power_fpr_plots2_v2.png'
 png(f,width=2500,height=2500,res=500)
 plot_grid(g3,g2,ncol=1)

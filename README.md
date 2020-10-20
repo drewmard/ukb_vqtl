@@ -16,10 +16,10 @@ anm2868@med.cornell.edu
 
 Directory: ./scripts/vqtl_method_comparison
 
-#### (A) vQTL_method_compare_simulation.R
+#### (A) vQTL_method_compare_simulation_trans.R
 **Description:** Main script 1. Simulating population genetic data and comparing the false positive rates and power for different variance tests. Results are saved using various parameter settings.
 
-#### (B) vQTL_vs_muQTL_compare_simulation.R
+#### (B) vQTL_vs_muQTL_compare_simulation_v2.R
 **Description:** Main script 2. Simulating population genetic data and contrasting power for a muQTL test versus a vQTL test. Results are saved using various parameter settings.
 
 #### (C) Other scripts:
@@ -118,6 +118,9 @@ Directory: ./scripts/gxe
 
 #### (G) correlation_with_gxe_effects.R
 **Description:** Estimates correlation between interaction effects and muQTL effects, raw vQTL effects, RINT vQTL effects, and dQTL effects, and visualizes the results.
+
+#### (H) raw_vs_rint_gxe_results.R
+**Description:** This script compares the GxE results from analysis on different transformations of BMI.
 
 
 ## Large gene-environment interactions influence BMI
